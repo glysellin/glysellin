@@ -1,4 +1,5 @@
 require "active_model/model"
+require "paperclip"
 
 require "glysellin/engine"
 require "glysellin/helpers"
