@@ -18,16 +18,6 @@ module ActionDispatch::Routing
           end
         end
 
-        resources :products, controller: controllers[:products] do
-          collection do
-            get 'taxonomy/:id', action: "filter", as: "filter"
-          end
-        end
-
-        resources :taxonomies, only: [] do
-          resources :products, only: [:index]
-        end
-
         resource :cart, controller: controllers[:cart], only: [:show, :destroy] do
           resources :products, controller: "glysellin/cart/products", only: [:create, :update, :destroy] do
             collection do
@@ -51,7 +41,6 @@ module ActionDispatch::Routing
     def parse_controllers options
       defaults = {
         orders: 'glysellin/orders',
-        products: 'glysellin/products',
         cart: 'glysellin/cart'
       }
 
