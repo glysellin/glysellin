@@ -1,10 +1,13 @@
 module Glysellin
   class ProductProperty < ActiveRecord::Base
     self.table_name = 'glysellin_product_properties'
-    attr_accessible :adjustement, :name, :value, :variant, :variant_id, :type, :type_id
+    attr_accessible :value, :variant_id, :type_id
 
-    belongs_to :variant, polymorphic: true, foreign_key: 'variant_id'
-    belongs_to :type, class_name: 'Glysellin::ProductPropertyType', foreign_key: 'type_id'
+    belongs_to :variant, class_name: "Glysellin::Variant",
+      inverse_of: :properties
+
+    belongs_to :type, class_name: 'Glysellin::ProductPropertyType',
+      inverse_of: :properties
 
     # validate :check_uniqueness_of_type
 
@@ -12,6 +15,10 @@ module Glysellin
     # validates_associated :type, :if => Proc.new { |type| !self.variant.properties.map(&:type).include?(type) }
 
     private
+
+    def name
+      type && type.name
+    end
 
     def check_uniqueness_of_type
       if self.variant.properties.map(&:type).include? self.type

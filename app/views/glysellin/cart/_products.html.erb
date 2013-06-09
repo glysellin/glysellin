@@ -31,6 +31,7 @@
           <% end %>
         </td>
         <td class="product-eot-price">
+          <% puts "***** #{quantity} -- #{item.inspect}" %>
           <%= number_to_currency(quantity * item.eot_price) %>
         </td>
         <td class="product-price">

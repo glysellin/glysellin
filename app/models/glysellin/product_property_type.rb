@@ -1,11 +1,13 @@
 module Glysellin
   class ProductPropertyType < ActiveRecord::Base
     self.table_name = 'glysellin_product_property_types'
-    attr_accessible :eot_price, :in_stock, :name, :position, :price, :published, :sku, :slug, :unlimited_stock
+    attr_accessible :name
 
-    has_many :properties, class_name: "Glysellin::ProductProperty"
+    has_many :properties, class_name: "Glysellin::ProductProperty",
+      foreign_key: 'type_id', inverse_of: :type
 
-    has_and_belongs_to_many :product_types, class_name: 'Glysellin::ProductType',
-      join_table: 'glysellin_product_types_property_types'
+    def name
+      "hoo"
+    end
   end
 end

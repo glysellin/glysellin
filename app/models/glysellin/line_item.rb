@@ -1,10 +1,12 @@
 module Glysellin
-  class OrderItem < ActiveRecord::Base
-    self.table_name = 'glysellin_order_items'
+  class LineItem < ActiveRecord::Base
+    self.table_name = "glysellin_line_items"
     belongs_to :order, inverse_of: :products
 
+    belongs_to :variant, class_name: "Glysellin::Variant"
+
     attr_accessible :sku, :name, :eot_price, :vat_rate, :bundle, :price,
-      :quantity, :weight
+      :quantity, :weight, :variant_id
 
     # The attributes we getch from a product to build our order item
     PRODUCT_ATTRIBUTES_FOR_ITEM = %w(sku name eot_price vat_rate price weight)
@@ -15,15 +17,19 @@ module Glysellin
       # @param [String] id The id string of the item
       # @param [Boolean] bundle If it's a bundle or just one product
       #
-      # @return [OrderItem] The created order item
+      # @return [LineItem] The created order item
+      #
       def build_from_product id, quantity
-        product = Glysellin::Variant.find_by_id(id)
+        variant = Glysellin::Variant.find_by_id(id)
 
         attrs = PRODUCT_ATTRIBUTES_FOR_ITEM.map do |key|
-          [key, product.public_send(key)]
+          [key, variant.public_send(key)]
         end
 
-        OrderItem.new(Hash[attrs].merge('quantity' => quantity))
+        self.new Hash[attrs].merge(
+          "quantity" => quantity,
+          "variant_id" => variant.id
+        )
       end
     end
 
@@ -33,6 +39,10 @@ module Glysellin
 
     def total_price
       quantity * price
+    end
+
+    def sellable
+      variant && variant.product && variant.product.sellable
     end
   end
 end

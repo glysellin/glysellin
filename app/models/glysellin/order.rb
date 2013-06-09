@@ -27,7 +27,7 @@ module Glysellin
     #
     # Order products are used to map order to cloned and simplified products
     #   so the Order propererties can't be affected by product updates
-    has_many :products, class_name: 'Glysellin::OrderItem',
+    has_many :products, class_name: 'Glysellin::LineItem',
       foreign_key: 'order_id', dependent: :destroy
 
     # The actual buyer
@@ -158,7 +158,7 @@ module Glysellin
 
     def products=(attributes)
       products = attributes.reduce([]) do |list, product|
-        item = OrderItem.build_from_product(product[:id], product[:quantity])
+        item = LineItem.build_from_product(product[:id], product[:quantity])
         item ? (list << item) : list
       end
 

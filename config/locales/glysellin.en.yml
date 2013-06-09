@@ -86,6 +86,9 @@ en:
         informations: "Your informations"
         shipping_method: "Shipping method"
         payment_method: "Payment method"
+      sellables:
+        out_of_stock: "Out of stock"
+        choose_your_variant: "--- Choose your product ---"
     orders:
       states:
         created: "Created"

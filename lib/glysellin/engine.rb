@@ -13,7 +13,7 @@ module Glysellin
 
     initializer "Mix acts_as_sellable into ActiveRecord::Base" do
       ActiveSupport.on_load :active_record do
-        ::ActiveRecord::Base.send(:include, ActsAsSellable)
+        ActiveRecord::Base.send(:include, ActsAsSellable)
       end
     end
 

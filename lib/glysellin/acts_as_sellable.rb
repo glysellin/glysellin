@@ -6,42 +6,103 @@ module Glysellin
 
       # Macro to include sellable behaviour in side any model
       #
+      # @param [Hash] options An option hash to configure the mixin
+      #
+      # @option options [Symbol] :simple If set to true, sellable will only have
+      #   one variant, a has_one relation is defined between sellable and the
+      #   Variant model
+      # @option options [Boolean] :stock If set to false, consider every itmes
+      #   should have unlimited stock. Defaults to true
+      #
       def acts_as_sellable options = {}
-        define_sellable_associations!
-        define_sellable_product_filters!
-      end
+        include Filters
 
-      private
+        # Merge options with defaults and store them for further use
+        cattr_accessor :sellable_options
+        self.sellable_options = options = options.reverse_merge(
+          simple: false,
+          stock: true
+        )
 
-      # Defines the polymorphic has_one association with the Glysellin::Product
-      # model
-      #
-      def define_sellable_associations!
+        # Defines the polymorphic has_one association with the
+        # Glysellin::Product model, holding product wide configurations
         has_one :product, as: :sellable, class_name: "Glysellin::Product",
-          inverse_of: :sellable
-        accepts_nested_attributes_for :product, :allow_destroy => true
-        attr_accessible :product_attributes
-      end
+          inverse_of: :sellable, dependent: :destroy
+        accepts_nested_attributes_for :product, allow_destroy: true
 
-
-      def define_sellable_product_filters!
-        if find_attribute(:name)
-          before_save :fill_product_name_from_sellable
+        if options[:simple]
+          define_simple_variants_relation!
+        else
+          define_multi_variants_relation!
         end
+
+        accepts_nested_attributes_for :"#{ @_variant_association_name }",
+          allow_destroy: true, reject_if: :all_blank
+
+        attr_accessible :"#{ @_variant_association_name }_attributes",
+          :product_attributes
+
+        unless options[:stock]
+          before_validation :ensure_unlimited_stock
+        end
+
+        # Published sellables are the ones that have at least one variant
+        # published.
+        #
+        # This behaviour can be overriden inside the sellable's model if the
+        # scope is declared after the `acts_as_sellable` call
+        scope :published, -> {
+          includes(:"#{ @_variant_association_name }").where(
+            glysellin_variants: { published: true }
+          )
+        }
+
+        # Attributes delegation. Allowing to consider Product as a simple
+        # configuration model for the sellable one.
+        #
+        delegate :vat_rate, :vat_ratio, to: :product
+
+        # delegate :price, :unmarked_price, :marked_down?, to: :master_variant
       end
 
-      # Finds a column matching any of the given names
+      # Defines the polymophic has_one association with the Variant model,
+      # allowing only to set one variant for the sellable
       #
-      def find_attribute *attributes
-        @instance ||= new
-        attributes.find { |attribute| @instance.respond_to?(attribute) }
+      def define_simple_variants_relation!
+        @_variant_association_name = "variant"
+
+        has_one :variant, as: :sellable, class_name: "Glysellin::Variant",
+          inverse_of: :sellable, dependent: :destroy
+      end
+
+      # Defines the polymophic has_many association with the Variant model,
+      # allowing to set multiple variants on our sellable
+      #
+      def define_multi_variants_relation!
+        @_variant_association_name = "variants"
+
+        has_many :variants, as: :sellable, class_name: "Glysellin::Variant",
+          inverse_of: :sellable, dependent: :destroy
       end
     end
 
-    # Filter to proxy sellable model name attribute to product one
-    #
-    def fill_product_name_from_sellable
-      product && product.name = name
+    module Filters
+      # If acts_as_sellable is called with the option `stock: false`, we admit
+      # every variant must be unlimited stock, so admins never have to bother
+      # filling in stock or selecting `unlimited_stock: true`
+      #
+      def ensure_unlimited_stock
+        if variants.length > 0
+          variants.each do |variant|
+            variant.unlimited_stock = true
+            variant.save unless variant.new_record?
+          end
+        end
+      end
+    end
+
+    def published_variants
+      variants.select { |variant| variant.published }
     end
   end
 end

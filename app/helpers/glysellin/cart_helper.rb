@@ -1,11 +1,11 @@
 module Glysellin
   module CartHelper
-    def add_to_cart_form product, options = {}
+    def add_to_cart_form sellable, options = {}
       # Default to remote form
       options[:remote] = true unless options[:remote] == false
       # Render actual form
       render partial: 'glysellin/products/add_to_cart', locals: {
-        product: product,
+        sellable: sellable,
         options: options
       }
     end

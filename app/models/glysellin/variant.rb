@@ -2,7 +2,6 @@ require 'friendly_id'
 
 module Glysellin
   class Variant < ActiveRecord::Base
-    include ProductMethods
     extend FriendlyId
 
     friendly_id :name, use: :slugged
@@ -10,24 +9,25 @@ module Glysellin
     self.table_name = 'glysellin_variants'
 
     attr_accessible :eot_price, :in_stock, :name, :position, :price,
-      :published, :sku, :slug, :unlimited_stock, :product, :product_id,
-      :properties_attributes, :properties, :weight, :unmarked_price
+      :published, :sku, :slug, :unlimited_stock, :sellable_id,
+      :sellable_type, :properties_attributes, :weight,
+      :unmarked_price
 
-    belongs_to :product, class_name: 'Glysellin::Product',
-      foreign_key: 'product_id'
+    belongs_to :sellable, polymorphic: true
 
     has_many :properties, class_name: 'Glysellin::ProductProperty',
-      as: :variant, extend: Glysellin::PropertyFinder, dependent: :destroy
+      extend: Glysellin::PropertyFinder, dependent: :destroy,
+      inverse_of: :variant
 
     accepts_nested_attributes_for :properties, allow_destroy: true
 
-    validates_presence_of :name, if: proc { |v| v.product.variants.length > 1 }
+    validates_presence_of :name, if: proc { |v| v.sellable.variants.length > 1 }
     validates_numericality_of :price
     validates_numericality_of :in_stock, if: proc { |v| v.in_stock.presence }
 
     before_validation :check_prices
 
-    after_initialize :prepare_properties
+    # after_initialize :prepare_properties
 
     AVAILABLE_QUERY = <<-SQL
       glysellin_variants.published = ? AND (
@@ -38,24 +38,22 @@ module Glysellin
 
     scope :available, where(AVAILABLE_QUERY, true, true, 0)
 
-    def prepare_properties
-      if product && product.product_type
-        product.product_type.property_types.each do |type|
-          properties.build(type: type) if properties.send(type.name) == false
-        end
-      end
-    end
+    # def prepare_properties
+    #   if product && product.product_type
+    #     product.product_type.property_types.each do |type|
+    #       properties.build(type: type) if properties.send(type.name) == false
+    #     end
+    #   end
+    # end
 
     def description
-      product.description
+      sellable.description if sellable.respond_to?(:description)
     end
 
-    def vat_rate
-      product.vat_rate
-    end
+    delegate :vat_rate, :vat_ratio, to: :sellable
+
 
     def check_prices
-      vat_ratio = self.product.vat_ratio rescue Glysellin.default_vat_rate
       # If we have to fill one of the prices when changed
       if eot_changed_alone?
         self.price = (self.eot_price * vat_ratio).round(2)
@@ -84,12 +82,12 @@ module Glysellin
     end
 
     def name fullname = true
-      variant_name, product_name = super().presence, product.name
+      variant_name, sellable_name = super().presence, (sellable && sellable.name)
 
       if fullname
-        variant_name ? "#{ product_name } - #{ variant_name }" : product_name
+        variant_name ? "#{ sellable_name } - #{ variant_name }" : sellable_name
       else
-        variant_name ? variant_name : product_name
+        variant_name ? variant_name : sellable_name
       end
     end
 

@@ -97,6 +97,9 @@ fr:
         informations: "Vos informations"
         shipping_method: "Mode de livraison"
         payment_method: "Mode de paiement"
+      sellables:
+        out_of_stock: "Épuisé"
+        choose_your_variant: "--- Choisissez votre produit ---"
     orders:
       states:
         ready: "Paiement en attente"
