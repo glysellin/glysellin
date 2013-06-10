@@ -19,10 +19,12 @@ module Glysellin
 
         # Merge options with defaults and store them for further use
         cattr_accessor :sellable_options
-        self.sellable_options = options = options.reverse_merge(
+        self.sellable_options = options.reverse_merge(
           simple: false,
           stock: true
         )
+
+        cattr_accessor :variant_association_name
 
         # Defines the polymorphic has_one association with the
         # Glysellin::Product model, holding product wide configurations
@@ -30,19 +32,19 @@ module Glysellin
           inverse_of: :sellable, dependent: :destroy
         accepts_nested_attributes_for :product, allow_destroy: true
 
-        if options[:simple]
+        if sellable_options[:simple]
           define_simple_variants_relation!
         else
           define_multi_variants_relation!
         end
 
-        accepts_nested_attributes_for :"#{ @_variant_association_name }",
+        accepts_nested_attributes_for :"#{ variant_association_name }",
           allow_destroy: true, reject_if: :all_blank
 
-        attr_accessible :"#{ @_variant_association_name }_attributes",
+        attr_accessible :"#{ variant_association_name }_attributes",
           :product_attributes
 
-        unless options[:stock]
+        unless sellable_options[:stock]
           before_validation :ensure_unlimited_stock
         end
 
@@ -52,7 +54,7 @@ module Glysellin
         # This behaviour can be overriden inside the sellable's model if the
         # scope is declared after the `acts_as_sellable` call
         scope :published, -> {
-          includes(:"#{ @_variant_association_name }").where(
+          includes(:"#{ variant_association_name }").where(
             glysellin_variants: { published: true }
           )
         }
@@ -69,7 +71,7 @@ module Glysellin
       # allowing only to set one variant for the sellable
       #
       def define_simple_variants_relation!
-        @_variant_association_name = "variant"
+        self.variant_association_name = "variant"
 
         has_one :variant, as: :sellable, class_name: "Glysellin::Variant",
           inverse_of: :sellable, dependent: :destroy
@@ -79,7 +81,7 @@ module Glysellin
       # allowing to set multiple variants on our sellable
       #
       def define_multi_variants_relation!
-        @_variant_association_name = "variants"
+        self.variant_association_name = "variants"
 
         has_many :variants, as: :sellable, class_name: "Glysellin::Variant",
           inverse_of: :sellable, dependent: :destroy
@@ -92,17 +94,25 @@ module Glysellin
       # filling in stock or selecting `unlimited_stock: true`
       #
       def ensure_unlimited_stock
-        if variants.length > 0
-          variants.each do |variant|
-            variant.unlimited_stock = true
-            variant.save unless variant.new_record?
-          end
+        set_unlimited_stock = ->(variant) {
+          variant.unlimited_stock = true
+          variant.save unless variant.new_record?
+        }
+
+        if sellable_options[:simple] && variant.presence
+          set_unlimited_stock.call(variant)
+        elsif !sellable_options[:simple] && variants.length > 0
+          variants.each(&set_unlimited_stock)
         end
       end
     end
 
     def published_variants
-      variants.select { |variant| variant.published }
+      if sellable_options[:simple]
+        variant.published ? [variant] : []
+      else
+        variants.select { |variant| variant.published }
+      end
     end
   end
 end
