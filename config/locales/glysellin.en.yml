@@ -91,10 +91,7 @@ en:
         choose_your_variant: "--- Choose your product ---"
     orders:
       states:
-        created: "Created"
-        filling_address: "Addresses not filled"
-        address: "Addresses filled"
-        payment: "Payment method chosen"
+        ready: "Payment pending"
         paid: "Paid"
         shipped: "Shipped"
     cart:
