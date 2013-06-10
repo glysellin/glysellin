@@ -23,7 +23,7 @@ module Glysellin
 
     validates_presence_of :name, if: proc { |variant|
       if variant.sellable.sellable_options[:simple] then false
-      else variant.sellable.sellable_options > 1
+      else variant.sellable.variants > 1
       end
     }
 
