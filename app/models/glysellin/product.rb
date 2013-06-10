@@ -26,5 +26,9 @@ module Glysellin
     def vat_ratio
       1 + vat_rate / 100
     end
+
+    def variants
+      sellable.published_variants
+    end
   end
 end
