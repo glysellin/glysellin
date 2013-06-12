@@ -78,6 +78,7 @@ en:
         back_to_shop: "Back to shop"
         remove_from_cart: "Delete"
         update: "Update cart"
+        added_to_cart: "Product added to cart"
         update_discount: "Update discount code"
         create_order_form: "Submit order"
         follow: "Go to order"

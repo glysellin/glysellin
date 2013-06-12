@@ -1,5 +1,5 @@
 require 'glysellin/helpers'
-require 'glysellin/acts_as_sellable'
+require 'glysellin/sellable'
 require 'glysellin/engine/routes'
 
 module Glysellin
@@ -13,7 +13,7 @@ module Glysellin
 
     initializer "Mix acts_as_sellable into ActiveRecord::Base" do
       ActiveSupport.on_load :active_record do
-        ActiveRecord::Base.send(:include, ActsAsSellable)
+        ActiveRecord::Base.send(:include, Sellable)
       end
     end
 

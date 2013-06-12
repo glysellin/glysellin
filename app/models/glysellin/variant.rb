@@ -42,6 +42,7 @@ module Glysellin
     SQL
 
     scope :available, where(AVAILABLE_QUERY, true, true, 0)
+    scope :published, where(published: true)
 
     # def prepare_properties
     #   if product && product.product_type
