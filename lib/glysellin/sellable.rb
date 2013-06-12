@@ -25,7 +25,11 @@ module Glysellin
           stock: true
         )
 
-        include (sellable_options[:simple] ? Simple : Multi)
+        if sellable_options[:simple]
+          include Sellable::Simple
+        else
+          include Sellable::Multi
+        end
 
         # Defines the polymorphic has_one association with the
         # Glysellin::Product model, holding product wide configurations
@@ -44,16 +48,6 @@ module Glysellin
         delegate :vat_rate, :vat_ratio, to: :product
 
         # delegate :price, :unmarked_price, :marked_down?, to: :master_variant
-      end
-
-      # Defines the polymophic has_many association with the Variant model,
-      # allowing to set multiple variants on our sellable
-      #
-      def define_multi_variants_relation!
-        self.variant_association_name = "variants"
-
-        has_many :variants, as: :sellable, class_name: "Glysellin::Variant",
-          inverse_of: :sellable, dependent: :destroy
       end
     end
 

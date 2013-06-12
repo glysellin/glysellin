@@ -22,9 +22,7 @@ module Glysellin
     accepts_nested_attributes_for :properties, allow_destroy: true
 
     validates_presence_of :name, if: proc { |variant|
-      if variant.sellable.sellable_options[:simple] then false
-      else variant.sellable.variants.length > 1
-      end
+      variant.sellable.variants.length > 1
     }
 
     validates_numericality_of :price
