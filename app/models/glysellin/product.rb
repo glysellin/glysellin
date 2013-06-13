@@ -1,4 +1,3 @@
-require 'digest/sha1'
 require 'friendly_id'
 
 module Glysellin
