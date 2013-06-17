@@ -42,7 +42,7 @@ module Glysellin
     end
 
     def sellable
-      variant && variant.product && variant.product.sellable
+      variant && variant.sellable
     end
   end
 end

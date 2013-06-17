@@ -25,6 +25,9 @@ module Glysellin
           stock: true
         )
 
+        cattr_accessor :sold_callback
+        self.sold_callback = options[:sold]
+
         if sellable_options[:simple]
           include Sellable::Simple
         else

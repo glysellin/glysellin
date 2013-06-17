@@ -102,13 +102,11 @@ en:
         choose_shipping_method: "Shipping method"
         choose_payment_method: "Payment method"
         ready: "Payment"
-    order_admin_mailer:
-      send_order_paid_email:
-        subject: "A new order has validated"
-      send_check_order_created_email:
-        subject: "An order with Check payment method has been placed"
-    order_customer_mailer:
-      send_order_created_email:
-        subject: "Your order has been placed"
-      send_order_paid_email:
-        subject: "Your payment has been accepted"
+    mailer:
+      admin:
+        send_order_paid_email: "An order has been validated"
+        send_check_order_created_email: "An order that'll be paid by check has been submitted"
+      customer:
+        send_order_created_email: "Your order has been taken into account"
+        send_order_paid_email: "Your payment has been accepted"
+        send_order_shipped_email: "Your command has been shipped"

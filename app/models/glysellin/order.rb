@@ -19,8 +19,8 @@ module Glysellin
         transition paid: :shipped
       end
 
-      after_transition on: :choose_shipping_method, do: :set_shipping_price
       after_transition on: :paid, do: :set_payment
+      after_transition on: :paid, do: :execute_sold_callbacks
     end
 
     # Relations
@@ -74,7 +74,7 @@ module Glysellin
       update_attribute(:ref, self.generate_ref) unless self.ref
     end
 
-    # Ensures that the customer hash a billing and, if needed shipping, address.
+    # Ensures that the customer has a billing and, if needed shipping, address.
     #
     def ensure_customer_addresses
       unless customer.billing_address
@@ -107,15 +107,23 @@ module Glysellin
       update_attribute(:paid_on, payment.last_payment_action_on)
     end
 
+    def execute_sold_callbacks
+      products.each do |product|
+        # If line item's associated variant still exists
+        if (sellable = product.sellable) && (callback = sellable.sold_callback)
+          case callback.class.to_s
+          when "Proc" then sellable.instance_exec(self, &callback)
+          else sellable.send(callback, self)
+          end
+        end
+      end
+    end
+
     # Callback invoked after event :shipped
     def notify_shipped
       if state_changed? && shipped?
         OrderCustomerMailer.send_order_shipped_email(self).deliver
       end
-    end
-
-    def init_payment!
-      self.payments.build unless payment
     end
 
     # Define model to use it's ref when asked for parameterized
