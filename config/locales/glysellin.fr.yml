@@ -88,6 +88,7 @@ fr:
         payment_method_chosen: "En attente de paiement"
         paid: "Traitement en cours"
         shipped: "Expédiée"
+        canceled: "Annulée"
     mailer:
       admin:
         send_order_paid_email: "Une nouvelle commande a été validée sur le site"

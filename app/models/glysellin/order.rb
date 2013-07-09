@@ -34,6 +34,10 @@ module Glysellin
         transition paid: :shipped
       end
 
+      event :cancel do
+        transition any => :canceled
+      end
+
       after_transition on: :choose_shipping_method, do: :set_shipping_price
       after_transition on: :paid, do: :set_payment
     end
@@ -45,10 +49,15 @@ module Glysellin
     has_many :items, class_name: 'Glysellin::OrderItem', foreign_key: 'order_id'
     # The actual buyer
     belongs_to :customer, class_name: "::#{ Glysellin.user_class_name }",
-      foreign_key: 'customer_id', :autosave => true
+      foreign_key: 'customer_id'
+
     # Addresses
-    belongs_to :billing_address, foreign_key: 'billing_address_id', class_name: 'Glysellin::Address', inverse_of: :billed_orders
-    belongs_to :shipping_address, foreign_key: 'shipping_address_id', class_name: 'Glysellin::Address', inverse_of: :shipped_orders
+    belongs_to :billing_address, foreign_key: 'billing_address_id',
+      class_name: 'Glysellin::Address', inverse_of: :billed_orders
+
+    belongs_to :shipping_address, foreign_key: 'shipping_address_id',
+      class_name: 'Glysellin::Address', inverse_of: :shipped_orders
+
     # Payment tries
     has_many :payments, inverse_of: :order
 
@@ -57,11 +66,11 @@ module Glysellin
     has_many :order_adjustments, inverse_of: :order
 
     # We want to be able to see fields_for addresses
-    accepts_nested_attributes_for :billing_address
-    accepts_nested_attributes_for :shipping_address
-    accepts_nested_attributes_for :items
-    accepts_nested_attributes_for :customer
-    accepts_nested_attributes_for :payments
+    accepts_nested_attributes_for :billing_address, reject_if: :all_blank
+    accepts_nested_attributes_for :shipping_address, reject_if: :all_blank
+    accepts_nested_attributes_for :items, reject_if: :all_blank
+    accepts_nested_attributes_for :customer, reject_if: :customer_has_no_email
+    accepts_nested_attributes_for :payments, reject_if: :all_blank
 
     attr_accessible :billing_address_attributes, :shipping_address_attributes,
       :billing_address, :shipping_address, :payments, :items, :items_ids,
@@ -98,6 +107,10 @@ module Glysellin
 
     def set_shipping_price
       build_adjustment_from shipping_method if shipping_method
+    end
+
+    def customer_has_no_email
+      !customer || customer.email.blank?
     end
 
     # Allows to change state after order's validation and related items
@@ -421,5 +434,4 @@ module Glysellin
       order
     end
   end
-
 end
