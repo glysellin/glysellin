@@ -13,13 +13,14 @@ module Glysellin
       super(val && val.downcase)
     end
 
-    def applicable?
-      !expires_on || expires_on > Time.now
+    def applicable_for?(price)
+      (!expires_on || expires_on > Time.now) &&
+        (!order_minimum.presence || order_minimum <= price)
     end
 
     class << self
       def from_code code
-        find_by_code(code.downcase)
+        code && find_by_code(code.downcase)
       end
     end
 
