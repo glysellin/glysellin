@@ -1,7 +1,14 @@
 require "factory_girl"
 
 FactoryGirl.define do
-  factory :product, class: Glysellin::Product do
+  factory :sellable, class: Glysellin::Sellable do
+    sequence(:name) { |n| "Product #{ n }" }
+  end
+
+  factory :variant, class: Glysellin::Variant do
+    sequence(:name) { |n| "Variant #{ n }" }
+    price 10
+    in_stock 10
   end
 
   factory :order, class: Glysellin::Order do

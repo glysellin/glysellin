@@ -18,33 +18,6 @@ module Glysellin
       #   should have unlimited stock. Defaults to true
       #
       def acts_as_sellable options = {}
-        # Merge options with defaults and store them for further use
-        cattr_accessor :sellable_options
-        self.sellable_options = options.reverse_merge(
-          simple: false,
-          stock: true
-        )
-
-        cattr_accessor :sold_callback
-        self.sold_callback = options[:sold]
-
-        if sellable_options[:simple]
-          include Sellable::Simple
-        else
-          include Sellable::Multi
-        end
-
-        # Defines the polymorphic has_one association with the
-        # Glysellin::Product model, holding product wide configurations
-        has_one :product, as: :sellable, class_name: "Glysellin::Product",
-          inverse_of: :sellable, dependent: :destroy
-        accepts_nested_attributes_for :product, allow_destroy: true
-        attr_accessible :product_attributes
-
-        unless sellable_options[:stock]
-          before_validation :ensure_unlimited_stock
-        end
-
         # Attributes delegation. Allowing to consider Product as a simple
         # configuration model for the sellable one.
         #

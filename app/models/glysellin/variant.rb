@@ -8,7 +8,7 @@ module Glysellin
 
     self.table_name = 'glysellin_variants'
 
-    belongs_to :sellable, polymorphic: true
+    belongs_to :sellable, class_name: "Glysellin::Sellable"
 
     has_many :properties, class_name: 'Glysellin::ProductProperty',
       extend: Glysellin::PropertyFinder, dependent: :destroy,
@@ -16,10 +16,7 @@ module Glysellin
 
     accepts_nested_attributes_for :properties, allow_destroy: true
 
-    validates_presence_of :name, if: proc { |variant|
-      variant.sellable.variants.length > 1
-    }
-
+    validates_presence_of :name
     validates_numericality_of :price
     validates_numericality_of :in_stock, if: proc { |v| v.in_stock.presence }
 
@@ -34,8 +31,8 @@ module Glysellin
       )
     SQL
 
-    scope :available, where(AVAILABLE_QUERY, true, true, 0)
-    scope :published, where(published: true)
+    scope :available, -> { where(AVAILABLE_QUERY, true, true, 0) }
+    scope :published, -> { where(published: true) }
 
     # def prepare_properties
     #   if product && product.product_type
@@ -45,14 +42,10 @@ module Glysellin
     #   end
     # end
 
-    def description
-      sellable.description if sellable.respond_to?(:description)
-    end
-
     delegate :vat_rate, :vat_ratio, to: :sellable
 
-
     def check_prices
+      return unless sellable
       # If we have to fill one of the prices when changed
       if eot_changed_alone?
         self.price = (self.eot_price * vat_ratio).round(2)
@@ -70,6 +63,10 @@ module Glysellin
 
     def price_changed_alone?
       self.price_changed? || (self.new_record? && self.price)
+    end
+
+    def description
+      sellable ? sellable.description : ""
     end
 
     def in_stock?

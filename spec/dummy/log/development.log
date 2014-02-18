@@ -385,3 +385,9 @@ Migrating to DeviseCreateUsers (20140206210102)
   [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20140206210102"]]
   [1m[36m (2.6ms)[0m  [1mcommit transaction[0m
   [1m[35mActiveRecord::SchemaMigration Load (0.2ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateGlysellinOrders (20140218161659)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "glysellin_orders" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ref" varchar(255), "status" varchar(255), "paid_on" datetime, "user_id" integer, "billing_address_id" integer, "shipping_address_id" integer, "state" varchar(255), "customer_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+SQLite3::SQLException: table "glysellin_orders" already exists: CREATE TABLE "glysellin_orders" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ref" varchar(255), "status" varchar(255), "paid_on" datetime, "user_id" integer, "billing_address_id" integer, "shipping_address_id" integer, "state" varchar(255), "customer_id" integer, "created_at" datetime, "updated_at" datetime) 
+  [1m[35m (0.0ms)[0m  rollback transaction

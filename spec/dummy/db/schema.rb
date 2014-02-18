@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140206210102) do
+ActiveRecord::Schema.define(version: 20140218173133) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -148,13 +148,15 @@ ActiveRecord::Schema.define(version: 20140206210102) do
     t.string "name"
   end
 
-  create_table "glysellin_products", force: true do |t|
+  create_table "glysellin_sellables", force: true do |t|
     t.decimal  "vat_rate",      precision: 11, scale: 2
     t.integer  "brand_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "sellable_type"
     t.integer  "sellable_id"
+    t.string   "name"
+    t.text     "description"
   end
 
   create_table "glysellin_shipping_methods", force: true do |t|
