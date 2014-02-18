@@ -4,7 +4,7 @@ module Glysellin
   self.config do |config|
     # User model must be set in order to bind customers to authenticable users
     #   default: 'User'
-    # config.user_class_name = 'User'
+    config.user_class_name = 'Customer'
 
     # Add additional fields to address model
     #   default: []

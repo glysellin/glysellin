@@ -29,6 +29,7 @@ Spork.prefork do
   require "database_cleaner"
 
   RSpec.configure do |config|
+    config.include FactoryGirl::Syntax::Methods
     config.include Paperclip::Shoulda::Matchers
     ### Mock Framework
     #

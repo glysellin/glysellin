@@ -26,10 +26,10 @@ FactoryGirl.define do
     country "Country"
   end
 
-  factory :customer, class: Glysellin.user_class_name.constantize do
+  factory :customer, class: Glysellin::Customer do
+    first_name 'first_name'
+    last_name 'last_name'
     sequence(:email) { |n| "customer-#{ n }@example.com" }
-    password "azerty123"
-    password_confirmation "azerty123"
   end
 
   factory :discount_code, class: Glysellin::DiscountCode do

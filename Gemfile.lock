@@ -5,7 +5,7 @@ PATH
       activemerchant
       country_select
       devise
-      friendly_id (~> 4.0.9)
+      friendly_id (~> 5.0)
       money
       paperclip
       rails (~> 4.0)
@@ -92,7 +92,8 @@ GEM
       railties (>= 3.0.0)
     ffi (1.9.3)
     formatador (0.2.4)
-    friendly_id (4.0.10)
+    friendly_id (5.0.2)
+      activerecord (~> 4.0.0)
     guard (2.4.0)
       formatador (>= 0.2.4)
       listen (~> 2.1)
