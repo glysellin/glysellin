@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "simple_form"
   s.add_dependency "country_select"
   s.add_dependency "state_machine"
-  s.add_dependency "friendly_id", "~> 4.0.9"
+  s.add_dependency "friendly_id", "~> 5.0"
   s.add_dependency "devise"
 
   s.add_development_dependency "sqlite3"
