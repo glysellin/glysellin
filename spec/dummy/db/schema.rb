@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140218163514) do
+ActiveRecord::Schema.define(version: 20140218165003) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -50,6 +50,8 @@ ActiveRecord::Schema.define(version: 20140218163514) do
     t.string   "email",      default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "glysellin_customers", ["email"], name: "index_glysellin_customers_on_email", unique: true
@@ -101,9 +103,8 @@ ActiveRecord::Schema.define(version: 20140218163514) do
     t.string   "ref"
     t.string   "status"
     t.datetime "paid_on"
-    t.integer  "user_id"
-    t.string   "state"
     t.integer  "customer_id"
+    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "shipping_method_id"
