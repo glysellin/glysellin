@@ -1,7 +1,12 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/version.rb": [
+        1,
+        1,
+        null
+      ],
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin.rb": [
         1,
         1,
         null,
@@ -128,7 +133,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/active_model/model.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/active_model/model.rb": [
         null,
         null,
         1,
@@ -231,7 +236,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/engine.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/engine.rb": [
         1,
         1,
         1,
@@ -258,7 +263,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/helpers.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/helpers.rb": [
         1,
         1,
         1,
@@ -268,7 +273,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/helpers/controller.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/helpers/controller.rb": [
         1,
         1,
         1,
@@ -292,7 +297,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/helpers/countries.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/helpers/countries.rb": [
         null,
         1,
         1,
@@ -555,7 +560,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/helpers/views.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/helpers/views.rb": [
         1,
         1,
         1,
@@ -585,7 +590,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/sellable.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/sellable.rb": [
         1,
         1,
         null,
@@ -659,7 +664,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/sellable/simple.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/sellable/simple.rb": [
         1,
         1,
         1,
@@ -691,7 +696,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/sellable/multi.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/sellable/multi.rb": [
         1,
         1,
         1,
@@ -717,7 +722,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/orderer.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/orderer.rb": [
         1,
         1,
         1,
@@ -754,7 +759,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/engine/routes.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/engine/routes.rb": [
         1,
         1,
         1,
@@ -806,7 +811,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/gateway.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/gateway.rb": [
         1,
         1,
         1,
@@ -817,7 +822,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/gateway/base.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/gateway/base.rb": [
         1,
         null,
         1,
@@ -862,7 +867,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/gateway/paypal_integral.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/gateway/paypal_integral.rb": [
         1,
         1,
         1,
@@ -935,7 +940,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/gateway/atos.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/gateway/atos.rb": [
         1,
         1,
         1,
@@ -1048,7 +1053,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/gateway/check.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/gateway/check.rb": [
         1,
         1,
         1,
@@ -1084,7 +1089,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/adjustment.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/adjustment.rb": [
         1,
         1,
         1,
@@ -1093,7 +1098,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/discount_type_calculator.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/discount_type_calculator.rb": [
         1,
         1,
         null,
@@ -1102,7 +1107,7 @@
         1,
         1
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/discount_type_calculator/base.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/discount_type_calculator/base.rb": [
         1,
         1,
         0,
@@ -1134,7 +1139,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/discount_type_calculator/order_percentage.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/discount_type_calculator/order_percentage.rb": [
         1,
         1,
         1,
@@ -1152,7 +1157,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/property_finder.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/property_finder.rb": [
         1,
         1,
         1,
@@ -1167,7 +1172,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/products_list.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/products_list.rb": [
         1,
         1,
         1,
@@ -1241,7 +1246,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/shipping_carrier.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/shipping_carrier.rb": [
         1,
         null,
         1,
@@ -1257,7 +1262,7 @@
         1,
         1
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/shipping_carrier/helpers/country_weight_table.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/shipping_carrier/helpers/country_weight_table.rb": [
         1,
         1,
         1,
@@ -1324,7 +1329,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/shipping_carrier/base.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/shipping_carrier/base.rb": [
         1,
         null,
         1,
@@ -1381,7 +1386,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/shipping_carrier/colissimo.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/shipping_carrier/colissimo.rb": [
         1,
         1,
         1,
@@ -1402,7 +1407,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/shipping_carrier/lettre_max.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/shipping_carrier/lettre_max.rb": [
         1,
         1,
         1,
@@ -1423,7 +1428,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/shipping_carrier/free_shipping.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/shipping_carrier/free_shipping.rb": [
         1,
         1,
         1,
@@ -1439,7 +1444,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart.rb": [
         null,
         null,
         1,
@@ -1462,7 +1467,7 @@
         1,
         1
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/model_wrapper.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/model_wrapper.rb": [
         1,
         1,
         1,
@@ -1554,7 +1559,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/nested_resource.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/nested_resource.rb": [
         1,
         1,
         1,
@@ -1595,7 +1600,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/select.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/select.rb": [
         1,
         1,
         1,
@@ -1628,7 +1633,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/serializable.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/serializable.rb": [
         1,
         1,
         1,
@@ -1660,7 +1665,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/product.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/product.rb": [
         1,
         1,
         1,
@@ -1678,7 +1683,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/customer.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/customer.rb": [
         1,
         1,
         1,
@@ -1716,7 +1721,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/address.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/address.rb": [
         1,
         1,
         1,
@@ -1734,7 +1739,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/payment_method.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/payment_method.rb": [
         1,
         1,
         1,
@@ -1744,7 +1749,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/shipping_method.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/shipping_method.rb": [
         1,
         1,
         1,
@@ -1754,7 +1759,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/adjustment.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/adjustment.rb": [
         1,
         1,
         1,
@@ -1773,7 +1778,7 @@
         1,
         1
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/adjustment/base.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/adjustment/base.rb": [
         1,
         1,
         1,
@@ -1816,7 +1821,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/adjustment/discount_code.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/adjustment/discount_code.rb": [
         1,
         1,
         1,
@@ -1861,7 +1866,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/adjustment/shipping_method.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/adjustment/shipping_method.rb": [
         1,
         1,
         1,
@@ -1894,7 +1899,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/lib/glysellin/cart/basket.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/lib/glysellin/cart/basket.rb": [
         1,
         null,
         1,
@@ -2378,13 +2383,13 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/app/helpers/glysellin/application_helper.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/helpers/glysellin/application_helper.rb": [
         1,
         1,
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/app/helpers/glysellin/cart_helper.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/helpers/glysellin/cart_helper.rb": [
         1,
         1,
         1,
@@ -2395,99 +2400,6 @@
         null,
         null,
         null,
-        null,
-        null,
-        1,
-        0,
-        null,
-        null,
-        1,
-        0,
-        null,
-        null,
-        null
-      ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/app/helpers/glysellin/orders_helper.rb": [
-        1,
-        1,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        1,
-        null,
-        0,
-        0,
-        0,
-        0,
-        0,
-        null,
-        null,
-        null,
-        0,
-        0,
-        null,
-        null,
-        null,
-        0,
-        0,
-        null,
-        null,
-        null,
-        0,
-        0,
-        null,
-        0,
-        null,
-        null,
-        null
-      ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/app/helpers/glysellin/products_helper.rb": [
-        1,
-        1,
-        1,
-        null,
-        0,
-        null,
-        0,
-        0,
-        0,
-        0,
-        null,
-        0,
-        0,
-        null,
-        null,
-        null,
-        0,
-        null,
-        null,
-        0,
-        null,
-        null,
-        null
-      ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/app/models/glysellin/product.rb": [
-        1,
-        null,
-        1,
-        1,
-        null,
-        1,
-        null,
-        1,
-        1,
-        null,
-        1,
-        null,
-        1,
-        0,
-        null,
-        null,
-        1,
-        0,
         null,
         null,
         1,
@@ -2500,7 +2412,100 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/app/models/glysellin/order.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/helpers/glysellin/orders_helper.rb": [
+        1,
+        1,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        1,
+        null,
+        0,
+        0,
+        0,
+        0,
+        0,
+        null,
+        null,
+        null,
+        0,
+        0,
+        null,
+        null,
+        null,
+        0,
+        0,
+        null,
+        null,
+        null,
+        0,
+        0,
+        null,
+        0,
+        null,
+        null,
+        null
+      ],
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/helpers/glysellin/products_helper.rb": [
+        1,
+        1,
+        1,
+        null,
+        0,
+        null,
+        0,
+        0,
+        0,
+        0,
+        null,
+        0,
+        0,
+        null,
+        null,
+        null,
+        0,
+        null,
+        null,
+        0,
+        null,
+        null,
+        null
+      ],
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/models/glysellin/product.rb": [
+        1,
+        null,
+        1,
+        1,
+        null,
+        1,
+        null,
+        1,
+        1,
+        null,
+        1,
+        null,
+        1,
+        0,
+        null,
+        null,
+        1,
+        0,
+        null,
+        null,
+        1,
+        0,
+        null,
+        null,
+        1,
+        0,
+        null,
+        null,
+        null
+      ],
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/models/glysellin/order.rb": [
         1,
         null,
         1,
@@ -2725,7 +2730,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/app/models/glysellin/address.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/models/glysellin/address.rb": [
         1,
         1,
         1,
@@ -2757,7 +2762,19 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/app/models/glysellin/discount_code.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/models/glysellin/customer.rb": [
+        1,
+        1,
+        1,
+        null,
+        null,
+        null,
+        null,
+        1,
+        null,
+        null
+      ],
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/models/glysellin/discount_code.rb": [
         1,
         1,
         1,
@@ -2792,7 +2809,7 @@
         null,
         null
       ],
-      "/Users/vala/Documents/development/ruby/gems/glysellin/app/models/glysellin/discount_type.rb": [
+      "/Users/user/Dropbox/Research/glyph/glysellin/app/models/glysellin/discount_type.rb": [
         1,
         1,
         1,
@@ -2802,6 +2819,6 @@
         null
       ]
     },
-    "timestamp": 1392026712
+    "timestamp": 1392740957
   }
 }
