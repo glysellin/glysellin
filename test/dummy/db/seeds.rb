@@ -1,1 +1,0 @@
-User.create! :email => 'vala@test.com', :password => 'vala94', :password_confirmation => 'vala94'

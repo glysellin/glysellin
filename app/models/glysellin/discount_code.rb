@@ -1,8 +1,8 @@
 module Glysellin
   class DiscountCode < ActiveRecord::Base
-    self.table_name = 'glysellin_discount_codes'
+    include Adjustment
 
-    attr_accessible :code, :discount_type_id, :expires_on, :name, :value
+    self.table_name = 'glysellin_discount_codes'
 
     belongs_to :discount_type, inverse_of: :discount_codes
     has_many :order_adjustments, as: :adjustment
@@ -10,27 +10,24 @@ module Glysellin
     validates_presence_of :name, :code, :discount_type, :value
 
     def code=(val)
-      super(val.downcase)
+      super(val && val.downcase)
     end
 
     def applicable?
       !expires_on || expires_on > Time.now
     end
 
-    def to_adjustment order
-      calculator = Glysellin.discount_type_calculators[discount_type.identifier].new(order, value)
-
-      {
-        name: name,
-        value: -calculator.calculate,
-        adjustment: self
-      }
-    end
-
     class << self
       def from_code code
         find_by_code(code.downcase)
       end
+    end
+
+    private
+
+    def adjustment_value_for order
+      calculator = Glysellin.discount_type_calculators[discount_type.identifier]
+      calculator.new(order, value).calculate
     end
   end
 end

@@ -9,7 +9,7 @@ module Glysellin
       end
 
       def calculate
-        @order.subtotal * @value
+        -(@order.subtotal * @value)
       end
     end
   end

@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "rails", "~> 3.2.0"
+  s.add_dependency "rails", "~> 4.0"
   s.add_dependency "paperclip"
   s.add_dependency "money"
   s.add_dependency "activemerchant"
@@ -23,6 +23,19 @@ Gem::Specification.new do |s|
   s.add_dependency "country_select"
   s.add_dependency "state_machine"
   s.add_dependency "friendly_id", "~> 4.0.9"
+  s.add_dependency "devise"
 
-  s.add_development_dependency "mysql2"
+  s.add_development_dependency "sqlite3"
+  s.add_development_dependency 'rspec-rails', '~> 3.0.0.beta'
+  s.add_development_dependency "factory_girl_rails", "~> 4.0"
+  s.add_development_dependency 'shoulda-matchers'
+  s.add_development_dependency 'spork', '~> 1.0rc'
+  s.add_development_dependency 'guard-spork'
+  s.add_development_dependency "database_cleaner"
+  s.add_development_dependency "capybara"
+  s.add_development_dependency "guard-rspec"
+  s.add_development_dependency 'terminal-notifier-guard'
+  s.add_development_dependency "launchy"
+  s.add_development_dependency 'selenium-webdriver'
+  s.add_development_dependency 'simplecov'
 end

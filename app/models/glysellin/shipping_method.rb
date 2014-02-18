@@ -1,22 +1,19 @@
 module Glysellin
   class ShippingMethod < ActiveRecord::Base
-    self.table_name = "glysellin_shipping_methods"
+    include Adjustment
 
-    attr_accessible :identifier, :name
+    self.table_name = "glysellin_shipping_methods"
 
     has_many :orders, inverse_of: :shipping_method
     has_many :order_adjustments, as: :adjustment
 
-    scope :ordered, order("name ASC")
+    scope :ordered, -> { order("name ASC") }
 
-    def to_adjustment order
-      calculator = Glysellin.shipping_carriers[identifier].new(order)
+    private
 
-      {
-        name: name,
-        value: calculator.calculate,
-        adjustment: self
-      }
+    def adjustment_value_for order
+      calculator = Glysellin.shipping_carriers[identifier]
+      calculator.new(order).calculate
     end
   end
 end

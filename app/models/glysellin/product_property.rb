@@ -1,7 +1,6 @@
 module Glysellin
   class ProductProperty < ActiveRecord::Base
     self.table_name = 'glysellin_product_properties'
-    attr_accessible :value, :variant_id, :type_id
 
     belongs_to :variant, class_name: "Glysellin::Variant",
       inverse_of: :properties

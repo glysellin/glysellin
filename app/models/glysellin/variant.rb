@@ -8,11 +8,6 @@ module Glysellin
 
     self.table_name = 'glysellin_variants'
 
-    attr_accessible :eot_price, :in_stock, :name, :position, :price,
-      :published, :sku, :slug, :unlimited_stock, :sellable_id,
-      :sellable_type, :properties_attributes, :weight,
-      :unmarked_price
-
     belongs_to :sellable, polymorphic: true
 
     has_many :properties, class_name: 'Glysellin::ProductProperty',

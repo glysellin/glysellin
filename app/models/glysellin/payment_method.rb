@@ -3,8 +3,6 @@ module Glysellin
     self.table_name = 'glysellin_payment_methods'
     has_many :payments, :foreign_key => 'type_id'
 
-    attr_accessible :name, :slug
-
     scope :ordered, order("name ASC")
 
     class << self

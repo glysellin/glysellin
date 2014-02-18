@@ -1,0 +1,387 @@
+  [1m[36m (1.0ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) [0m
+  [1m[35m (0.8ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateGlysellinOrders (20120206115004)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mCREATE TABLE "glysellin_orders" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ref" varchar(255), "status" varchar(255), "paid_on" datetime, "user_id" integer, "billing_address_id" integer, "shipping_address_id" integer, "state" varchar(255), "customer_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20120206115004"]]
+  [1m[36m (0.9ms)[0m  [1mcommit transaction[0m
+Migrating to CreateGlysellinCustomers (20120206115132)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mCREATE TABLE "glysellin_customers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20120206115132"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to CreateGlysellinAddresses (20120206115657)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.5ms)[0m  [1mCREATE TABLE "glysellin_addresses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "activated" boolean DEFAULT 't', "company" boolean, "company_name" varchar(255), "vat_number" varchar(255), "first_name" varchar(255), "last_name" varchar(255), "address" text, "address_details" text, "zip" varchar(255), "city" varchar(255), "country" varchar(255), "tel" varchar(255), "fax" varchar(255), "additional_fields" text, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20120206115657"]]
+  [1m[36m (0.6ms)[0m  [1mcommit transaction[0m
+Migrating to CreateGlysellinProducts (20120206124505)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mCREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "price" decimal(11,2), "vat_rate" decimal(11,2), "in_stock" integer DEFAULT 0, "position" integer DEFAULT 1, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20120206124505"]]
+  [1m[36m (0.6ms)[0m  [1mcommit transaction[0m
+Migrating to CreateGlysellinOrderItems (20120206124545)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "glysellin_order_items" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "eot_price" decimal(11,2), "price" decimal(11,2), "vat_rate" decimal(11,2), "quantity" integer, "order_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20120206124545"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to CreateGlysellinProductImages (20120206124630)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "glysellin_product_images" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "imageable_id" integer, "imageable_type" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20120206124630"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to AddAttachmentImageToProductImage (20120206125210)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "glysellin_product_images" ADD "image_file_name" varchar(255)[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "glysellin_product_images" ADD "image_content_type" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "glysellin_product_images" ADD "image_file_size" integer[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "glysellin_product_images" ADD "image_updated_at" datetime
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20120206125210"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Migrating to CreateGlysellinPayments (20120206130920)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "glysellin_payments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "status" varchar(255), "type_id" integer, "order_id" integer, "last_payment_action_on" datetime, "transaction_id" integer, "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20120206130920"]]
+  [1m[35m (0.7ms)[0m  commit transaction
+Migrating to CreateGlysellinPaymentMethods (20120206131042)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "glysellin_payment_methods" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "slug" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20120206131042"]]
+  [1m[35m (0.5ms)[0m  commit transaction
+Migrating to CreateGlysellinTaxonomies (20120207175050)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "glysellin_taxonomies" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "slug" varchar(255), "parent_taxonomy_id" integer, "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20120207175050"]]
+  [1m[35m (0.5ms)[0m  commit transaction
+Migrating to CreateProductsTaxonomiesTable (20120207175158)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "glysellin_products_taxonomies" ("product_id" integer, "taxonomy_id" integer) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20120207175158"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Migrating to CreateBrands (20120515143231)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "glysellin_brands" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20120515143231"]]
+  [1m[35m (0.5ms)[0m  commit transaction
+Migrating to AddAttachmentImageToBrands (20120515143233)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "glysellin_brands" ADD "image_file_name" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "glysellin_brands" ADD "image_content_type" varchar(255)[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "glysellin_brands" ADD "image_file_size" integer
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "glysellin_brands" ADD "image_updated_at" datetime[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20120515143233"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to CreateProductProperties (20120620151705)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mCREATE TABLE "glysellin_product_properties" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "value" varchar(255), "adjustement" decimal(11,2), "product_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20120620151705"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to CreateGlysellinDiscountTypes (20130204121211)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "glysellin_discount_types" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "identifier" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130204121211"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to CreateGlysellinDiscountCodes (20130204121228)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mCREATE TABLE "glysellin_discount_codes" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "code" varchar(255), "discount_type_id" integer, "value" decimal(11,2), "expires_on" datetime, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35m (0.1ms)[0m  CREATE INDEX "index_glysellin_discount_codes_on_code" ON "glysellin_discount_codes" ("code")
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130204121228"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Migrating to CreateGlysellinOrderAdjustments (20130204125310)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "glysellin_order_adjustments" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "value" decimal(11,2), "order_id" integer, "adjustment_id" integer, "adjustment_type" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130204125310"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Migrating to CreateGlysellinShippingMethods (20130204202102)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "glysellin_shipping_methods" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "identifier" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36m (0.1ms)[0m  [1mCREATE INDEX "index_glysellin_shipping_methods_on_identifier" ON "glysellin_shipping_methods" ("identifier")[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130204202102"]]
+  [1m[36m (0.8ms)[0m  [1mcommit transaction[0m
+Migrating to AddShippingMethodIdToGlysellinOrders (20130204202109)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "glysellin_orders" ADD "shipping_method_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130204202109"]]
+  [1m[36m (0.6ms)[0m  [1mcommit transaction[0m
+Migrating to AddWeightToGlysellinProducts (20130205110036)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "glysellin_products" ADD "weight" decimal(11,3)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130205110036"]]
+  [1m[36m (0.8ms)[0m  [1mcommit transaction[0m
+Migrating to AddWeightToGlysellinOrderItems (20130205120541)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mALTER TABLE "glysellin_order_items" ADD "weight" decimal(11,3)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130205120541"]]
+  [1m[36m (0.9ms)[0m  [1mcommit transaction[0m
+Migrating to CreateGlysellinVariants (20130208162813)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mCREATE TABLE "glysellin_variants" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "eot_price" decimal(11,2), "price" decimal(11,2), "in_stock" integer DEFAULT 0, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "position" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130208162813"]]
+  [1m[36m (0.8ms)[0m  [1mcommit transaction[0m
+Migrating to CreateGlysellinProductPropertyTypes (20130208165020)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mCREATE TABLE "glysellin_product_property_types" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255)) [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130208165020"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to AddTypeIdToGlysellinProductProperties (20130211105557)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "glysellin_product_properties" ADD "type_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130211105557"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to AddVariantIdToGlysellinProductProperties (20130211112302)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "glysellin_product_properties" ADD "variant_id" integer[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "glysellin_product_properties" ADD "variant_type" varchar(255)
+  [1m[36m (0.9ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_product_properties" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "value" varchar(255), "adjustement" decimal(11,2), "product_id" integer, "created_at" datetime, "updated_at" datetime, "type_id" integer, "variant_id" integer, "variant_type" varchar(255)) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_product_properties"
+  [1m[36m (0.3ms)[0m  [1mDROP TABLE "glysellin_product_properties"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_product_properties" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "value" varchar(255), "adjustement" decimal(11,2), "created_at" datetime, "updated_at" datetime, "type_id" integer, "variant_id" integer, "variant_type" varchar(255)) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_product_properties"[0m
+  [1m[35m (0.4ms)[0m  DROP TABLE "aglysellin_product_properties"
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130211112302"]]
+  [1m[35m (1.0ms)[0m  commit transaction
+Migrating to AddProductIdToGlysellinVariants (20130211152651)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "glysellin_variants" ADD "product_id" integer
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130211152651"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Migrating to AddWeightToGlysellinVariants (20130212131658)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "glysellin_variants" ADD "weight" decimal
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130212131658"]]
+  [1m[35m (0.6ms)[0m  commit transaction
+Migrating to RemoveVariantColumnsFromGlysellinProducts (20130212132253)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "price" decimal(11,2), "vat_rate" decimal(11,2), "in_stock" integer DEFAULT 0, "position" integer DEFAULT 1, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "weight" decimal(11,3)) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "glysellin_products"[0m
+  [1m[35m (0.2ms)[0m  DROP TABLE "glysellin_products"
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "vat_rate" decimal(11,2), "in_stock" integer DEFAULT 0, "position" integer DEFAULT 1, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "weight" decimal(11,3)) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "aglysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "aglysellin_products"[0m
+  [1m[35m (0.1ms)[0m  CREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "vat_rate" decimal(11,2), "in_stock" integer DEFAULT 0, "position" integer DEFAULT 1, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "weight" decimal(11,3)) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "glysellin_products"[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "glysellin_products"
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "weight" decimal(11,3)) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "aglysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "aglysellin_products"[0m
+  [1m[35m (0.1ms)[0m  CREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "weight" decimal(11,3)) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "glysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "glysellin_products"
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "weight" decimal(11,3)) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "aglysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "aglysellin_products"[0m
+  [1m[35m (0.2ms)[0m  CREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "weight" decimal(11,3)) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "glysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "glysellin_products"
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "aglysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "aglysellin_products"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130212132253"]]
+  [1m[36m (0.9ms)[0m  [1mcommit transaction[0m
+Migrating to RemoveEotPriceFromGlysellinProducts (20130212154943)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "eot_price" decimal(11,2), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35m (0.2ms)[0m  SELECT * FROM "glysellin_products"
+  [1m[36m (0.4ms)[0m  [1mDROP TABLE "glysellin_products"[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_products"
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130212154943"]]
+  [1m[35m (0.7ms)[0m  commit transaction
+Migrating to CreateGlysellinProductTypes (20130214184204)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "glysellin_product_types" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "created_at" datetime, "updated_at" datetime) 
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130214184204"]]
+  [1m[35m (0.7ms)[0m  commit transaction
+Migrating to CreateProductTypeBehavior (20130214184352)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TABLE "glysellin_product_types_properties" ("product_type_id" integer, "product_property_id" integer) 
+  [1m[36m (0.2ms)[0m  [1mALTER TABLE "glysellin_products" ADD "product_type_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130214184352"]]
+  [1m[36m (0.6ms)[0m  [1mcommit transaction[0m
+Migrating to AddUnmarkedPriceToGlysellinVariants (20130221102200)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "glysellin_variants" ADD "unmarked_price" decimal(11,2)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130221102200"]]
+  [1m[36m (0.8ms)[0m  [1mcommit transaction[0m
+Migrating to AddAddressableToGlysellinAddresses (20130311135842)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mALTER TABLE "glysellin_addresses" ADD "addressable_type" varchar(255)[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "glysellin_addresses" ADD "addressable_id" integer
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130311135842"]]
+  [1m[35m (0.9ms)[0m  commit transaction
+Migrating to ChangeAddressableAssociationsInGlysellinAddresses (20130314114048)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  CREATE TEMPORARY TABLE "aglysellin_addresses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "activated" boolean DEFAULT 't', "company" boolean, "company_name" varchar(255), "vat_number" varchar(255), "first_name" varchar(255), "last_name" varchar(255), "address" text, "address_details" text, "zip" varchar(255), "city" varchar(255), "country" varchar(255), "tel" varchar(255), "fax" varchar(255), "additional_fields" text, "created_at" datetime, "updated_at" datetime, "addressable_type" varchar(255), "addressable_id" integer) 
+  [1m[36m (0.2ms)[0m  [1mSELECT * FROM "glysellin_addresses"[0m
+  [1m[35m (0.4ms)[0m  DROP TABLE "glysellin_addresses"
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "glysellin_addresses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "activated" boolean DEFAULT 't', "company" boolean, "company_name" varchar(255), "vat_number" varchar(255), "first_name" varchar(255), "last_name" varchar(255), "address" text, "address_details" text, "zip" varchar(255), "city" varchar(255), "country" varchar(255), "tel" varchar(255), "fax" varchar(255), "additional_fields" text, "created_at" datetime, "updated_at" datetime, "addressable_id" integer) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "aglysellin_addresses"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "aglysellin_addresses"[0m
+  [1m[35m (0.1ms)[0m  CREATE TEMPORARY TABLE "aglysellin_addresses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "activated" boolean DEFAULT 't', "company" boolean, "company_name" varchar(255), "vat_number" varchar(255), "first_name" varchar(255), "last_name" varchar(255), "address" text, "address_details" text, "zip" varchar(255), "city" varchar(255), "country" varchar(255), "tel" varchar(255), "fax" varchar(255), "additional_fields" text, "created_at" datetime, "updated_at" datetime, "addressable_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "glysellin_addresses"[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "glysellin_addresses"
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "glysellin_addresses" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "activated" boolean DEFAULT 't', "company" boolean, "company_name" varchar(255), "vat_number" varchar(255), "first_name" varchar(255), "last_name" varchar(255), "address" text, "address_details" text, "zip" varchar(255), "city" varchar(255), "country" varchar(255), "tel" varchar(255), "fax" varchar(255), "additional_fields" text, "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "aglysellin_addresses"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "aglysellin_addresses"[0m
+  [1m[35m (0.2ms)[0m  ALTER TABLE "glysellin_addresses" ADD "shipped_addressable_type" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "glysellin_addresses" ADD "shipped_addressable_id" integer[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "glysellin_addresses" ADD "billed_addressable_type" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "glysellin_addresses" ADD "billed_addressable_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130314114048"]]
+  [1m[36m (0.9ms)[0m  [1mcommit transaction[0m
+Migrating to RemoveAddressIdsFromGlysellinOrders (20130325113903)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_orders" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ref" varchar(255), "status" varchar(255), "paid_on" datetime, "user_id" integer, "billing_address_id" integer, "shipping_address_id" integer, "state" varchar(255), "customer_id" integer, "created_at" datetime, "updated_at" datetime, "shipping_method_id" integer) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_orders"
+  [1m[36m (0.2ms)[0m  [1mDROP TABLE "glysellin_orders"[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "glysellin_orders" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ref" varchar(255), "status" varchar(255), "paid_on" datetime, "user_id" integer, "shipping_address_id" integer, "state" varchar(255), "customer_id" integer, "created_at" datetime, "updated_at" datetime, "shipping_method_id" integer) 
+  [1m[36m (0.0ms)[0m  [1mSELECT * FROM "aglysellin_orders"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_orders"
+  [1m[36m (0.1ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_orders" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ref" varchar(255), "status" varchar(255), "paid_on" datetime, "user_id" integer, "shipping_address_id" integer, "state" varchar(255), "customer_id" integer, "created_at" datetime, "updated_at" datetime, "shipping_method_id" integer) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_orders"
+  [1m[36m (0.3ms)[0m  [1mDROP TABLE "glysellin_orders"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_orders" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "ref" varchar(255), "status" varchar(255), "paid_on" datetime, "user_id" integer, "state" varchar(255), "customer_id" integer, "created_at" datetime, "updated_at" datetime, "shipping_method_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_orders"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_orders"
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130325113903"]]
+  [1m[35m (0.7ms)[0m  commit transaction
+Migrating to AddSellableReferencesToGlysellinProducts (20130609013900)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  ALTER TABLE "glysellin_products" ADD "sellable_type" varchar(255)
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "glysellin_products" ADD "sellable_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130609013900"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to RemoveUnusedFieldsFromGlysellinProducts (20130609023300)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.0ms)[0m  [1mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to RemoveUnusedFieldsFromGlysellinProducts (20130609023300)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (1.2ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "description" text, "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_products"
+  [1m[36m (0.3ms)[0m  [1mDROP TABLE "glysellin_products"[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "slug" varchar(255), "description" text, "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_products"[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "aglysellin_products"
+  [1m[36m (0.2ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "slug" varchar(255), "description" text, "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_products"
+  [1m[36m (0.3ms)[0m  [1mDROP TABLE "glysellin_products"[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "slug" varchar(255), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_products"
+  [1m[36m (0.2ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "slug" varchar(255), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "glysellin_products"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "slug" varchar(255), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_products"
+  [1m[36m (0.1ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "slug" varchar(255), "vat_rate" decimal(11,2), "position" integer DEFAULT 1, "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "glysellin_products"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "slug" varchar(255), "vat_rate" decimal(11,2), "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_products"
+  [1m[36m (0.1ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "slug" varchar(255), "vat_rate" decimal(11,2), "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "glysellin_products"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "vat_rate" decimal(11,2), "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_products"
+  [1m[36m (0.1ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "vat_rate" decimal(11,2), "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) [0m
+  [1m[35m (0.0ms)[0m  SELECT * FROM "glysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "glysellin_products"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "vat_rate" decimal(11,2), "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) 
+  [1m[36m (0.0ms)[0m  [1mSELECT * FROM "aglysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_products"
+  [1m[36m (0.1ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "vat_rate" decimal(11,2), "published" boolean DEFAULT 't', "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) [0m
+  [1m[35m (0.0ms)[0m  SELECT * FROM "glysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "glysellin_products"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "vat_rate" decimal(11,2), "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_products"
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130609023300"]]
+  [1m[35m (7.0ms)[0m  commit transaction
+Migrating to RemoveTaxonomiesFromSystem (20130609025800)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "glysellin_taxonomies"
+  [1m[36m (0.3ms)[0m  [1mDROP TABLE "glysellin_products_taxonomies"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130609025800"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to RenameOrderItemsToLineItems (20130609040600)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mALTER TABLE "glysellin_order_items" RENAME TO "glysellin_line_items"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130609040600"]]
+  [1m[36m (0.7ms)[0m  [1mcommit transaction[0m
+Migrating to AddVariantIdToGlysellinLineItems (20130609142100)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "glysellin_line_items" ADD "variant_id" integer[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130609142100"]]
+  [1m[36m (0.6ms)[0m  [1mcommit transaction[0m
+Migrating to MakeVariantsBelongToSellablesAndNotProducts (20130609155600)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.3ms)[0m  [1mALTER TABLE "glysellin_variants" ADD "sellable_id" integer[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "glysellin_variants" ADD "sellable_type" varchar(255)
+  [1m[36m (0.2ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_variants" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "eot_price" decimal(11,2), "price" decimal(11,2), "in_stock" integer DEFAULT 0, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "position" integer, "created_at" datetime, "updated_at" datetime, "product_id" integer, "weight" decimal, "unmarked_price" decimal(11,2), "sellable_id" integer, "sellable_type" varchar(255)) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_variants"
+  [1m[36m (0.4ms)[0m  [1mDROP TABLE "glysellin_variants"[0m
+  [1m[35m (0.2ms)[0m  CREATE TABLE "glysellin_variants" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "eot_price" decimal(11,2), "price" decimal(11,2), "in_stock" integer DEFAULT 0, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "position" integer, "created_at" datetime, "updated_at" datetime, "weight" decimal, "unmarked_price" decimal(11,2), "sellable_id" integer, "sellable_type" varchar(255)) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_variants"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_variants"
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130609155600"]]
+  [1m[35m (1.0ms)[0m  commit transaction
+Migrating to DropProductTypes (20130609193600)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  DROP TABLE "glysellin_product_types"
+  [1m[36m (0.4ms)[0m  [1mDROP TABLE "glysellin_product_types_properties"[0m
+  [1m[35m (0.2ms)[0m  CREATE TEMPORARY TABLE "aglysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "vat_rate" decimal(11,2), "brand_id" integer, "created_at" datetime, "updated_at" datetime, "product_type_id" integer, "sellable_type" varchar(255), "sellable_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "glysellin_products"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "glysellin_products"
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "glysellin_products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "vat_rate" decimal(11,2), "brand_id" integer, "created_at" datetime, "updated_at" datetime, "sellable_type" varchar(255), "sellable_id" integer) [0m
+  [1m[35m (0.0ms)[0m  SELECT * FROM "aglysellin_products"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "aglysellin_products"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130609193600"]]
+  [1m[36m (1.0ms)[0m  [1mcommit transaction[0m
+Migrating to RemoveUnusedProductPropertiesColumns (20130609200000)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.2ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_product_properties" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar(255), "value" varchar(255), "adjustement" decimal(11,2), "created_at" datetime, "updated_at" datetime, "type_id" integer, "variant_id" integer, "variant_type" varchar(255)) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_product_properties"
+  [1m[36m (0.3ms)[0m  [1mDROP TABLE "glysellin_product_properties"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_product_properties" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "value" varchar(255), "adjustement" decimal(11,2), "created_at" datetime, "updated_at" datetime, "type_id" integer, "variant_id" integer, "variant_type" varchar(255)) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_product_properties"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_product_properties"
+  [1m[36m (0.1ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_product_properties" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "value" varchar(255), "adjustement" decimal(11,2), "created_at" datetime, "updated_at" datetime, "type_id" integer, "variant_id" integer, "variant_type" varchar(255)) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "glysellin_product_properties"
+  [1m[36m (0.3ms)[0m  [1mDROP TABLE "glysellin_product_properties"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_product_properties" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "value" varchar(255), "created_at" datetime, "updated_at" datetime, "type_id" integer, "variant_id" integer, "variant_type" varchar(255)) 
+  [1m[36m (0.0ms)[0m  [1mSELECT * FROM "aglysellin_product_properties"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_product_properties"
+  [1m[36m (0.1ms)[0m  [1mCREATE TEMPORARY TABLE "aglysellin_product_properties" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "value" varchar(255), "created_at" datetime, "updated_at" datetime, "type_id" integer, "variant_id" integer, "variant_type" varchar(255)) [0m
+  [1m[35m (0.0ms)[0m  SELECT * FROM "glysellin_product_properties"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "glysellin_product_properties"[0m
+  [1m[35m (0.1ms)[0m  CREATE TABLE "glysellin_product_properties" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "value" varchar(255), "created_at" datetime, "updated_at" datetime, "type_id" integer, "variant_id" integer) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "aglysellin_product_properties"[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "aglysellin_product_properties"
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20130609200000"]]
+  [1m[35m (0.9ms)[0m  commit transaction
+Migrating to RemovePositionFromGlysellinVariants (20130609200700)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.2ms)[0m  CREATE TEMPORARY TABLE "aglysellin_variants" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "eot_price" decimal(11,2), "price" decimal(11,2), "in_stock" integer DEFAULT 0, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "position" integer, "created_at" datetime, "updated_at" datetime, "weight" decimal, "unmarked_price" decimal(11,2), "sellable_id" integer, "sellable_type" varchar(255)) 
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "glysellin_variants"[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "glysellin_variants"
+  [1m[36m (0.2ms)[0m  [1mCREATE TABLE "glysellin_variants" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "sku" varchar(255), "name" varchar(255), "slug" varchar(255), "eot_price" decimal(11,2), "price" decimal(11,2), "in_stock" integer DEFAULT 0, "unlimited_stock" boolean DEFAULT 'f', "published" boolean DEFAULT 't', "created_at" datetime, "updated_at" datetime, "weight" decimal, "unmarked_price" decimal(11,2), "sellable_id" integer, "sellable_type" varchar(255)) [0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "aglysellin_variants"
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "aglysellin_variants"[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20130609200700"]]
+  [1m[36m (1.1ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.1ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to DeviseCreateUsers (20140206210102)
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36m (0.5ms)[0m  [1mCREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "email" varchar(255) DEFAULT '' NOT NULL, "encrypted_password" varchar(255) DEFAULT '' NOT NULL, "reset_password_token" varchar(255), "reset_password_sent_at" datetime, "remember_created_at" datetime, "sign_in_count" integer DEFAULT 0 NOT NULL, "current_sign_in_at" datetime, "last_sign_in_at" datetime, "current_sign_in_ip" varchar(255), "last_sign_in_ip" varchar(255), "created_at" datetime, "updated_at" datetime) [0m
+  [1m[35m (0.8ms)[0m  CREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")
+  [1m[36m (0.1ms)[0m  [1mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES (?)  [["version", "20140206210102"]]
+  [1m[36m (2.6ms)[0m  [1mcommit transaction[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.2ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"

@@ -2,8 +2,8 @@ require "active_model/model"
 require "paperclip"
 
 require "glysellin/engine"
-require "glysellin/helpers"
 require "glysellin/gateway"
+require "glysellin/adjustment"
 require "glysellin/discount_type_calculator"
 require "glysellin/property_finder"
 require "glysellin/products_list"
@@ -48,7 +48,9 @@ module Glysellin
   # Public: Giving it a lambda will override Order reference
   #   string generation method
   mattr_accessor :order_reference_generator
-  @@order_reference_generator = nil
+  @@order_reference_generator = ->(order) {
+    "#{ Time.now.strftime("%Y%m%d%H%M") }-#{ order.id }"
+  }
 
   # Public: Defines if we will show the subtotal field in Order recaps if
   #   no adjustements are applied to the Order price

@@ -5,9 +5,6 @@ module Glysellin
 
     belongs_to :variant, class_name: "Glysellin::Variant"
 
-    attr_accessible :sku, :name, :eot_price, :vat_rate, :bundle, :price,
-      :quantity, :weight, :variant_id
-
     # The attributes we getch from a product to build our order item
     PRODUCT_ATTRIBUTES_FOR_ITEM = %w(sku name eot_price vat_rate price weight)
 

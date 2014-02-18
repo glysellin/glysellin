@@ -5,9 +5,6 @@ module Glysellin
     belongs_to :order, :inverse_of => :payments
     belongs_to :type, :class_name => 'PaymentMethod', :foreign_key => 'type_id', :inverse_of => :payments
 
-    attr_accessible :status, :type_id, :type, :order, :order_id,
-      :last_payment_action_on, :transaction_id
-
     # Public: Status const to be used if payment pending
     PAYMENT_STATUS_PENDING = 'pending'
     # Public: Status const to be used if payment paid

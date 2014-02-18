@@ -8,7 +8,7 @@ module Glysellin
       include Cart::Select
       include ActiveModel::Model
       include ActiveModel::Dirty
-      include ActiveModel::Observing
+      # include ActiveModel::Observing
 
       attr_accessor :total, :products, :adjustments, :state, :order_id
       attr_reader :use_another_address_for_shipping

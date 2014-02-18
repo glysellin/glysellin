@@ -10,7 +10,6 @@ module Glysellin
     attr_accessor :discount_code
 
     state_machine initial: :ready do
-
       event :paid do
         transition any => :paid
       end
@@ -27,12 +26,10 @@ module Glysellin
     #
     # Order products are used to map order to cloned and simplified products
     #   so the Order propererties can't be affected by product updates
-    has_many :products, class_name: 'Glysellin::LineItem',
-      foreign_key: 'order_id', dependent: :destroy
+    has_many :products, class_name: 'Glysellin::LineItem', dependent: :destroy
 
     # The actual buyer
-    belongs_to :customer, class_name: "::#{ Glysellin.user_class_name }",
-      foreign_key: 'customer_id', :autosave => true
+    belongs_to :customer, class_name: "::#{ Glysellin.user_class_name }"
 
     # Payment tries
     has_many :payments, inverse_of: :order, dependent: :destroy
@@ -47,20 +44,12 @@ module Glysellin
     accepts_nested_attributes_for :payments
     accepts_nested_attributes_for :order_adjustments
 
-    attr_accessible :payments, :products, :products_ids,
-      :customer, :customer_id, :ref, :user, :payments,
-      :payments_attributes, :products_attributes, :paid_on,
-      :state, :payment_method_id, :billing_address, :shipping_address,
-      :shipping_method_id, :discount_code, :order_adjustments_attributes
-
-    validates_presence_of :customer, :billing_address, :shipping_address,
+    validates_presence_of :billing_address, :shipping_address,
       :products
 
-    before_validation :process_adjustments
-    after_save :ensure_ref
-    after_create :ensure_customer_addresses
-    before_save :set_paid_if_paid_by_check
-    before_save :notify_shipped
+    before_validation :process_adjustments, :notify_shipped,
+      :set_paid_if_paid_by_check
+    after_create :ensure_customer_addresses, :ensure_ref
 
     scope :from_customer, lambda { |customer_id| where(customer_id: customer_id) }
 
@@ -71,13 +60,13 @@ module Glysellin
     # Ensures there is always an order reference
     #
     def ensure_ref
-      update_attribute(:ref, self.generate_ref) unless self.ref
+      self.ref ||= Glysellin.order_reference_generator.call(self)
     end
 
     # Ensures that the customer has a billing and, if needed shipping, address.
     #
     def ensure_customer_addresses
-      unless customer.billing_address
+      if customer && !customer.billing_address
         customer.create_billing_address(billing_address.clone_attributes)
 
         unless billing_address.same_as?(shipping_address)
@@ -132,23 +121,6 @@ module Glysellin
     # @return [String] the order ref
     def to_param
       ref
-    end
-
-    # Automatic ref generation for an order that can be overriden
-    #   within the config initializer, and only executes if there's no
-    #   existing ref inside for this order
-    #
-    # @return [String] the generated or existing ref
-    def generate_ref
-      if ref
-        ref
-      else
-        if Glysellin.order_reference_generator
-          Glysellin.order_reference_generator.call(self)
-        else
-          "#{Time.now.strftime('%Y%m%d%H%M')}-#{id}"
-        end
-      end
     end
 
     # Customer's e-mail directly accessible from the order
@@ -235,7 +207,7 @@ module Glysellin
     # Set customer from a Hash of attributes
     #
     def customer=(attributes)
-      unless (self.customer_id = attributes[:id])
+      unless attributes && (self.customer_id = attributes[:id])
         user = self.build_customer(attributes)
 
         if Glysellin.allow_anonymous_orders &&
