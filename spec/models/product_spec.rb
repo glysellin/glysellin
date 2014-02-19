@@ -5,7 +5,7 @@ describe Glysellin::Product do
   it { should belong_to(:brand) }
   it { should validate_numericality_of(:vat_rate) }
 
-  let(:product) { FactoryGirl.create(:product) }
+  let(:product) { create(:product) }
 
   describe "#name" do
     it "returns nil when associated with a sellable" do

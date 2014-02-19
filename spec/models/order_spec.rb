@@ -16,7 +16,7 @@ describe Glysellin::Order do
   it { should validate_presence_of(:products) }
 
   describe "callbacks" do
-    let(:order) { FactoryGirl.build(:order) }
+    let(:order) { build(:order) }
 
     context "before validation" do
       it "processes adjustments" do
@@ -49,7 +49,7 @@ describe Glysellin::Order do
   end
 
   describe "#ensure_ref" do
-    let(:order) { FactoryGirl.build(:order) }
+    let(:order) { build(:order) }
 
     it "sets the order reference to TIMESTAMP-ORDER_ID by defaut" do
       allow(order).to receive(:id) { 1234412 }
@@ -71,7 +71,7 @@ describe Glysellin::Order do
   end
 
   describe "#ensure_customer_addresses" do
-    let(:order) { FactoryGirl.build(:order) }
+    let(:order) { build(:order) }
 
     it "adds order's billing address to the customer if customer doesn't have one yet" do
       order.customer.billing_address = nil
@@ -82,7 +82,7 @@ describe Glysellin::Order do
     end
 
     it "doesn't replace existing Customer#billing_address" do
-      order.customer.billing_address = FactoryGirl.build(:address)
+      order.customer.billing_address = build(:address)
       order.ensure_customer_addresses
       expect(order.customer.billing_address.clone_attributes).not_to eq(
         order.billing_address.clone_attributes
@@ -98,8 +98,8 @@ describe Glysellin::Order do
     end
 
     it "doesn't replace existing Customer#shipping_address" do
-      order.customer.billing_address = FactoryGirl.build(:address)
-      order.customer.shipping_address = FactoryGirl.build(:address)
+      order.customer.billing_address = build(:address)
+      order.customer.shipping_address = build(:address)
       order.ensure_customer_addresses
       expect(order.customer.shipping_address.clone_attributes).not_to eq(
         order.shipping_address.clone_attributes

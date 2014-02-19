@@ -12,16 +12,16 @@ describe Glysellin::Address do
 
   describe "#same_as?" do
     it "returns true if #clone_attributes of both Address objects are equal" do
-      first_address = FactoryGirl.build(:address)
-      second_address = FactoryGirl.build(:address)
+      first_address = build(:address)
+      second_address = build(:address)
       allow(first_address).to receive(:clone_attributes) { { a: 1 } }
       allow(second_address).to receive(:clone_attributes) { { a: 1 } }
       expect(first_address.same_as?(second_address)).to eq(true)
     end
 
     it "returns false if #clone_attributes of both Address objects aren't equal" do
-      first_address = FactoryGirl.build(:address)
-      second_address = FactoryGirl.build(:address)
+      first_address = build(:address)
+      second_address = build(:address)
       allow(first_address).to receive(:clone_attributes) { { a: 1 } }
       allow(second_address).to receive(:clone_attributes) { { a: 2 } }
       expect(first_address.same_as?(second_address)).to eq(false)
@@ -29,7 +29,7 @@ describe Glysellin::Address do
   end
 
   describe "#clone_attributes" do
-    let(:address) { FactoryGirl.build(:address) }
+    let(:address) { build(:address) }
 
     it "returns all the relevant model's attributes to create a similar one" do
       [
