@@ -1,6 +1,6 @@
 class RemoveUnusedFieldsFromGlysellinProducts < ActiveRecord::Migration
   def up
-    remove_columns :glysellin_products, :name, :description, :display_priority,
+    remove_columns :glysellin_products, :name, :description,
       :position, :slug, :sku, :published
   end
 
