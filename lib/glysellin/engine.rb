@@ -1,11 +1,9 @@
 require 'glysellin/helpers'
-require 'glysellin/sellable'
 require 'glysellin/orderer'
 require 'glysellin/engine/routes'
 
 module Glysellin
   class Engine < ::Rails::Engine
-
     initializer "Include Helpers" do |app|
       ActiveSupport.on_load :action_controller do
         %w(Controller Countries Views).each do |helper|
@@ -16,7 +14,6 @@ module Glysellin
 
     initializer "Mix acts_as_sellable into ActiveRecord::Base" do
       ActiveSupport.on_load :active_record do
-        ActiveRecord::Base.send(:include, Sellable)
         ActiveRecord::Base.send(:include, ActsAsOrderer)
       end
     end
