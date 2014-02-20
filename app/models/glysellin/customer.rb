@@ -5,7 +5,7 @@ module Glysellin
 
     validates_presence_of :first_name, :last_name, unless: 'corporate_filled_in?'
     validates_presence_of :email, if: 'user.present?'
-    validates_uniqueness_of :email
+    validates_uniqueness_of :email, if: 'email.present?'
 
     has_one :user, class_name: Glysellin.user_class_name
     accepts_nested_attributes_for :user, reject_if: :all_blank
