@@ -17,6 +17,7 @@ module Glysellin
     accepts_nested_attributes_for :properties, allow_destroy: true
 
     validates_presence_of :name
+    validates_presence_of :price
     validates_numericality_of :price
     validates_numericality_of :in_stock, if: proc { |v| v.in_stock.presence }
 
@@ -46,6 +47,7 @@ module Glysellin
 
     def check_prices
       return unless sellable
+      return unless price.present? && eot_price.present?
       # If we have to fill one of the prices when changed
       if eot_changed_alone?
         self.price = (self.eot_price * vat_ratio).round(2)
@@ -77,15 +79,15 @@ module Glysellin
       unlimited_stock || in_stock >= quantity
     end
 
-    def name fullname = true
-      variant_name, sellable_name = super().presence, (sellable && sellable.name)
+    # def name fullname = true
+    #   variant_name, sellable_name = super().presence, (sellable && sellable.name)
 
-      if fullname
-        variant_name ? "#{ sellable_name } - #{ variant_name }" : sellable_name
-      else
-        variant_name ? variant_name : sellable_name
-      end
-    end
+    #   if fullname
+    #     variant_name ? "#{ sellable_name } - #{ variant_name }" : sellable_name
+    #   else
+    #     variant_name ? variant_name : sellable_name
+    #   end
+    # end
 
     def marked_down?
       (p = unmarked_price.presence) && p != price

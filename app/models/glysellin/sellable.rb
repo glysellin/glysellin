@@ -10,12 +10,15 @@ module Glysellin
     belongs_to :sellable, polymorphic: true, inverse_of: :product
     belongs_to :brand, class_name: "Glysellin::Brand", inverse_of: :products
 
+    validates :name, presence: true
+    validates :brand, presence: true
+    validates :vat_rate, presence: true
     validates_numericality_of :vat_rate
 
-    has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable,
-      dependent: :destroy
-    accepts_nested_attributes_for :variants, allow_destroy: true,
-      reject_if: :all_blank
+    validate :at_least_one_variant_present
+
+    has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable, dependent: :destroy
+    accepts_nested_attributes_for :variants, allow_destroy: true, reject_if: :all_blank
 
     # Published sellables are the ones that have at least one variant
     # published.
@@ -26,13 +29,17 @@ module Glysellin
       includes(:variants).where(glysellin_variants: { published: true })
     }
 
+    def at_least_one_variant_present
+      errors.add(:variants, 'Au moins une variante doit être renseignée.') unless variants.any?
+    end
+
     def published_variants
       variants.published
     end
 
-    def vat_rate
-      read_attribute(:vat_rate).presence || Glysellin.default_vat_rate
-    end
+    # def vat_rate
+    #   read_attribute(:vat_rate).presence || Glysellin.default_vat_rate
+    # end
 
     def vat_ratio
       1 + vat_rate / 100
