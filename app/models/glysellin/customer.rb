@@ -13,6 +13,7 @@ module Glysellin
     before_validation :setup_user_email
 
     def full_name
+      return unless first_name.present? && last_name.present?
       [first_name, last_name].join(' ')
     end
 

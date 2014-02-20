@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140219174319) do
+ActiveRecord::Schema.define(version: 20140220162725) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -47,16 +47,14 @@ ActiveRecord::Schema.define(version: 20140219174319) do
   end
 
   create_table "glysellin_customers", force: true do |t|
-    t.string   "email",      default: "", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "corporate"
     t.integer  "user_id"
+    t.string   "email"
   end
-
-  add_index "glysellin_customers", ["email"], name: "index_glysellin_customers_on_email", unique: true
 
   create_table "glysellin_discount_codes", force: true do |t|
     t.string   "name"
@@ -162,6 +160,7 @@ ActiveRecord::Schema.define(version: 20140219174319) do
     t.integer  "sellable_id"
     t.string   "name"
     t.text     "description"
+    t.integer  "taxonomy_id"
   end
 
   create_table "glysellin_shipping_methods", force: true do |t|
@@ -172,6 +171,11 @@ ActiveRecord::Schema.define(version: 20140219174319) do
   end
 
   add_index "glysellin_shipping_methods", ["identifier"], name: "index_glysellin_shipping_methods_on_identifier"
+
+  create_table "glysellin_taxonomies", force: true do |t|
+    t.string "name"
+    t.text   "description"
+  end
 
   create_table "glysellin_variants", force: true do |t|
     t.string   "sku"

@@ -7,7 +7,7 @@ module Glysellin
 
     cattr_accessor :sold_callback
 
-    belongs_to :sellable, polymorphic: true, inverse_of: :product
+    belongs_to :taxonomy, class_name: "Glysellin::Taxonomy"
     belongs_to :brand, class_name: "Glysellin::Brand", inverse_of: :products
 
     validates :name, presence: true
