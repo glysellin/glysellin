@@ -3,7 +3,11 @@ require "spec_helper"
 describe Glysellin::Variant do
   it { should belong_to(:sellable) }
   it { should have_many(:properties) }
+  it { should have_many(:stocks) }
+  it { should have_many(:stores) }
+
   it { should accept_nested_attributes_for(:properties) }
+  it { should accept_nested_attributes_for(:stocks) }
 
   it { should validate_presence_of(:name) }
   it { should validate_numericality_of(:price) }

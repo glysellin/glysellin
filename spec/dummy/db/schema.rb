@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140220162725) do
+ActiveRecord::Schema.define(version: 20140221154418) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -152,7 +152,7 @@ ActiveRecord::Schema.define(version: 20140220162725) do
   end
 
   create_table "glysellin_sellables", force: true do |t|
-    t.decimal  "vat_rate",      precision: 11, scale: 2
+    t.decimal  "vat_rate",        precision: 11, scale: 2
     t.integer  "brand_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -161,6 +161,7 @@ ActiveRecord::Schema.define(version: 20140220162725) do
     t.string   "name"
     t.text     "description"
     t.integer  "taxonomy_id"
+    t.boolean  "unlimited_stock",                          default: false
   end
 
   create_table "glysellin_shipping_methods", force: true do |t|
@@ -172,6 +173,24 @@ ActiveRecord::Schema.define(version: 20140220162725) do
 
   add_index "glysellin_shipping_methods", ["identifier"], name: "index_glysellin_shipping_methods_on_identifier"
 
+  create_table "glysellin_stocks", force: true do |t|
+    t.integer  "count"
+    t.integer  "store_id"
+    t.integer  "variant_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "glysellin_stores", force: true do |t|
+    t.string   "name"
+    t.text     "address"
+    t.string   "city"
+    t.string   "country"
+    t.string   "phone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "glysellin_taxonomies", force: true do |t|
     t.string "name"
     t.text   "description"
@@ -181,15 +200,13 @@ ActiveRecord::Schema.define(version: 20140220162725) do
     t.string   "sku"
     t.string   "name"
     t.string   "slug"
-    t.decimal  "eot_price",       precision: 11, scale: 2
-    t.decimal  "price",           precision: 11, scale: 2
-    t.integer  "in_stock",                                 default: 0
-    t.boolean  "unlimited_stock",                          default: false
-    t.boolean  "published",                                default: true
+    t.decimal  "eot_price",      precision: 11, scale: 2
+    t.decimal  "price",          precision: 11, scale: 2
+    t.boolean  "published",                               default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "weight"
-    t.decimal  "unmarked_price",  precision: 11, scale: 2
+    t.decimal  "unmarked_price", precision: 11, scale: 2
     t.integer  "sellable_id"
     t.string   "sellable_type"
   end
