@@ -15,10 +15,10 @@ module Glysellin
     validates :vat_rate, presence: true
     validates_numericality_of :vat_rate
 
-    validate :at_least_one_variant_present
-
     has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable, dependent: :destroy
     accepts_nested_attributes_for :variants, allow_destroy: true, reject_if: :all_blank
+
+    validates :variants, length: { minimum: 1, too_short: "Merci de renseigner %{count} variante au minimum." }
 
     # Published sellables are the ones that have at least one variant
     # published.
@@ -28,10 +28,6 @@ module Glysellin
     scope :published, -> {
       includes(:variants).where(glysellin_variants: { published: true })
     }
-
-    def at_least_one_variant_present
-      errors.add(:variants, 'Au moins une variante doit être renseignée.') unless variants.any?
-    end
 
     def published_variants
       variants.published
