@@ -20,7 +20,6 @@ module Glysellin
     validates_presence_of :name
     validates_presence_of :price
     validates_numericality_of :price
-    validates_numericality_of :in_stock, if: proc { |v| v.in_stock.presence }
 
     before_validation :check_prices
 
@@ -72,13 +71,13 @@ module Glysellin
       sellable ? sellable.description : ""
     end
 
-    def in_stock?
-      unlimited_stock || in_stock > 0
-    end
+    # def in_stock?
+    #   unlimited_stock || in_stock > 0
+    # end
 
-    def available_for quantity
-      unlimited_stock || in_stock >= quantity
-    end
+    # def available_for quantity
+    #   unlimited_stock || in_stock >= quantity
+    # end
 
     # def name fullname = true
     #   variant_name, sellable_name = super().presence, (sellable && sellable.name)
