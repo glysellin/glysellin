@@ -2,7 +2,6 @@ require 'friendly_id'
 
 module Glysellin
   class Sellable < ActiveRecord::Base
-
     self.table_name = 'glysellin_sellables'
 
     cattr_accessor :sold_callback
@@ -11,7 +10,6 @@ module Glysellin
     belongs_to :brand, class_name: "Glysellin::Brand", inverse_of: :products
 
     validates :name, presence: true
-    validates :brand, presence: true
     validates :vat_rate, presence: true
     validates_numericality_of :vat_rate
 
@@ -25,6 +23,7 @@ module Glysellin
     #
     # This behaviour can be overriden inside the sellable's model if the
     # scope is declared after the `acts_as_sellable` call
+    #
     scope :published, -> {
       includes(:variants).where(glysellin_variants: { published: true })
     }
