@@ -46,7 +46,6 @@ module Glysellin
     delegate :vat_rate, :vat_ratio, to: :sellable
 
     def check_prices
-      return unless sellable
       return unless price.present? && eot_price.present?
       # If we have to fill one of the prices when changed
       if eot_changed_alone?
