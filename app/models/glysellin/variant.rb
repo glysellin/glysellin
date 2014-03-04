@@ -70,6 +70,19 @@ module Glysellin
       sellable ? sellable.description : ""
     end
 
+    def stocks_for_all_stores
+      @stocks_for_all_stores ||= Glysellin::Store.all.map do |store|
+        stores_stocks[store] ||= stocks.build(store: store)
+      end
+    end
+
+    def stores_stocks
+      @stores_stocks ||= stocks.reduce({}) do |hash, stock|
+        hash[stock.store] = stock
+        hash
+      end
+    end
+
     # def in_stock?
     #   unlimited_stock || in_stock > 0
     # end
