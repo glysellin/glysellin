@@ -50,10 +50,6 @@ module Glysellin
     #   payment_method_chosen: ORDER_STEP_PAYMENT
     # }
 
-    # Change presence validation of Address fields
-    #   default: *[:first_name, :last_name, :address, :zip, :city, :country]
-    # config.address_presence_validation_keys = [:first_name, :last_name, :address, :zip, :city, :country]
-
     # Config paypal account
     # config.gateways['paypal-integral'].config do |pp|
     #     if Rails.env == 'development'

@@ -24,12 +24,13 @@ module Glysellin
 
     # Relations
     #
-    # Order products are used to map order to cloned and simplified products
-    #   so the Order propererties can't be affected by product updates
-    has_many :products, class_name: 'Glysellin::LineItem', dependent: :destroy
+    # Order line_items are used to map order to cloned and simplified line_items
+    #   so the Order propererties can't be affected by line_item updates
+    has_many :line_items, class_name: 'Glysellin::LineItem', dependent: :destroy
+    accepts_nested_attributes_for :line_items
 
     # The actual buyer
-    belongs_to :customer, class_name: "::#{ Glysellin.user_class_name }"
+    belongs_to :customer, class_name: "Glysellin::Customer"
 
     # Payment tries
     has_many :payments, inverse_of: :order, dependent: :destroy
@@ -38,29 +39,30 @@ module Glysellin
 
     has_many :order_adjustments, inverse_of: :order, dependent: :destroy
 
-    # We want to be able to see fields_for addresses
-    accepts_nested_attributes_for :products
     # accepts_nested_attributes_for :customer
     accepts_nested_attributes_for :payments
     accepts_nested_attributes_for :order_adjustments
 
     validates_presence_of :billing_address, :shipping_address,
-      :products
+      :line_items
 
-    before_validation :process_adjustments, :notify_shipped,
-      :set_paid_if_paid_by_check
-    after_create :ensure_customer_addresses, :ensure_ref
+    before_validation :process_adjustments
+    before_validation :notify_shipped
+    before_validation :set_paid_if_paid_by_check
+    after_create :ensure_customer_addresses
+    after_create :ensure_ref
 
     scope :from_customer, lambda { |customer_id| where(customer_id: customer_id) }
 
     def quantified_items
-      products.map { |product| [product, product.quantity] }
+      line_items.map { |line_item| [line_item, line_item.quantity] }
     end
 
     # Ensures there is always an order reference
     #
     def ensure_ref
       self.ref ||= Glysellin.order_reference_generator.call(self)
+      save(validate: false)
     end
 
     # Ensures that the customer has a billing and, if needed shipping, address.
@@ -97,9 +99,9 @@ module Glysellin
     end
 
     def execute_sold_callbacks
-      products.each do |product|
+      line_items.each do |line_item|
         # If line item's associated variant still exists
-        if (sellable = product.sellable) && (callback = sellable.sold_callback)
+        if (sellable = line_item.sellable) && (callback = sellable.sold_callback)
           case callback.class.to_s
           when "Proc" then sellable.instance_exec(self, &callback)
           else sellable.send(callback, self)
@@ -130,19 +132,24 @@ module Glysellin
       customer && customer.email
     end
 
+    def name
+      customer && customer.full_name ||
+        billing_address && billing_address.full_name
+    end
+
     ########################################
     #
     #               Products
     #
     ########################################
 
-    def products=(attributes)
-      products = attributes.reduce([]) do |list, product|
-        item = LineItem.build_from_product(product[:id], product[:quantity])
+    def line_items=(attributes)
+      line_items = attributes.reduce([]) do |list, line_item|
+        item = LineItem.build_from_line_item(line_item[:id], line_item[:quantity])
         item ? (list << item) : list
       end
 
-      super(products)
+      super(line_items)
     end
 
     ########################################
