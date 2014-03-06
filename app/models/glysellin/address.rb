@@ -13,7 +13,8 @@ module Glysellin
     # Validations
     #
     # Validates presence of the fields defined in the config file or the glysellin initializer
-    validates_presence_of *Glysellin.address_presence_validation_keys
+    validates_presence_of :company_name, unless: :first_name
+    validates_presence_of :first_name, :last_name, unless: :company_name
 
     def same_as?(other)
       clone_attributes == other.clone_attributes
@@ -25,6 +26,12 @@ module Glysellin
         %w(id created_at updated_at).include?(key) ||
           key.match(/_addressable_(type|id)$/)
       end
+    end
+
+    def full_name
+      [first_name, last_name, company_name].reduce([]) do |name, str|
+        name << (str || "")
+      end.join(" ")
     end
   end
 end

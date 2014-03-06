@@ -13,8 +13,9 @@ module Glysellin
     before_validation :setup_user_email
 
     def full_name
-      return unless first_name.present? && last_name.present?
-      [first_name, last_name].join(' ')
+      [first_name, last_name, corporate].reduce([]) do |name, str|
+        name << (str || "")
+      end.join(" ")
     end
 
     def password_filled_in?

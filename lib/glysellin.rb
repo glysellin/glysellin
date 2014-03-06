@@ -35,11 +35,6 @@ module Glysellin
   mattr_accessor :autoset_sku
   @@autoset_sku = true
 
-  # Public: Defines which fields must be present when validating an
-  #    Address model
-  mattr_accessor :address_presence_validation_keys
-  @@address_presence_validation_keys = [:first_name, :last_name, :address, :zip, :city, :country]
-
   # Public: Has to be filled if there are additional address fields to
   #   store in database
   mattr_accessor :additional_address_fields
