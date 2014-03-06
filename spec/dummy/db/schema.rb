@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140221154418) do
+ActiveRecord::Schema.define(version: 20140306133311) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -151,6 +151,19 @@ ActiveRecord::Schema.define(version: 20140221154418) do
     t.string "name"
   end
 
+  create_table "glysellin_properties", force: true do |t|
+    t.string   "value"
+    t.integer  "property_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "glysellin_property_types", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+  end
+
   create_table "glysellin_sellables", force: true do |t|
     t.decimal  "vat_rate",        precision: 11, scale: 2
     t.integer  "brand_id"
@@ -194,6 +207,11 @@ ActiveRecord::Schema.define(version: 20140221154418) do
   create_table "glysellin_taxonomies", force: true do |t|
     t.string "name"
     t.text   "description"
+  end
+
+  create_table "glysellin_variant_properties", force: true do |t|
+    t.integer "variant_id"
+    t.integer "property_id"
   end
 
   create_table "glysellin_variants", force: true do |t|

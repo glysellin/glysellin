@@ -5,6 +5,8 @@ describe Glysellin::Variant do
   it { should have_many(:properties) }
   it { should have_many(:stocks) }
   it { should have_many(:stores) }
+  it { should have_many(:variant_properties) }
+  it { should have_many(:properties) }
 
   it { should accept_nested_attributes_for(:properties) }
   it { should accept_nested_attributes_for(:stocks) }
