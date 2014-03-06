@@ -7,6 +7,4 @@ gemspec
 
 # jquery-rails is used by the dummy application
 gem "jquery-rails"
-
 gem "json", "~> 1.8"
-# gem 'rails_admin', :git => 'git://github.com/sferik/rails_admin.git'
