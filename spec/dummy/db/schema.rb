@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140306133311) do
+ActiveRecord::Schema.define(version: 20140307151438) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -78,15 +78,17 @@ ActiveRecord::Schema.define(version: 20140306133311) do
   create_table "glysellin_line_items", force: true do |t|
     t.string   "sku"
     t.string   "name"
-    t.decimal  "eot_price",  precision: 11, scale: 2
-    t.decimal  "price",      precision: 11, scale: 2
-    t.decimal  "vat_rate",   precision: 11, scale: 2
+    t.decimal  "eot_price",     precision: 11, scale: 2
+    t.decimal  "price",         precision: 11, scale: 2
+    t.decimal  "vat_rate",      precision: 11, scale: 2
     t.integer  "quantity"
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "weight",     precision: 11, scale: 3
+    t.decimal  "weight",        precision: 11, scale: 3
     t.integer  "variant_id"
+    t.decimal  "discount",      precision: 11, scale: 2
+    t.string   "discount_unit"
   end
 
   create_table "glysellin_order_adjustments", force: true do |t|
@@ -156,12 +158,14 @@ ActiveRecord::Schema.define(version: 20140306133311) do
     t.integer  "property_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "barcode_ref"
   end
 
   create_table "glysellin_property_types", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+    t.string   "identifier"
   end
 
   create_table "glysellin_sellables", force: true do |t|
@@ -175,6 +179,7 @@ ActiveRecord::Schema.define(version: 20140306133311) do
     t.text     "description"
     t.integer  "taxonomy_id"
     t.boolean  "unlimited_stock",                          default: false
+    t.string   "barcode_ref"
   end
 
   create_table "glysellin_shipping_methods", force: true do |t|
@@ -207,6 +212,7 @@ ActiveRecord::Schema.define(version: 20140306133311) do
   create_table "glysellin_taxonomies", force: true do |t|
     t.string "name"
     t.text   "description"
+    t.string "barcode_ref"
   end
 
   create_table "glysellin_variant_properties", force: true do |t|
@@ -227,6 +233,7 @@ ActiveRecord::Schema.define(version: 20140306133311) do
     t.decimal  "unmarked_price", precision: 11, scale: 2
     t.integer  "sellable_id"
     t.string   "sellable_type"
+    t.string   "barcode"
   end
 
 end

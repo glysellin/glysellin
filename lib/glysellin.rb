@@ -28,6 +28,7 @@ module Glysellin
 
   # Public: Defines which user class will be used to bind Customer model to an
   #   authenticable user
+  mattr_accessor :barcode_class_name
   mattr_accessor :user_class_name
   @@user_class_name = 'User'
 

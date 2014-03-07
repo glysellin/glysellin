@@ -10,7 +10,8 @@ module Glysellin
 
     belongs_to :sellable, class_name: "Glysellin::Sellable"
 
-    has_many :variant_properties, class_name: 'Glysellin::VariantProperty', extend: Glysellin::PropertyFinder, dependent: :destroy, inverse_of: :variant
+    has_many :variant_properties, class_name: 'Glysellin::VariantProperty', dependent: :destroy, inverse_of: :variant
+    has_many :properties, class_name: 'Glysellin::Property', through: :variant_properties
     accepts_nested_attributes_for :variant_properties, allow_destroy: true
 
     has_many :stocks, class_name: 'Glysellin::Stock', dependent: :destroy
@@ -21,7 +22,10 @@ module Glysellin
     validates_presence_of :price
     validates_numericality_of :price
 
+    after_create :generate_barcode
     before_validation :check_prices
+    validate :check_properties, on: :create
+    validate :check_properties, on: :update
 
     # after_initialize :prepare_properties
 
@@ -35,15 +39,24 @@ module Glysellin
     scope :available, -> { where(AVAILABLE_QUERY, true, true, 0) }
     scope :published, -> { where(published: true) }
 
-    # def prepare_properties
-    #   if product && product.product_type
-    #     product.product_type.property_types.each do |type|
-    #       properties.build(type: type) if properties.send(type.name) == false
-    #     end
-    #   end
-    # end
-
     delegate :vat_rate, :vat_ratio, to: :sellable
+
+    def check_properties
+      errors.add(:missing_property, 'Merci de renseigner une couleur !') unless properties_hash['couleur']
+      errors.add(:missing_property, 'Merci de renseigner une taille !') unless properties_hash['taille']
+      errors.add(:missing_property, 'Merci de renseigner un motif !') unless properties_hash['motifs']
+    end
+
+    def properties_hash
+      @properties_hash ||= begin
+        properties = Glysellin::Property.includes(:property_type).where(id: variant_properties.map(&:property_id))
+
+        properties.reduce({}) do |hash, property|
+          hash[property.property_type.identifier] = property
+          hash
+        end
+      end
+    end
 
     def check_prices
       return unless price.present? && eot_price.present?
@@ -83,23 +96,10 @@ module Glysellin
       end
     end
 
-    # def in_stock?
-    #   unlimited_stock || in_stock > 0
-    # end
-
-    # def available_for quantity
-    #   unlimited_stock || in_stock >= quantity
-    # end
-
-    # def name fullname = true
-    #   variant_name, sellable_name = super().presence, (sellable && sellable.name)
-
-    #   if fullname
-    #     variant_name ? "#{ sellable_name } - #{ variant_name }" : sellable_name
-    #   else
-    #     variant_name ? variant_name : sellable_name
-    #   end
-    # end
+    def generate_barcode
+      barcode = Glysellin.barcode_class_name.constantize.new(self).generate
+      self.update_column(:barcode, barcode)
+    end
 
     def marked_down?
       (p = unmarked_price.presence) && p != price
