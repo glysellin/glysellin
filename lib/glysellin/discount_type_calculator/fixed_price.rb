@@ -3,13 +3,14 @@ module Glysellin
     class FixedPrice < Glysellin::DiscountTypeCalculator::Base
       register 'fixed-price', self
 
+      attr_reader :value
+
       def initialize order, value
-        @order = order
         @value = value
       end
 
       def calculate
-        @value
+        value
       end
     end
   end

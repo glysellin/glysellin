@@ -187,6 +187,7 @@ module Glysellin
     # Gives the last payment found for that order
     #
     # @return [Payment, nil] the found Payment item or nil
+    #
     def payment
       payments.last
     end
@@ -195,6 +196,7 @@ module Glysellin
     #   a payment try
     #
     # @return [PaymentType, nil] the PaymentMethod or nil
+    #
     def payment_method
       payment.type rescue nil
     end
@@ -203,7 +205,6 @@ module Glysellin
       payment = self.payments.build :status => Payment::PAYMENT_STATUS_PENDING
       payment.type = PaymentMethod.find(type_id)
     end
-
 
     ########################################
     #
