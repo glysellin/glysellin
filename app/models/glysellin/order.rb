@@ -34,17 +34,18 @@ module Glysellin
 
     # Payment tries
     has_many :payments, inverse_of: :order, dependent: :destroy
+    accepts_nested_attributes_for :payments
 
     belongs_to :shipping_method, inverse_of: :orders
 
     has_many :order_adjustments, inverse_of: :order, dependent: :destroy
-
-    # accepts_nested_attributes_for :customer
-    accepts_nested_attributes_for :payments
     accepts_nested_attributes_for :order_adjustments
 
-    validates_presence_of :billing_address, :shipping_address,
-      :line_items
+    has_many :discounts, class_name: "Glysellin::Discount", as: :discountable
+    accepts_nested_attributes_for :discounts, allow_destroy: true,
+      reject_if: :all_blank
+
+    validates_presence_of :billing_address, :shipping_address, :line_items
 
     before_validation :process_adjustments
     before_validation :notify_shipped
