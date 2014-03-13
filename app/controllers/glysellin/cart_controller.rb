@@ -36,7 +36,6 @@ module Glysellin
 
     def totals_hash
       adjustment = current_cart.discount
-
       discount_name = adjustment.name rescue nil
       discount_value = number_to_currency(adjustment.value) rescue nil
 

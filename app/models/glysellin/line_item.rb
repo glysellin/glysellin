@@ -5,6 +5,10 @@ module Glysellin
 
     belongs_to :variant, class_name: "Glysellin::Variant"
 
+    has_one :discount, class_name: "Glysellin::Discount", as: :discountable
+    accepts_nested_attributes_for :discount, allow_destroy: true,
+      reject_if: :all_blank
+
     # The attributes we getch from a product to build our order item
     PRODUCT_ATTRIBUTES_FOR_ITEM = %w(sku name eot_price vat_rate price weight)
 
