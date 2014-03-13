@@ -98,7 +98,7 @@ module Glysellin
 
     def generate_barcode
       barcode = Glysellin.barcode_class_name.constantize.new(self).generate
-      self.update_column(:barcode, barcode)
+      self.update_column(:sku, barcode)
     end
 
     def marked_down?
