@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140307151438) do
+ActiveRecord::Schema.define(version: 20140313105522) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -233,7 +233,6 @@ ActiveRecord::Schema.define(version: 20140307151438) do
     t.decimal  "unmarked_price", precision: 11, scale: 2
     t.integer  "sellable_id"
     t.string   "sellable_type"
-    t.string   "barcode"
   end
 
 end
