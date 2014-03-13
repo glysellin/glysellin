@@ -42,9 +42,9 @@ module Glysellin
     end
 
     def adjustments_total
-      adjustments.reduce(0) do |total, adj|
-        total + adj.value.to_f
-      end
+      adjustments_value = adjustments.map(&:value).reduce(&:+) || 0
+      discounts_value = discounts.map(&:value).reduce(&:+) || 0
+      adjustments_value - discounts_value
     end
 
     def eot_adjustments_total
