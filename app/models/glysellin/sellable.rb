@@ -17,6 +17,7 @@ module Glysellin
     accepts_nested_attributes_for :variants, allow_destroy: true, reject_if: :all_blank
 
     validates :variants, length: { minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short") }
+    validates :barcode_ref, presence: true
 
     # Published sellables are the ones that have at least one variant
     # published.

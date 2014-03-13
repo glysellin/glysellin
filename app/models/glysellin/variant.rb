@@ -24,6 +24,7 @@ module Glysellin
 
     after_create :generate_barcode
     before_validation :check_prices
+
     validate :check_properties, on: :create
     validate :check_properties, on: :update
 
@@ -96,8 +97,13 @@ module Glysellin
     end
 
     def generate_barcode
-      barcode = Glysellin.barcode_class_name.constantize.new(self).generate
-      self.update_column(:sku, barcode)
+      barcode = Glysellin.barcode_class_name.constantize.new(self)
+
+      if barcode.valid?
+        self.update_column(:sku, barcode.generate)
+      else
+        errors.add :sku, barcode.errors.full_messages
+      end
     end
 
     def marked_down?
