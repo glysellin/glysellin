@@ -42,8 +42,8 @@ module Glysellin
     delegate :vat_rate, :vat_ratio, to: :sellable
 
     def check_properties
-      errors.add(:missing_property, 'Merci de renseigner un motif !') unless properties_hash['gender']
-      errors.add(:missing_property, 'Merci de renseigner un motif !') unless properties_hash['collection']
+      errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']
+      errors.add(:missing_property, 'Merci de renseigner une collection !') unless properties_hash['collection']
     end
 
     def properties_hash
