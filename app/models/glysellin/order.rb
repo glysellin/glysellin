@@ -118,14 +118,6 @@ module Glysellin
       end
     end
 
-    # Define model to use it's ref when asked for parameterized
-    #   representation of itself
-    #
-    # @return [String] the order ref
-    def to_param
-      ref
-    end
-
     # Customer's e-mail directly accessible from the order
     #
     # @return [String] the wanted e-mail string
