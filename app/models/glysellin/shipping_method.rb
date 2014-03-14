@@ -7,6 +7,8 @@ module Glysellin
     has_many :orders, inverse_of: :shipping_method
     has_many :order_adjustments, as: :adjustment
 
+    has_many :shipments, dependent: :destroy
+
     scope :ordered, -> { order("name ASC") }
 
     private

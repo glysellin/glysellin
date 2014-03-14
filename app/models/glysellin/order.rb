@@ -36,7 +36,8 @@ module Glysellin
     has_many :payments, inverse_of: :order, dependent: :destroy
     accepts_nested_attributes_for :payments
 
-    belongs_to :shipping_method, inverse_of: :orders
+    has_one :shipment, class_name: "Glysellin::Shipment", dependent: :destroy
+    accepts_nested_attributes_for :shipment, allow_destroy: true
 
     has_many :order_adjustments, inverse_of: :order, dependent: :destroy
     accepts_nested_attributes_for :order_adjustments
@@ -87,10 +88,6 @@ module Glysellin
 
     def paid_by_check?
       payment and payment.by_check?
-    end
-
-    def set_shipping_price
-      build_adjustment_from shipping_method if shipping_method
     end
 
     # Callback invoked after event :paid
@@ -163,8 +160,6 @@ module Glysellin
     end
 
     def process_adjustments
-      build_adjustment_from(shipping_method) if shipping_method
-
       if discount_code
         code = Glysellin::DiscountCode.from_code(discount_code)
         build_adjustment_from(code) if code

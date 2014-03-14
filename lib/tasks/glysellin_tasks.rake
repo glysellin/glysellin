@@ -6,7 +6,7 @@
 #     [['Chèque', 'check'],
 #     ['Paypal', 'paypal-integral'],
 #     ['Carte bancaire', 'atos']].each do |payment_method|
-#       attributes = Hash[[:name, :slug].zip(payment_method)]
+#       attributes = Hash[[:name, :identifier].zip(payment_method)]
 #       Glysellin::PaymentMethod.create(attributes)
 #       puts "Created payment method : #{ attributes[:name] }"
 #     end
