@@ -97,7 +97,7 @@ module Glysellin
       barcode = Glysellin.barcode_class_name.constantize.new(self)
 
       if barcode.valid?
-        sku = barcode.generate
+        self.sku = barcode.generate
       else
         for message in barcode.errors.full_messages
           errors.add :sku, message
