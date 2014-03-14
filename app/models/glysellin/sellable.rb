@@ -9,8 +9,7 @@ module Glysellin
     belongs_to :taxonomy, class_name: "Glysellin::Taxonomy"
     belongs_to :brand, class_name: "Glysellin::Brand", inverse_of: :products
 
-    validates :name, presence: true
-    validates :vat_rate, presence: true
+    validates :name, :vat_rate, :taxonomy_id, :brand_id, presence: true
     validates_numericality_of :vat_rate
 
     has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable, dependent: :destroy
