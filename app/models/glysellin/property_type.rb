@@ -4,5 +4,7 @@ module Glysellin
 
     has_many :properties, class_name: 'Glysellin::Property'
     accepts_nested_attributes_for :properties, allow_destroy: true
+
+    validates :name, presence: true
   end
 end

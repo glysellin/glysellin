@@ -22,12 +22,10 @@ module Glysellin
     validates_presence_of :price
     validates_numericality_of :price
 
-    after_create :generate_barcode
     before_validation :check_prices
-    validate :check_properties, on: :create
-    validate :check_properties, on: :update
 
-    # after_initialize :prepare_properties
+    validate :generate_barcode
+    validate :check_properties
 
     AVAILABLE_QUERY = <<-SQL
       glysellin_variants.published = ? AND (
@@ -96,8 +94,15 @@ module Glysellin
     end
 
     def generate_barcode
-      barcode = Glysellin.barcode_class_name.constantize.new(self).generate
-      self.update_column(:sku, barcode)
+      barcode = Glysellin.barcode_class_name.constantize.new(self)
+
+      if barcode.valid?
+        self.sku = barcode.generate
+      else
+        for message in barcode.errors.full_messages
+          errors.add :sku, message
+        end
+      end
     end
 
     def marked_down?

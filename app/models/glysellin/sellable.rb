@@ -9,14 +9,14 @@ module Glysellin
     belongs_to :taxonomy, class_name: "Glysellin::Taxonomy"
     belongs_to :brand, class_name: "Glysellin::Brand", inverse_of: :products
 
-    validates :name, presence: true
-    validates :vat_rate, presence: true
+    validates :name, :vat_rate, :taxonomy_id, :brand_id, presence: true
     validates_numericality_of :vat_rate
 
     has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable, dependent: :destroy
     accepts_nested_attributes_for :variants, allow_destroy: true, reject_if: :all_blank
 
     validates :variants, length: { minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short") }
+    validates :barcode_ref, presence: true
 
     # Published sellables are the ones that have at least one variant
     # published.
