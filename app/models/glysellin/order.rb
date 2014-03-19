@@ -27,14 +27,14 @@ module Glysellin
     # Order line_items are used to map order to cloned and simplified line_items
     #   so the Order propererties can't be affected by line_item updates
     has_many :line_items, class_name: 'Glysellin::LineItem', dependent: :destroy
-    accepts_nested_attributes_for :line_items
+    accepts_nested_attributes_for :line_items, allow_destroy: true
 
     # The actual buyer
     belongs_to :customer, class_name: "Glysellin::Customer"
 
     # Payment tries
     has_many :payments, inverse_of: :order, dependent: :destroy
-    accepts_nested_attributes_for :payments
+    accepts_nested_attributes_for :payments, allow_destroy: true
 
     has_one :shipment, class_name: "Glysellin::Shipment", dependent: :destroy
     accepts_nested_attributes_for :shipment, allow_destroy: true
@@ -46,7 +46,11 @@ module Glysellin
     accepts_nested_attributes_for :discounts, allow_destroy: true,
       reject_if: :all_blank
 
-    validates_presence_of :billing_address, :shipping_address, :line_items
+    validates_presence_of :billing_address, :line_items
+
+    validates_presence_of :shipping_address, if: ->(order) {
+      order.use_another_address_for_shipping
+    }
 
     before_validation :process_adjustments
     before_validation :notify_shipped
@@ -73,7 +77,10 @@ module Glysellin
       if customer && !customer.billing_address
         customer.create_billing_address(billing_address.clone_attributes)
 
-        unless billing_address.same_as?(shipping_address)
+        customer.use_another_address_for_shipping =
+          use_another_address_for_shipping
+
+        if use_another_address_for_shipping
           customer.create_shipping_address(shipping_address.clone_attributes)
         end
       end

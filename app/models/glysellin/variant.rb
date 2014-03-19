@@ -2,11 +2,10 @@ require 'friendly_id'
 
 module Glysellin
   class Variant < ActiveRecord::Base
-    extend FriendlyId
-
-    friendly_id :name, use: :slugged
-
     self.table_name = 'glysellin_variants'
+
+    extend FriendlyId
+    friendly_id :name, use: :slugged
 
     belongs_to :sellable, class_name: "Glysellin::Sellable"
 

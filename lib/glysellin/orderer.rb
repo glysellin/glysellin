@@ -9,14 +9,8 @@ module Glysellin
       has_one :shipping_address, class_name: 'Glysellin::Address',
         as: :shipped_addressable, dependent: :destroy
 
-      attr_writer :use_another_address_for_shipping
-
       accepts_nested_attributes_for :billing_address, reject_if: :all_blank
       accepts_nested_attributes_for :shipping_address, reject_if: :all_blank
-    end
-
-    def use_another_address_for_shipping
-      !(shipping_address.new_record? && !super) rescue false
     end
 
     def has_shipping_address?
