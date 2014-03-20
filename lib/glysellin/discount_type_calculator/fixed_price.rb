@@ -10,7 +10,7 @@ module Glysellin
       end
 
       def calculate
-        value
+        -value
       end
     end
   end

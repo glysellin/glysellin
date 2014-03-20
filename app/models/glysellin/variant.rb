@@ -9,9 +9,12 @@ module Glysellin
 
     belongs_to :sellable, class_name: "Glysellin::Sellable"
 
-    has_many :variant_properties, class_name: 'Glysellin::VariantProperty', dependent: :destroy, inverse_of: :variant
-    has_many :properties, class_name: 'Glysellin::Property', through: :variant_properties
+    has_many :variant_properties, class_name: 'Glysellin::VariantProperty',
+      dependent: :destroy, inverse_of: :variant
     accepts_nested_attributes_for :variant_properties, allow_destroy: true
+
+    has_many :properties, class_name: 'Glysellin::Property',
+      through: :variant_properties
 
     has_many :stocks, class_name: 'Glysellin::Stock', dependent: :destroy
     has_many :stores, class_name: 'Glysellin::Variant', through: :stocks
