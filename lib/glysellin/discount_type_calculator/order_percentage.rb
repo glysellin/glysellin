@@ -3,13 +3,15 @@ module Glysellin
     class OrderPercentage < Glysellin::DiscountTypeCalculator::Base
       register 'order-percentage', self
 
+      attr_accessor :order, :value
+
       def initialize order, value
         @order = order
         @value = (value.to_f / 100.0) # Convert to percentage
       end
 
       def calculate
-        -(@order.subtotal * @value)
+        -(order.subtotal * value)
       end
     end
   end

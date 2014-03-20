@@ -33,7 +33,8 @@ module Glysellin
     belongs_to :customer, class_name: "Glysellin::Customer"
 
     # Payment tries
-    has_many :payments, inverse_of: :order, dependent: :destroy
+    has_many :payments, -> { extending Glysellin::OrderPaymentsMethods },
+      inverse_of: :order, dependent: :destroy
     accepts_nested_attributes_for :payments, allow_destroy: true
 
     has_one :shipment, class_name: "Glysellin::Shipment", dependent: :destroy
@@ -42,7 +43,9 @@ module Glysellin
     has_many :order_adjustments, inverse_of: :order, dependent: :destroy
     accepts_nested_attributes_for :order_adjustments
 
-    has_many :discounts, class_name: "Glysellin::Discount", as: :discountable
+    has_many :discounts, class_name: "Glysellin::Discount", as: :discountable,
+      inverse_of: :discountable
+
     accepts_nested_attributes_for :discounts, allow_destroy: true,
       reject_if: :all_blank
 
@@ -67,8 +70,9 @@ module Glysellin
     # Ensures there is always an order reference
     #
     def ensure_ref
-      self.ref ||= Glysellin.order_reference_generator.call(self)
-      save(validate: false)
+      unless ref
+        update_column(:ref, Glysellin.order_reference_generator.call(self))
+      end
     end
 
     # Ensures that the customer has a billing and, if needed shipping, address.

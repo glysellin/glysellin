@@ -14,6 +14,14 @@ module Glysellin
       end
     end
 
+    def vat_rate
+      1 - (eot_subtotal / subtotal)
+    end
+
+    def vat_total
+      subtotal - eot_subtotal
+    end
+
     # Gets order subtotal from items only
     #
     # @return [BigDecimal] the calculated subtotal
@@ -38,17 +46,16 @@ module Glysellin
     end
 
     def adjustments
-      respond_to?(:order_adjustments) ? order_adjustments : []
+      adjustments  = shipment ? [shipment] : []
+      adjustments += discounts.to_a
     end
 
     def adjustments_total
-      adjustments_value = adjustments.map(&:value).reduce(&:+) || 0
-      discounts_value = discounts.map(&:value).reduce(&:+) || 0
-      adjustments_value - discounts_value
+      adjustments.map(&:price).reduce(&:+) || 0
     end
 
     def eot_adjustments_total
-      adjustments_total * (eot_subtotal / subtotal)
+      adjustments.map(&:eot_price).reduce(&:+) || 0
     end
 
     # Gets order total price from subtotal and adjustments
