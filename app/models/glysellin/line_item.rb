@@ -39,7 +39,7 @@ module Glysellin
     end
 
     def total_price
-      quantity * price
+      total_eot_price + ((total_eot_price * vat_rate)/100)
     end
 
     def sellable
