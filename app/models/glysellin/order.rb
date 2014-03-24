@@ -63,14 +63,6 @@ module Glysellin
 
     scope :from_customer, lambda { |customer_id| where(customer_id: customer_id) }
 
-    def total_eot_price
-      line_items.map(&:total_eot_price).sum
-    end
-
-    def total_price
-      line_items.map(&:total_price).sum
-    end
-
     def quantified_items
       line_items.map { |line_item| [line_item, line_item.quantity] }
     end

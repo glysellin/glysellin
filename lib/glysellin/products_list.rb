@@ -22,6 +22,10 @@ module Glysellin
       subtotal - eot_subtotal
     end
 
+    def vat_rates
+      @vat_rates ||= Glysellin::VatRates.new(self)
+    end
+
     # Gets order subtotal from items only
     #
     # @return [BigDecimal] the calculated subtotal
@@ -43,6 +47,18 @@ module Glysellin
         weight = item.weight.presence || Glysellin.default_product_weight
         total + (quantity * weight)
       end
+    end
+
+    def discounts_eot_total
+      discounts.map(&:eot_price).reduce(&:+) || 0
+    end
+
+    def discounts_total
+      discounts.map(&:price).reduce(&:+) || 0
+    end
+
+    def discounts_total_vat
+      discounts_total - discounts_eot_total
     end
 
     def adjustments
@@ -69,6 +85,15 @@ module Glysellin
 
     def total_eot_price
       (eot_subtotal + eot_adjustments_total).round(2)
+    end
+
+
+    def total_price_before_discount
+      subtotal + shipment.price
+    end
+
+    def total_eot_price_before_discount
+      eot_subtotal + shipment.eot_price
     end
   end
 end
