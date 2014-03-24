@@ -3,7 +3,7 @@ module Glysellin
     self.table_name = 'glysellin_payment_methods'
     has_many :payments, :foreign_key => 'type_id'
 
-    scope :ordered, order("name ASC")
+    scope :ordered, -> { order("name ASC") }
 
     class << self
       def gateway_from_order_ref ref

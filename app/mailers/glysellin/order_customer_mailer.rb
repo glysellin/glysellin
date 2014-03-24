@@ -19,6 +19,9 @@ class Glysellin::OrderCustomerMailer < ActionMailer::Base
 
   def send_order_shipped_email order
     @order = order
+
+    return unless order.email.presence
+
     mail(
       to: @order.email,
       subject: Glysellin.mailer_subjects.call[:customer][:send_order_shipped_email]

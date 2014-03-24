@@ -9,17 +9,32 @@ module Glysellin
 
     attr_accessor :discount_code
 
-    state_machine initial: :ready do
-      event :paid do
-        transition any => :paid
+    state_machine :payment_state, initial: :payment_pending, use_transactions: false do
+      event :empty_payment do
+        transition all => :payment_pending
       end
 
-      event :shipped do
-        transition paid: :shipped
+      event :completed_payment do
+        transition all => :complete
       end
 
-      after_transition on: :paid, do: :set_payment
-      after_transition on: :paid, do: :execute_sold_callbacks
+      event :partially_paid do
+        transition all => :payment_unbalanced
+      end
+
+      event :over_paid do
+        transition all => :payment_over_paid
+      end
+
+      after_transition on: :completed, do: :execute_sold_callbacks
+    end
+
+    state_machine :shipment_state, initial: :shipment_pending do
+      event :ship do
+        transition all => :shipped
+      end
+
+      after_transition on: :ship, do: :notify_shipment_sent!
     end
 
     # Relations
@@ -55,8 +70,8 @@ module Glysellin
       order.use_another_address_for_shipping
     }
 
-    before_validation :process_adjustments
-    before_validation :notify_shipped
+    before_validation :process_payments
+    before_validation :process_shipment
     before_validation :set_paid_if_paid_by_check
     after_create :ensure_customer_addresses
     after_create :ensure_ref
@@ -72,6 +87,22 @@ module Glysellin
     def ensure_ref
       unless ref
         update_column(:ref, Glysellin.order_reference_generator.call(self))
+      end
+    end
+
+    def process_payments
+      self.payment_state = case
+      when payments.balanced?         then  :complete
+      when payments.empty?            then  :payment_pending
+      when payments.partially_paid?   then  :payment_unbalanced
+      when payments.over_paid?        then  :payment_over_paid
+      end
+    end
+
+    def process_shipment
+      self.shipment_state = case
+      when shipment && shipment.sent_on.presence then :shipped
+      else                                            :shipment_pending
       end
     end
 
@@ -120,10 +151,9 @@ module Glysellin
     end
 
     # Callback invoked after event :shipped
-    def notify_shipped
-      if state_changed? && shipped?
-        OrderCustomerMailer.send_order_shipped_email(self).deliver
-      end
+    def notify_shipment_sent!
+      email = OrderCustomerMailer.send_order_shipped_email(self)
+      email.deliver if email
     end
 
     # Customer's e-mail directly accessible from the order
@@ -151,30 +181,6 @@ module Glysellin
       end
 
       super(line_items)
-    end
-
-    ########################################
-    #
-    #               Adjustments
-    #
-    ########################################
-
-    def build_adjustment_from item
-      # Handle replacing duplicate adjustments on the same order
-      existing_adjustments = order_adjustments.where(
-        adjustment_type: item.class.to_s
-      )
-      # Destroy exisiting ones
-      existing_adjustments.each(&:destroy) if existing_adjustments.length > 0
-      # Build new adjustment from existing discount code
-      order_adjustments.build(item.to_adjustment(self))
-    end
-
-    def process_adjustments
-      if discount_code
-        code = Glysellin::DiscountCode.from_code(discount_code)
-        build_adjustment_from(code) if code
-      end
     end
 
     ########################################
