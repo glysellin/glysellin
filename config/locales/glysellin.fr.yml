@@ -148,8 +148,8 @@ fr:
         payment_state:
           payment_pending: "Non payée"
           complete: "Payée"
-          partially_paid: "Paiement partial"
-          over_paid: "Sur-Paiement"
+          payment_unbalanced: "Paiement partial"
+          payment_over_paid: "Sur-Paiement"
         shipment_state:
           shipment_pending: "Non expédiée"
           shipped: "Expédiée"
