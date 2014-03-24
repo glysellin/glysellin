@@ -18,7 +18,9 @@ module Glysellin
     end
 
     def process_shipment_rates!
-      add(order.shipment.vat_rate, order.shipment.total_vat)
+      if order.shipment && order.shipment.price != 0
+        add(order.shipment.vat_rate, order.shipment.total_vat)
+      end
     end
 
     def add rate, value
