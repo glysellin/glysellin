@@ -5,16 +5,20 @@ module ActionDispatch::Routing
       controllers = parse_controllers(options)
 
       scope mount_location do
+        scope :api do
+          resources :sellables, controller: 'glysellin/api/sellables'
+        end
+
         resources :orders, controller: controllers[:orders], :only => [] do
           collection do
             get 'payment_response'
             post 'gateway/:gateway', :action => 'gateway_response', :as => 'named_gateway_response'
-            match 'gateway/response/:type', :action => 'payment_response', :as => 'typed_payment_response'
+            match 'gateway/response/:type', :action => 'payment_response', :as => 'typed_payment_response', via: [:get, :post]
           end
 
           member do
             post 'gateway-response', :action => 'gateway_response', :as => 'gateway_response'
-            match 'payment_response'
+            match 'payment_response', via: [:get, :post]
           end
         end
 
@@ -24,6 +28,7 @@ module ActionDispatch::Routing
               put "contents/validate", action: "validate", as: "validate"
             end
           end
+
           resource :discount_code, controller: "glysellin/cart/discount_code", only: [:update]
           resource :addresses, controller: "glysellin/cart/addresses", only: [:update]
           resource :shipping_method, controller: "glysellin/cart/shipping_method", only: [:update]
