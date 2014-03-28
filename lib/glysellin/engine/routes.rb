@@ -6,7 +6,9 @@ module ActionDispatch::Routing
 
       scope mount_location do
         scope :api do
-          resources :sellables, controller: 'glysellin/api/sellables'
+          resources :sellables, controller: 'glysellin/api/sellables', only: :index
+          resources :variants, controller: 'glysellin/api/variants', only: :index
+          resources :orders, controller: 'glysellin/api/orders', only: :create
         end
 
         resources :orders, controller: controllers[:orders], :only => [] do
@@ -38,7 +40,7 @@ module ActionDispatch::Routing
           end
         end
 
-        get '/' => 'glysellin/products#index', as: 'shop'
+        # get '/' => 'glysellin/products#index', as: 'shop'
       end
     end
 

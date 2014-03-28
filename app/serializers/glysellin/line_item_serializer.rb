@@ -1,10 +1,10 @@
 module Glysellin
   class LineItemSerializer < ActiveModel::Serializer
-    embed :ids
+    embed :ids, include: true
 
     attributes :id, :eot_price, :name, :price, :quantity, :sku, :variant_id,
       :vat_rate, :order_id
 
-    has_one :discount, include: true
+    has_one :discount
   end
 end

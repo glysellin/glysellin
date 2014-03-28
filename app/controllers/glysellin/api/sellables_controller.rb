@@ -1,12 +1,11 @@
 module Glysellin
   module Api
     class SellablesController < ApplicationController
-
-      respond_to :json
+      skip_before_filter :authenticate_admin_user!
 
       def index
         @q = Glysellin::Sellable.search(params[:q])
-        respond_with @q.result
+        render json: @q.result, each_serializer: Glysellin::SellableSerializer
       end
     end
   end
