@@ -20,12 +20,6 @@ module Glysellin
     has_many :stores, class_name: 'Glysellin::Variant', through: :stocks
     accepts_nested_attributes_for :stocks, allow_destroy: true
 
-    validates_presence_of :name
-    validates_presence_of :price
-    validates_numericality_of :price
-
-    before_validation :check_prices
-
     validate :generate_barcode
     validate :check_properties
 
@@ -39,7 +33,7 @@ module Glysellin
     scope :available, -> { where(AVAILABLE_QUERY, true, true, 0) }
     scope :published, -> { where(published: true) }
 
-    delegate :vat_rate, :vat_ratio, to: :sellable
+    delegate :eot_price, :price, :vat_rate, :vat_ratio, to: :sellable
 
     def check_properties
       errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']
@@ -55,27 +49,6 @@ module Glysellin
           hash
         end
       end
-    end
-
-    def check_prices
-      return unless price.present? && eot_price.present?
-      # If we have to fill one of the prices when changed
-      if eot_changed_alone?
-        self.price = (self.eot_price * vat_ratio).round(2)
-      elsif price_changed_alone?
-        self.eot_price = (self.price / vat_ratio).round(2)
-      end
-    end
-
-    def eot_changed_alone?
-      eot_changed_alone = self.eot_price_changed? && !self.price_changed?
-      new_record_eot_alone = self.new_record? && self.eot_price && !self.price
-
-      eot_changed_alone || new_record_eot_alone
-    end
-
-    def price_changed_alone?
-      self.price_changed? || (self.new_record? && self.price)
     end
 
     def description
