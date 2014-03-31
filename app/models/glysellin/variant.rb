@@ -7,7 +7,8 @@ module Glysellin
     extend FriendlyId
     friendly_id :name, use: :slugged
 
-    belongs_to :sellable, class_name: "Glysellin::Sellable"
+    belongs_to :sellable, class_name: "Glysellin::Sellable",
+      inverse_of: :variants
 
     has_many :variant_properties, class_name: 'Glysellin::VariantProperty',
       dependent: :destroy, inverse_of: :variant
@@ -20,17 +21,18 @@ module Glysellin
     has_many :stores, class_name: 'Glysellin::Variant', through: :stocks
     accepts_nested_attributes_for :stocks, allow_destroy: true
 
-    validate :generate_barcode
     validate :check_properties
+    validate :generate_barcode, on: :create
+    validates_length_of :sku, :minimum => 13, :maximum => 13
 
-    AVAILABLE_QUERY = <<-SQL
-      glysellin_variants.published = ? AND (
-        glysellin_variants.unlimited_stock = ? OR
-        glysellin_variants.in_stock > ?
+    scope :available, -> {
+      where(published: true).where(
+        "glysellin_variants.unlimited_stock = ? OR " +
+        "glysellin_variants.in_stock > ?",
+        true, 0
       )
-    SQL
+    }
 
-    scope :available, -> { where(AVAILABLE_QUERY, true, true, 0) }
     scope :published, -> { where(published: true) }
 
     delegate :eot_price, :price, :vat_rate, :vat_ratio, to: :sellable

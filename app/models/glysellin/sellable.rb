@@ -14,10 +14,13 @@ module Glysellin
 
     validates_numericality_of :vat_rate, :eot_price, :price
 
-    has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable, dependent: :destroy
-    accepts_nested_attributes_for :variants, allow_destroy: true, reject_if: :all_blank
+    has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable,
+      dependent: :destroy
+    accepts_nested_attributes_for :variants, allow_destroy: true
 
-    validates :variants, length: { minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short") }
+    validates :variants, length: {
+      minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short")
+    }
 
     before_validation :check_prices
 
