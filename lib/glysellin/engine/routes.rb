@@ -5,12 +5,6 @@ module ActionDispatch::Routing
       controllers = parse_controllers(options)
 
       scope mount_location do
-        scope :api do
-          resources :sellables, controller: 'glysellin/api/sellables', only: :index
-          resources :variants, controller: 'glysellin/api/variants', only: :index
-          resources :orders, controller: 'glysellin/api/orders', only: :create
-        end
-
         resources :orders, controller: controllers[:orders], :only => [] do
           collection do
             get 'payment_response'
@@ -40,6 +34,13 @@ module ActionDispatch::Routing
           end
         end
 
+        scope module: "glysellin" do
+          namespace :api do
+            resources :sellables, only: :index
+            resources :variants, only: :index
+            resources :orders, only: :create
+          end
+        end
         # get '/' => 'glysellin/products#index', as: 'shop'
       end
     end
