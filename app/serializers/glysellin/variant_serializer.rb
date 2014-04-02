@@ -6,6 +6,7 @@ module Glysellin
 
     has_many :stocks
     has_many :variant_properties
+    has_one :sellable
 
     def vat_rate
       object.sellable.vat_rate

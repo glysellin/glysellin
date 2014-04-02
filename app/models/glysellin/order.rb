@@ -70,6 +70,7 @@ module Glysellin
       order.use_another_address_for_shipping
     }
 
+    before_validation :process_total_price
     before_validation :process_payments
     before_validation :process_shipment
     before_validation :set_paid_if_paid_by_check
@@ -88,6 +89,11 @@ module Glysellin
       unless ref
         update_column(:ref, Glysellin.order_reference_generator.call(self))
       end
+    end
+
+    def process_total_price
+      write_attribute(:total_price, total_price)
+      write_attribute(:total_eot_price, total_eot_price)
     end
 
     def process_payments

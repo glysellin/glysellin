@@ -1,7 +1,7 @@
 module Glysellin
   class LineItem < ActiveRecord::Base
     self.table_name = "glysellin_line_items"
-    belongs_to :order, inverse_of: :products
+    belongs_to :order, inverse_of: :products, autosave: true
 
     belongs_to :variant, class_name: "Glysellin::Variant"
 
