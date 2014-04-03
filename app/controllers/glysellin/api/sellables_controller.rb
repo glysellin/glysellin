@@ -4,7 +4,7 @@ module Glysellin
       skip_before_filter :authenticate_admin_user!
 
       def index
-        @q = Glysellin::Sellable.search(params[:q])
+        @q = Glysellin::Sellable.search(params)
         render json: @q.result, each_serializer: Glysellin::SellableSerializer
       end
     end
