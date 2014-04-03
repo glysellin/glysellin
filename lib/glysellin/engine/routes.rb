@@ -38,6 +38,8 @@ module ActionDispatch::Routing
           namespace :api do
             resources :sellables, only: :index
             resources :variants, only: :index
+            resources :properties, only: :index
+            resources :property_types, only: :index
             resources :orders, only: :create
           end
         end
