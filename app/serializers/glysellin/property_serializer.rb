@@ -4,6 +4,7 @@ module Glysellin
 
     attributes :id, :value, :barcode_ref
 
+    has_many :sellables
     has_one :property_type
   end
 end
