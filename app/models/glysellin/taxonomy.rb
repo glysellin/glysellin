@@ -1,9 +1,11 @@
 module Glysellin
   class Taxonomy < ActiveRecord::Base
-    self.table_name = "glysellin_taxonomies"
+    self.table_name = 'glysellin_taxonomies'
+    has_ancestry
+
     has_many :products, class_name: 'Glysellin::Sellable', dependent: :nullify
 
-    validates :name, presence: true, uniqueness: true
+    validates :name, presence: true
     validates :barcode_ref, presence: true
 
     def self.order_and_print
