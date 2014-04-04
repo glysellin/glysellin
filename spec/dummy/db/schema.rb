@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140313105522) do
+ActiveRecord::Schema.define(version: 20140404135106) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20140313105522) do
     t.string   "corporate"
     t.integer  "user_id"
     t.string   "email"
+    t.boolean  "use_another_address_for_shipping", default: false
   end
 
   create_table "glysellin_discount_codes", force: true do |t|
@@ -75,20 +76,28 @@ ActiveRecord::Schema.define(version: 20140313105522) do
     t.datetime "updated_at"
   end
 
+  create_table "glysellin_discounts", force: true do |t|
+    t.string   "name"
+    t.decimal  "value"
+    t.integer  "discount_type_id"
+    t.integer  "discountable_id"
+    t.string   "discountable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "glysellin_line_items", force: true do |t|
     t.string   "sku"
     t.string   "name"
-    t.decimal  "eot_price",     precision: 11, scale: 2
-    t.decimal  "price",         precision: 11, scale: 2
-    t.decimal  "vat_rate",      precision: 11, scale: 2
+    t.decimal  "eot_price",  precision: 11, scale: 2
+    t.decimal  "price",      precision: 11, scale: 2
+    t.decimal  "vat_rate",   precision: 11, scale: 2
     t.integer  "quantity"
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "weight",        precision: 11, scale: 3
+    t.decimal  "weight",     precision: 11, scale: 3
     t.integer  "variant_id"
-    t.decimal  "discount",      precision: 11, scale: 2
-    t.string   "discount_unit"
   end
 
   create_table "glysellin_order_adjustments", force: true do |t|
@@ -106,27 +115,33 @@ ActiveRecord::Schema.define(version: 20140313105522) do
     t.string   "status"
     t.datetime "paid_on"
     t.integer  "customer_id"
-    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "shipping_method_id"
+    t.text     "comment"
+    t.boolean  "use_another_address_for_shipping",                          default: false
+    t.string   "payment_state"
+    t.string   "shipment_state"
+    t.decimal  "total_price",                      precision: 11, scale: 2
+    t.decimal  "total_eot_price",                  precision: 11, scale: 2
   end
 
   create_table "glysellin_payment_methods", force: true do |t|
     t.string   "name"
-    t.string   "slug"
+    t.string   "identifier"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "glysellin_payments", force: true do |t|
     t.string   "status"
-    t.integer  "type_id"
+    t.integer  "payment_method_id"
     t.integer  "order_id"
-    t.datetime "last_payment_action_on"
+    t.datetime "received_on"
     t.integer  "transaction_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "amount",            precision: 11, scale: 2
   end
 
   create_table "glysellin_product_images", force: true do |t|
@@ -180,6 +195,20 @@ ActiveRecord::Schema.define(version: 20140313105522) do
     t.integer  "taxonomy_id"
     t.boolean  "unlimited_stock",                          default: false
     t.string   "barcode_ref"
+    t.decimal  "eot_price",       precision: 11, scale: 2
+    t.decimal  "price",           precision: 11, scale: 2
+    t.decimal  "weight",          precision: 11, scale: 3
+  end
+
+  create_table "glysellin_shipments", force: true do |t|
+    t.integer  "order_id"
+    t.integer  "shipping_method_id"
+    t.datetime "sent_on"
+    t.decimal  "eot_price",          precision: 11, scale: 2
+    t.decimal  "price",              precision: 11, scale: 2
+    t.string   "tracking_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "glysellin_shipping_methods", force: true do |t|
@@ -213,7 +242,10 @@ ActiveRecord::Schema.define(version: 20140313105522) do
     t.string "name"
     t.text   "description"
     t.string "barcode_ref"
+    t.string "ancestry"
   end
+
+  add_index "glysellin_taxonomies", ["ancestry"], name: "index_glysellin_taxonomies_on_ancestry"
 
   create_table "glysellin_variant_properties", force: true do |t|
     t.integer "variant_id"
@@ -224,12 +256,9 @@ ActiveRecord::Schema.define(version: 20140313105522) do
     t.string   "sku"
     t.string   "name"
     t.string   "slug"
-    t.decimal  "eot_price",      precision: 11, scale: 2
-    t.decimal  "price",          precision: 11, scale: 2
     t.boolean  "published",                               default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "weight"
     t.decimal  "unmarked_price", precision: 11, scale: 2
     t.integer  "sellable_id"
     t.string   "sellable_type"
