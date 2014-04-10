@@ -44,6 +44,10 @@ module Glysellin
     has_many :line_items, class_name: 'Glysellin::LineItem', dependent: :destroy
     accepts_nested_attributes_for :line_items, allow_destroy: true
 
+    has_many :parcels, as: :sendable
+    accepts_nested_attributes_for :parcels, allow_destroy: true,
+      reject_if: :all_blank
+
     # The actual buyer
     belongs_to :customer, class_name: "Glysellin::Customer"
 
