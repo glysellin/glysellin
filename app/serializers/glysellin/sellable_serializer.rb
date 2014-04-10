@@ -7,6 +7,6 @@ module Glysellin
 
     has_one :taxonomy
     has_one :brand
-    has_many :variants
+    has_many :variants, include: false
   end
 end

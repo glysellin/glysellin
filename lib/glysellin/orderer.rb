@@ -16,6 +16,10 @@ module Glysellin
     def has_shipping_address?
       shipping_address && shipping_address.id.present?
     end
+
+    def shipping_address
+      use_another_address_for_shipping ? super : billing_address
+    end
   end
 
   module ActsAsOrderer

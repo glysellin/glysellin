@@ -6,5 +6,6 @@ module Glysellin
       :vat_rate, :order_id
 
     has_one :discount
+    has_one :variant
   end
 end
