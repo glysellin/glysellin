@@ -5,7 +5,7 @@ module Glysellin
 
       def index
         if params[:menu].present?
-          @taxonomies = Glysellin::Taxonomy.roots.order('name desc').first.descendants(at_depth: 1)
+          @taxonomies = Glysellin::Taxonomy.roots.order('name desc')
           render json: @taxonomies, each_serializer: Glysellin::TaxonomiesMenuSerializer
         else
           @q = Glysellin::Taxonomy.search(params)
