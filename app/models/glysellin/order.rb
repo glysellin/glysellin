@@ -46,6 +46,8 @@ module Glysellin
     # The actual buyer
     belongs_to :customer
 
+    belongs_to :store
+
     # Payment tries
     has_many :payments, -> { extending Glysellin::OrderPaymentsMethods },
              inverse_of: :order, dependent: :destroy

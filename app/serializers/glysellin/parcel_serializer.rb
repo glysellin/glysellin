@@ -6,6 +6,10 @@ module Glysellin
 
     has_many :line_items, include: true
 
-    has_one :sendable, polymorphic: true
+    has_one :order
+
+    def order
+      object.sendable
+    end
   end
 end
