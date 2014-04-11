@@ -7,6 +7,8 @@ module Glysellin
     extend FriendlyId
     friendly_id :name, use: :slugged
 
+    delegate :name, to: :sellable
+
     belongs_to :sellable, class_name: "Glysellin::Sellable",
       inverse_of: :variants
 
