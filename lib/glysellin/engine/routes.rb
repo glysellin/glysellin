@@ -19,28 +19,30 @@ module ActionDispatch::Routing
         end
 
         resource :cart, controller: controllers[:cart], only: [:show, :destroy] do
-          resources :products, controller: "glysellin/cart/products", only: [:create, :update, :destroy] do
+          resources :products, controller: 'glysellin/cart/products', only: [:create, :update, :destroy] do
             collection do
-              put "contents/validate", action: "validate", as: "validate"
+              put 'contents/validate', action: 'validate', as: 'validate'
             end
           end
 
-          resource :discount_code, controller: "glysellin/cart/discount_code", only: [:update]
-          resource :addresses, controller: "glysellin/cart/addresses", only: [:update]
-          resource :shipping_method, controller: "glysellin/cart/shipping_method", only: [:update]
-          resource :payment_method, controller: "glysellin/cart/payment_method", only: [:update]
-          resource :state, controller: "glysellin/cart/state", only: [:show] do
-            get "state/:state", action: "show", as: "set"
+          resource :discount_code, controller: 'glysellin/cart/discount_code', only: [:update]
+          resource :addresses, controller: 'glysellin/cart/addresses', only: [:update]
+          resource :shipping_method, controller: 'glysellin/cart/shipping_method', only: [:update]
+          resource :payment_method, controller: 'glysellin/cart/payment_method', only: [:update]
+          resource :state, controller: 'glysellin/cart/state', only: [:show] do
+            get 'state/:state', action: 'show', as: 'set'
           end
         end
 
-        scope module: "glysellin" do
+        scope module: 'glysellin' do
           namespace :api do
             resources :sellables, only: :index
             resources :variants, only: :index
             resources :properties, only: :index
             resources :property_types, only: :index
             resources :orders, only: :create
+            resources :menus, only: :index
+            resources :taxonomies, only: :index
           end
         end
         # get '/' => 'glysellin/products#index', as: 'shop'

@@ -2,7 +2,6 @@ require 'glysellin/helpers'
 require 'glysellin/orderer'
 require 'glysellin/engine/routes'
 require 'active_model_serializers'
-require 'ancestry'
 
 module Glysellin
   class Engine < ::Rails::Engine

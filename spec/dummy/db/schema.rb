@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140404135106) do
+ActiveRecord::Schema.define(version: 20140411114207) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -47,12 +47,12 @@ ActiveRecord::Schema.define(version: 20140404135106) do
   end
 
   create_table "glysellin_customers", force: true do |t|
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "corporate"
-    t.integer  "user_id"
     t.string   "email"
     t.boolean  "use_another_address_for_shipping", default: false
   end
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20140404135106) do
     t.string   "ref"
     t.string   "status"
     t.datetime "paid_on"
+    t.integer  "user_id"
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -239,13 +240,13 @@ ActiveRecord::Schema.define(version: 20140404135106) do
   end
 
   create_table "glysellin_taxonomies", force: true do |t|
-    t.string "name"
-    t.text   "description"
-    t.string "barcode_ref"
-    t.string "ancestry"
+    t.string  "name"
+    t.text    "description"
+    t.string  "barcode_ref"
+    t.integer "parent_id"
   end
 
-  add_index "glysellin_taxonomies", ["ancestry"], name: "index_glysellin_taxonomies_on_ancestry"
+  add_index "glysellin_taxonomies", ["parent_id"], name: "index_glysellin_taxonomies_on_parent_id"
 
   create_table "glysellin_variant_properties", force: true do |t|
     t.integer "variant_id"

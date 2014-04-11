@@ -4,7 +4,6 @@ PATH
     glysellin (0.4.1.1)
       active_model_serializers
       activemerchant
-      ancestry
       country_select
       devise
       friendly_id (~> 5.0)
@@ -55,8 +54,6 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
     addressable (2.3.6)
-    ancestry (2.0.0)
-      activerecord (>= 3.0.0)
     arel (4.0.2)
     atomic (1.1.16)
     bcrypt (3.1.7)
