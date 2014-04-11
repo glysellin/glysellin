@@ -3,10 +3,10 @@ module Glysellin
     embed :ids
 
     attributes :id, :eot_price, :name, :price, :quantity, :sku, :variant_id,
-      :vat_rate, :order_id
+      :vat_rate
 
     has_one :discount
-    has_one :variant
+    has_one :variant, include: true
     has_one :parcel
   end
 end

@@ -1,7 +1,6 @@
 module Glysellin
   class LineItem < ActiveRecord::Base
     self.table_name = "glysellin_line_items"
-    belongs_to :order, inverse_of: :products, autosave: true
 
     belongs_to :variant
     belongs_to :parcel
@@ -12,6 +11,8 @@ module Glysellin
 
     # The attributes we getch from a product to build our order item
     PRODUCT_ATTRIBUTES_FOR_ITEM = %w(sku name eot_price vat_rate price weight)
+
+    delegate :order, to: :parcel
 
     class << self
       # Create an item from product or bundle id
