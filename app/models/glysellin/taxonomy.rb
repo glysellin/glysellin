@@ -1,9 +1,10 @@
 module Glysellin
   class Taxonomy < ActiveRecord::Base
     self.table_name = 'glysellin_taxonomies'
-    has_ancestry
 
     has_many :products, class_name: 'Glysellin::Sellable', dependent: :nullify
+    has_many :children, class_name: 'Glysellin::Taxonomy', foreign_key: 'parent_id', dependent: :destroy
+    belongs_to :parent, class_name: 'Glysellin::Taxonomy'
 
     validates :name, presence: true
     validates :barcode_ref, presence: true
