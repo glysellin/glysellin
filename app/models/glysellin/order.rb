@@ -37,47 +37,44 @@ module Glysellin
       after_transition on: :ship, do: :notify_shipment_sent!
     end
 
-    # Relations
-    #
-    # Order line_items are used to map order to cloned and simplified line_items
-    #   so the Order propererties can't be affected by line_item updates
-    has_many :line_items, class_name: 'Glysellin::LineItem', dependent: :destroy
-    accepts_nested_attributes_for :line_items, allow_destroy: true
+    has_many :parcels, as: :sendable
+    accepts_nested_attributes_for :parcels, allow_destroy: true,
+                                  reject_if: :all_blank
+
+    has_many :line_items, through: :parcels
 
     # The actual buyer
-    belongs_to :customer, class_name: "Glysellin::Customer"
+    belongs_to :customer
 
     # Payment tries
     has_many :payments, -> { extending Glysellin::OrderPaymentsMethods },
-      inverse_of: :order, dependent: :destroy
+             inverse_of: :order, dependent: :destroy
     accepts_nested_attributes_for :payments, allow_destroy: true
 
-    has_one :shipment, class_name: "Glysellin::Shipment", dependent: :destroy
+    has_one :shipment, dependent: :destroy
     accepts_nested_attributes_for :shipment, allow_destroy: true
 
     has_many :order_adjustments, inverse_of: :order, dependent: :destroy
     accepts_nested_attributes_for :order_adjustments
 
-    has_many :discounts, class_name: "Glysellin::Discount", as: :discountable,
-      inverse_of: :discountable
-
+    has_many :discounts, as: :discountable, inverse_of: :discountable
     accepts_nested_attributes_for :discounts, allow_destroy: true,
-      reject_if: :all_blank
+                                  reject_if: :all_blank
 
-    validates_presence_of :billing_address, :line_items
+    validates_presence_of :billing_address, :parcels
 
-    validates_presence_of :shipping_address, if: ->(order) {
-      order.use_another_address_for_shipping
-    }
+    validates_presence_of :shipping_address,
+                          if: :use_another_address_for_shipping
 
     before_validation :process_total_price
     before_validation :process_payments
     before_validation :process_shipment
     before_validation :set_paid_if_paid_by_check
-    after_create :ensure_customer_addresses
-    after_create :ensure_ref
 
-    scope :from_customer, lambda { |customer_id| where(customer_id: customer_id) }
+    after_create      :ensure_customer_addresses
+    after_create      :ensure_ref
+
+    scope :from_customer, ->(customer_id) { where(customer_id: customer_id) }
 
     def quantified_items
       line_items.map { |line_item| [line_item, line_item.quantity] }

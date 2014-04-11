@@ -21,8 +21,8 @@ module Glysellin
     has_many :stores, class_name: 'Glysellin::Variant', through: :stocks
     accepts_nested_attributes_for :stocks, allow_destroy: true
 
-    validate :check_properties
-    validate :generate_barcode, on: :create
+    # validate :check_properties
+    validate :generate_barcode, on: :create, unless: :sku
     validates_length_of :sku, :minimum => 13, :maximum => 13
 
     scope :available, -> {
@@ -37,10 +37,10 @@ module Glysellin
 
     delegate :eot_price, :price, :vat_rate, :vat_ratio, to: :sellable
 
-    def check_properties
-      errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']
-      errors.add(:missing_property, 'Merci de renseigner une collection !') unless properties_hash['collection']
-    end
+    # def check_properties
+    #   errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']
+    #   errors.add(:missing_property, 'Merci de renseigner une collection !') unless properties_hash['collection']
+    # end
 
     def properties_hash
       @properties_hash ||= begin

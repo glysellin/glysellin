@@ -1,10 +1,10 @@
 module Glysellin
   class VariantPropertySerializer < ActiveModel::Serializer
-    embed :ids, include: true
+    embed :ids
 
     attributes :id
 
     has_one :variant
-    has_one :property
+    has_one :property, include: true
   end
 end

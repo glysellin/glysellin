@@ -7,9 +7,9 @@ module Glysellin
     has_one :customer
     has_one :billing_address, root: :addresses
     has_one :shipping_address, root: :addresses
-    has_many :line_items
     has_many :discounts
     has_one :shipment
     has_many :payments
+    has_many :parcels
   end
 end
