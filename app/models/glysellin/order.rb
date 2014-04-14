@@ -77,6 +77,9 @@ module Glysellin
     after_create      :ensure_ref
 
     scope :from_customer, ->(customer_id) { where(customer_id: customer_id) }
+    scope :to_be_shipped, -> {
+      where(orders: { shipment_state: "shipment_pending" })
+    }
 
     def quantified_items
       line_items.map { |line_item| [line_item, line_item.quantity] }

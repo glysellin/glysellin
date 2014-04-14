@@ -10,6 +10,7 @@ require "glysellin/vat_rates"
 require "glysellin/products_list"
 require "glysellin/shipping_carrier"
 require "glysellin/cart"
+require "glysellin/available_stock"
 
 module Glysellin
   ################################################################

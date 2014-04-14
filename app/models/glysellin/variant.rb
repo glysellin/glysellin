@@ -12,16 +12,16 @@ module Glysellin
     belongs_to :sellable, class_name: "Glysellin::Sellable",
       inverse_of: :variants
 
-    has_many :variant_properties, class_name: 'Glysellin::VariantProperty',
-      dependent: :destroy, inverse_of: :variant
+    has_many :variant_properties, dependent: :destroy, inverse_of: :variant
     accepts_nested_attributes_for :variant_properties, allow_destroy: true
 
-    has_many :properties, class_name: 'Glysellin::Property',
-      through: :variant_properties
+    has_many :properties, through: :variant_properties
 
-    has_many :stocks, class_name: 'Glysellin::Stock', dependent: :destroy
-    has_many :stores, class_name: 'Glysellin::Variant', through: :stocks
+    has_many :stocks, dependent: :destroy
+    has_many :stores, through: :stocks
     accepts_nested_attributes_for :stocks, allow_destroy: true
+
+    has_many :line_items
 
     # validate :check_properties
     validate :generate_barcode, on: :create, unless: :sku

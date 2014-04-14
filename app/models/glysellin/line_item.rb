@@ -14,6 +14,15 @@ module Glysellin
 
     delegate :order, to: :parcel
 
+    scope :join_orders, -> {
+      joins(
+        "INNER JOIN glysellin_parcels parcels " +
+          "ON parcels.id = glysellin_line_items.parcel_id " +
+        "INNER JOIN glysellin_orders orders " +
+          "ON orders.id = parcels.sendable_id"
+      ).where(parcels: { sendable_type: "Glysellin::Order"})
+    }
+
     class << self
       # Create an item from product or bundle id
       #

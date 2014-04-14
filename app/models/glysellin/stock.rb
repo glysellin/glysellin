@@ -6,4 +6,8 @@ class Glysellin::Stock < ActiveRecord::Base
 
   validates :count, presence: true
   validates_numericality_of :count
+
+  def available_stock
+    @available_stock ||= Glysellin::AvailableStock.new(self)
+  end
 end
