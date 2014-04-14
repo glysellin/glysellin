@@ -7,8 +7,6 @@ module Glysellin
     extend FriendlyId
     friendly_id :name, use: :slugged
 
-    delegate :name, to: :sellable
-
     belongs_to :sellable, class_name: "Glysellin::Sellable",
       inverse_of: :variants
 
@@ -43,6 +41,14 @@ module Glysellin
     #   errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']
     #   errors.add(:missing_property, 'Merci de renseigner une collection !') unless properties_hash['collection']
     # end
+
+    def name
+      properties_names = variant_properties.map do |variant_property|
+        variant_property.property.value
+      end.join(', ')
+
+      [sellable.name, properties_names].join(" - ")
+    end
 
     def properties_hash
       @properties_hash ||= begin

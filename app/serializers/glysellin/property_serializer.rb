@@ -4,6 +4,6 @@ module Glysellin
 
     attributes :id, :value, :barcode_ref
 
-    has_one :property_type, include: true
+    has_one :property_type
   end
 end

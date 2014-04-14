@@ -114,6 +114,16 @@ module Glysellin
       end
     end
 
+    def process_stocks
+      parcels.each do |parcel|
+        parcel.line_items.each do |line_item|
+          stock = line_item.variant.stocks_for_all_stores[store]
+          stock.count -= line_item.quantity
+          stock.save!
+        end
+      end
+    end
+
     # Ensures that the customer has a billing and, if needed shipping, address.
     #
     def ensure_customer_addresses
