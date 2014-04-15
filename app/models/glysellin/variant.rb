@@ -66,8 +66,12 @@ module Glysellin
     end
 
     def stocks_for_all_stores
-      @stocks_for_all_stores ||= Glysellin::Store.all.map do |store|
-        stores_stocks[store] ||= stocks.build(store: store)
+      @stocks_for_all_stores ||= begin
+        Glysellin::Store.all.each do |store|
+          stores_stocks[store] ||= stocks.build(store: store)
+        end
+
+        stores_stocks
       end
     end
 

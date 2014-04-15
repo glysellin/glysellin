@@ -9,6 +9,20 @@ module Glysellin
 
     attr_accessor :discount_code
 
+    state_machine :state, initial: :pending, use_transactions: false do
+      event :complete do
+        transition all => :completed
+      end
+
+      event :cancel do
+        transition all => :canceled
+      end
+
+      event :reset do
+        transition all => :pending
+      end
+    end
+
     state_machine :payment_state, initial: :payment_pending, use_transactions: false do
       event :empty_payment do
         transition all => :payment_pending
@@ -70,7 +84,6 @@ module Glysellin
 
     before_validation :process_total_price
     before_validation :process_payments
-    before_validation :process_shipment
     before_validation :set_paid_if_paid_by_check
 
     after_create      :ensure_customer_addresses
@@ -107,23 +120,6 @@ module Glysellin
       end
     end
 
-    def process_shipment
-      self.shipment_state = case
-      when shipment && shipment.sent_on.presence then :shipped
-      else                                            :shipment_pending
-      end
-    end
-
-    def process_stocks
-      parcels.each do |parcel|
-        parcel.line_items.each do |line_item|
-          stock = line_item.variant.stocks_for_all_stores[store]
-          stock.count -= line_item.quantity
-          stock.save!
-        end
-      end
-    end
-
     # Ensures that the customer has a billing and, if needed shipping, address.
     #
     def ensure_customer_addresses
@@ -152,7 +148,7 @@ module Glysellin
 
     # Callback invoked after event :paid
     def set_payment
-      self.payment.new_status Payment::PAYMENT_STATUS_PAID
+      payment.pay!
       update_attribute(:paid_on, payment.last_payment_action_on)
     end
 
@@ -170,8 +166,11 @@ module Glysellin
 
     # Callback invoked after event :shipped
     def notify_shipment_sent!
-      email = OrderCustomerMailer.send_order_shipped_email(self)
-      email.deliver if email
+      # email = OrderCustomerMailer.send_order_shipped_email(self)
+      # email.deliver if email
+
+      Rails.logger.debug("*************** notify_shipment_sent *************")
+      Glysellin::OrderStockMigration.new(self).apply
     end
 
     # Customer's e-mail directly accessible from the order
@@ -225,7 +224,7 @@ module Glysellin
     end
 
     def payment_method_id=(type_id)
-      payment = self.payments.build :status => Payment::PAYMENT_STATUS_PENDING
+      payment = self.payments.build
       payment.type = PaymentMethod.find(type_id)
     end
 

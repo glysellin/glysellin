@@ -11,6 +11,7 @@ require "glysellin/products_list"
 require "glysellin/shipping_carrier"
 require "glysellin/cart"
 require "glysellin/available_stock"
+require "glysellin/order_stock_migration"
 
 module Glysellin
   ################################################################
