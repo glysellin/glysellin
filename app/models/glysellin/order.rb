@@ -9,7 +9,7 @@ module Glysellin
 
     attr_accessor :discount_code
 
-    state_machine :state, initial: :pending, use_transactions: false do
+    state_machine :state, initial: :pending do
       event :complete do
         transition all => :completed
       end
@@ -21,9 +21,13 @@ module Glysellin
       event :reset do
         transition all => :pending
       end
+
+      after_transition on: :cancel do |order|
+        order.shipment.cancel! if order.shipment.shipped?
+      end
     end
 
-    state_machine :payment_state, initial: :payment_pending, use_transactions: false do
+    state_machine :payment_state, initial: :payment_pending do
       event :empty_payment do
         transition all => :payment_pending
       end
@@ -31,6 +35,7 @@ module Glysellin
       event :completed_payment do
         transition all => :complete
       end
+      after_transition on: :completed, do: :execute_sold_callbacks
 
       event :partially_paid do
         transition all => :payment_unbalanced
@@ -39,16 +44,6 @@ module Glysellin
       event :over_paid do
         transition all => :payment_over_paid
       end
-
-      after_transition on: :completed, do: :execute_sold_callbacks
-    end
-
-    state_machine :shipment_state, initial: :shipment_pending do
-      event :ship do
-        transition all => :shipped
-      end
-
-      after_transition on: :ship, do: :notify_shipment_sent!
     end
 
     has_many :parcels, as: :sendable
@@ -84,15 +79,19 @@ module Glysellin
 
     before_validation :process_total_price
     before_validation :process_payments
-    before_validation :set_paid_if_paid_by_check
 
     after_create      :ensure_customer_addresses
     after_create      :ensure_ref
 
     scope :from_customer, ->(customer_id) { where(customer_id: customer_id) }
+
     scope :to_be_shipped, -> {
-      where(orders: { shipment_state: "shipment_pending" })
+      active
+        .joins('INNER JOIN glysellin_shipments ON glysellin_shipments.order_id = orders.id')
+        .where(glysellin_shipments: { state: "pending" })
     }
+
+    scope :active, -> { where.not(orders: { state: 'canceled' }) }
 
     def quantified_items
       line_items.map { |line_item| [line_item, line_item.quantity] }
@@ -135,17 +134,6 @@ module Glysellin
       end
     end
 
-    # If admin sets payment date by hand and order was paid by check,
-    # fire :paid event
-    #
-    def set_paid_if_paid_by_check
-      paid! if (paid_on_changed? and ready? and paid_by_check?)
-    end
-
-    def paid_by_check?
-      payment and payment.by_check?
-    end
-
     # Callback invoked after event :paid
     def set_payment
       payment.pay!
@@ -162,15 +150,6 @@ module Glysellin
           end
         end
       end
-    end
-
-    # Callback invoked after event :shipped
-    def notify_shipment_sent!
-      # email = OrderCustomerMailer.send_order_shipped_email(self)
-      # email.deliver if email
-
-      Rails.logger.debug("*************** notify_shipment_sent *************")
-      Glysellin::OrderStockMigration.new(self).apply
     end
 
     # Customer's e-mail directly accessible from the order

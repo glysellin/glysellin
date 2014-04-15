@@ -144,12 +144,13 @@ fr:
         send_order_shipped_email: "Votre commande a été expédiée"
 
     states:
+      shipment:
+        state:
+          pending: "Non expédiée"
+          shipped: "Expédiée"
       order:
         payment_state:
           payment_pending: "Non payée"
           complete: "Payée"
           payment_unbalanced: "Paiement partial"
           payment_over_paid: "Sur-Paiement"
-        shipment_state:
-          shipment_pending: "Non expédiée"
-          shipped: "Expédiée"
