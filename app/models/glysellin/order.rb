@@ -1,9 +1,9 @@
 module Glysellin
   class Order < ActiveRecord::Base
+    self.table_name = 'glysellin_orders'
+
     include ProductsList
     include Orderer
-
-    self.table_name = 'glysellin_orders'
 
     attr_accessor :discount_code
 
@@ -74,7 +74,9 @@ module Glysellin
     scope :active, -> { where.not(orders: { state: 'canceled' }) }
 
     def quantified_items
-      line_items.map { |line_item| [line_item, line_item.quantity] }
+      parcels.map(&:line_items).flatten.map do |line_item|
+        [line_item, line_item.quantity]
+      end
     end
 
     # Ensures there is always an order reference
