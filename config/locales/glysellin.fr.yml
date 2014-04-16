@@ -150,7 +150,7 @@ fr:
           shipped: "Expédiée"
       order:
         payment_state:
-          payment_pending: "Non payée"
+          pending: "Non payée"
           complete: "Payée"
-          payment_unbalanced: "Paiement partial"
-          payment_over_paid: "Sur-Paiement"
+          unbalanced: "Paiement partiel"
+          over_paid: "Sur-Paiement"

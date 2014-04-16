@@ -1,5 +1,3 @@
-require "state_machine"
-
 module Glysellin
   module Cart
     class Basket

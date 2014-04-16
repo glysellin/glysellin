@@ -1,5 +1,3 @@
-require 'state_machine'
-
 module Glysellin
   class Order < ActiveRecord::Base
     include ProductsList
@@ -27,25 +25,6 @@ module Glysellin
       end
     end
 
-    state_machine :payment_state, initial: :payment_pending do
-      event :empty_payment do
-        transition all => :payment_pending
-      end
-
-      event :completed_payment do
-        transition all => :complete
-      end
-      after_transition on: :completed, do: :execute_sold_callbacks
-
-      event :partially_paid do
-        transition all => :payment_unbalanced
-      end
-
-      event :over_paid do
-        transition all => :payment_over_paid
-      end
-    end
-
     has_many :parcels, as: :sendable
     accepts_nested_attributes_for :parcels, allow_destroy: true,
                                   reject_if: :all_blank
@@ -58,7 +37,8 @@ module Glysellin
     belongs_to :store
 
     # Payment tries
-    has_many :payments, -> { extending Glysellin::OrderPaymentsMethods },
+    has_many :payments,
+             -> { extending Glysellin::Payments::AggregationMethods },
              inverse_of: :order, dependent: :destroy
     accepts_nested_attributes_for :payments, allow_destroy: true
 
@@ -110,15 +90,6 @@ module Glysellin
       write_attribute(:total_eot_price, total_eot_price)
     end
 
-    def process_payments
-      self.payment_state = case
-      when payments.balanced?         then  :complete
-      when payments.empty?            then  :payment_pending
-      when payments.partially_paid?   then  :payment_unbalanced
-      when payments.over_paid?        then  :payment_over_paid
-      end
-    end
-
     # Ensures that the customer has a billing and, if needed shipping, address.
     #
     def ensure_customer_addresses
@@ -134,10 +105,12 @@ module Glysellin
       end
     end
 
-    # Callback invoked after event :paid
-    def set_payment
-      payment.pay!
-      update_attribute(:paid_on, payment.last_payment_action_on)
+    def process_payments
+      payments_manager.save
+    end
+
+    def payments_manager
+      @payments_manager ||= Glysellin::Payments::Manager.new(self)
     end
 
     def execute_sold_callbacks
