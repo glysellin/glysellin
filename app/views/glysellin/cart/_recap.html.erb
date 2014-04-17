@@ -1,4 +1,4 @@
-<div class="cart-recap" style="float:right;width:400px;">
+<div class="cart-recap">
   <div class="title">
     <h3>
       <%= t('glysellin.labels.cart.your_cart') %>
@@ -6,11 +6,11 @@
   </div>
 
   <!-- Products recap table -->
-  <% if current_cart.products.length > 0 %>
-    <%= render partial: "glysellin/cart/recap/products", locals: { cart: cart } %>
+  <% if current_cart.line_items.length > 0 %>
+    <%= render partial: "glysellin/cart_steps/recap/products", locals: { cart: cart } %>
   <% end %>
 
   <% if current_cart.state_index > current_cart.available_states.index("addresses") %>
-    <%= render partial: "glysellin/cart/recap/addresses", locals: { cart: cart } %>
+    <%= render partial: "glysellin/cart_steps/recap/addresses", locals: { cart: cart } %>
   <% end %>
 </div>

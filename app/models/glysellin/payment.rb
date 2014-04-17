@@ -2,7 +2,7 @@ module Glysellin
   class Payment < ActiveRecord::Base
     self.table_name = 'glysellin_payments'
 
-    belongs_to :order, inverse_of: :payments
+    belongs_to :payable, polymorphic: true, inverse_of: :payments
 
     belongs_to :payment_method, class_name: 'PaymentMethod',
       inverse_of: :payments
@@ -23,11 +23,19 @@ module Glysellin
       self.received_on = Time.now
     end
 
+    def last_transaction_id
+      last_transaction = self.class
+        .where('transaction_id > 0')
+        .order('transaction_id DESC')
+        .first
+
+      last_transaction ? last_transaction.transaction_id : 0
+    end
+
     def new_transaction_id!
-      last_transaction_with_id = self.class.where('transaction_id > 0').order('transaction_id DESC').first
-      next_id = last_transaction_with_id ? last_transaction_with_id.transaction_id + 1 : 1
-      update_column!("transaction_id", next_id)
-      next_id
+      (last_transaction_id + 1).tap do |id|
+        update_column("transaction_id", id)
+      end
     end
 
     def get_new_transaction_id

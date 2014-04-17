@@ -1,17 +1,7 @@
 module Glysellin
   module ProductsList
-    extend ActiveSupport::Concern
-
     def quantified_items
       raise "You should implement `#quantified_items` in any class including Glysellin::ProductsList"
-    end
-
-    def each_items &block
-      if block_given?
-        quantified_items.each(&block)
-      else
-        quantified_items.each
-      end
     end
 
     def vat_rate
@@ -26,27 +16,24 @@ module Glysellin
       @vat_rates ||= Glysellin::VatRates.new(self)
     end
 
+    def total_quantity
+      line_items.map(&:quantity).reduce(&:+) || 0
+    end
+
     # Gets order subtotal from items only
     #
     # @return [BigDecimal] the calculated subtotal
     #
     def subtotal
-      each_items.reduce(0) do |total, (item, quantity)|
-        total + (item.price * quantity)
-      end
+      line_items.map(&:total_price).reduce(&:+) || 0
     end
 
     def eot_subtotal
-      each_items.reduce(0) do |total, (item, quantity)|
-        total + (item.eot_price * quantity)
-      end
+      line_items.map(&:total_eot_price).reduce(&:+) || 0
     end
 
     def total_weight
-      each_items.reduce(0) do |total, (item, quantity)|
-        weight = item.weight.presence || Glysellin.default_product_weight
-        total + (quantity * weight)
-      end
+      line_items.map(&:total_weight).reduce(&:+) || 0
     end
 
     def discounts_eot_total
@@ -86,7 +73,6 @@ module Glysellin
     def total_eot_price
       (eot_subtotal + eot_adjustments_total).round(2)
     end
-
 
     def total_price_before_discount
       subtotal + shipment.price

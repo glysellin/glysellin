@@ -53,10 +53,10 @@ To display the cart you must render it's partial in your layout :
 ### Filling the cart
 
 To fill the cart, you can use the pre-built helper to create a simple "Add to cart" form that asynchronously updates user's cart contents.
-You must pass the helper a `Glysellin::Product` instance in order to make it work :
+You must pass the helper a `Glysellin::Sellable` instance in order to make it work :
 
 ```erb
-<%= add_to_cart_form(@product) %>
+<%= add_to_cart_form(@sellable) %>
 ```
 
 

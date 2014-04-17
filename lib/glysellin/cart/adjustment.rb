@@ -12,6 +12,6 @@ module Glysellin
   end
 end
 
-require 'glysellin/cart/adjustment/base'
-require 'glysellin/cart/adjustment/discount_code'
-require 'glysellin/cart/adjustment/shipping_method'
+require 'glysellin/cart_steps/adjustment/base'
+require 'glysellin/cart_steps/adjustment/discount_code'
+require 'glysellin/cart_steps/adjustment/shipping_method'

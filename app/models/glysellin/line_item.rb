@@ -3,16 +3,13 @@ module Glysellin
     self.table_name = "glysellin_line_items"
 
     belongs_to :variant
-    belongs_to :parcel
+    belongs_to :container, polymorphic: true
 
     has_one :discount, as: :discountable
     accepts_nested_attributes_for :discount, allow_destroy: true,
       reject_if: :all_blank
 
-    # The attributes we getch from a product to build our order item
-    PRODUCT_ATTRIBUTES_FOR_ITEM = %w(sku name eot_price vat_rate price weight)
-
-    delegate :order, to: :parcel
+    # delegate :order, to: :parcel
 
     scope :join_orders, -> {
       joins(
@@ -20,28 +17,19 @@ module Glysellin
           "ON parcels.id = glysellin_line_items.parcel_id " +
         "INNER JOIN glysellin_orders orders " +
           "ON orders.id = parcels.sendable_id"
-      ).where(parcels: { sendable_type: "Glysellin::Order"})
+      ).where(
+        line_items: { container_type: 'Glysellin::Parcel' },
+        parcels: { sendable_type: "Glysellin::Order"}
+      )
     }
 
-    class << self
-      # Create an item from product or bundle id
-      #
-      # @param [String] id The id string of the item
-      # @param [Boolean] bundle If it's a bundle or just one product
-      #
-      # @return [LineItem] The created order item
-      #
-      def build_from_product id, quantity
-        variant = Glysellin::Variant.find_by_id(id)
+    def autofill_from_variant!
+      return unless variant_id
 
-        attrs = PRODUCT_ATTRIBUTES_FOR_ITEM.map do |key|
-          [key, variant.public_send(key)]
-        end
+      variant = Glysellin::Variant.find(variant_id)
 
-        self.new Hash[attrs].merge(
-          "quantity" => quantity,
-          "variant_id" => variant.id
-        )
+      %w(sku name eot_price vat_rate price weight).each do |key|
+        self.public_send(:"#{ key }=", variant.public_send(key))
       end
     end
 
@@ -57,8 +45,16 @@ module Glysellin
       total_eot_price * (vat_rate / 100.0)
     end
 
+    def total_weight
+      quantity * weight
+    end
+
     def sellable
       variant && variant.sellable
+    end
+
+    def weight
+      super.presence || Glysellin.default_product_weight
     end
   end
 end

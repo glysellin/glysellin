@@ -35,7 +35,7 @@ module Glysellin
 
     scope :published, -> { where(published: true) }
 
-    delegate :eot_price, :price, :vat_rate, :vat_ratio, to: :sellable
+    delegate :eot_price, :price, :vat_rate, :vat_ratio, :weight, to: :sellable
 
     # def check_properties
     #   errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']

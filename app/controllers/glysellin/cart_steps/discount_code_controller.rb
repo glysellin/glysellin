@@ -1,5 +1,5 @@
 module Glysellin
-  module Cart
+  module CartSteps
     class DiscountCodeController < CartController
       def update
         current_cart.discount_code = params[:code]

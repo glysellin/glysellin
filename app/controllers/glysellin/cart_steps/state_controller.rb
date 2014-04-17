@@ -1,11 +1,11 @@
 module Glysellin
-  module Cart
+  module CartSteps
     class StateController < CartController
       def show
         state = params[:state]
 
-        if current_cart.available_states.include?(state)
-          current_cart.state = state.to_sym
+        if current_cart.available_events.include?(state)
+          current_cart.public_send(:"#{ state }!")
         end
 
         redirect_to cart_path

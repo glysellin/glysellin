@@ -36,13 +36,15 @@ module Glysellin
 
     belongs_to :store
 
+    has_one :cart
+
     # Payment tries
     has_many :payments,
              -> { extending Glysellin::Payments::AggregationMethods },
-             inverse_of: :order, dependent: :destroy
+             as: :payable, inverse_of: :payable, dependent: :destroy
     accepts_nested_attributes_for :payments, allow_destroy: true
 
-    has_one :shipment, dependent: :destroy
+    has_one :shipment, as: :shippable, dependent: :destroy
     accepts_nested_attributes_for :shipment, allow_destroy: true
 
     has_many :order_adjustments, inverse_of: :order, dependent: :destroy

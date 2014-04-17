@@ -2,6 +2,7 @@ module Glysellin
   module Cart
     class Basket
       include ProductsList
+
       include Cart::NestedResource
       include Cart::Select
       include ActiveModel::Model

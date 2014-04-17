@@ -2,7 +2,7 @@ module Glysellin
   class Shipment < ActiveRecord::Base
     self.table_name = "glysellin_shipments"
 
-    belongs_to :order, class_name: "Glysellin::Order", autosave: true
+    belongs_to :shippable, polymorphic: true, autosave: true
     belongs_to :shipping_method, class_name: "Glysellin::ShippingMethod"
 
     state_machine initial: :pending do
@@ -47,6 +47,24 @@ module Glysellin
     def reset_shipment
       rollback_stocks
       self.sent_on = nil
+    end
+
+
+    # Validates the selected country is eligible for the current cart contents
+    # to be shipped to
+    #
+    def validate_shippable
+      code = shippable.shipping_address.country
+      country = Glysellin::Helpers::Countries::COUNTRIES_LIST[code]
+
+      errors.add(
+        :shipping_method_id,
+        I18n.t(
+          "glysellin.errors.cart.shipping_method_unavailable_for_country",
+          method: shipment.shipping_method.name,
+          country: country
+        )
+      )
     end
   end
 end

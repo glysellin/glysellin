@@ -1,15 +1,16 @@
-<%= simple_form_for cart, url: cart_addresses_path, method: "put" do |f| %>
+<%= simple_form_for cart, as: :cart, url: cart_addresses_path, method: "put" do |f| %>
   <h2><%= t('glysellin.labels.forms.customer_details') %></h2>
 
-  <%= f.simple_fields_for :customer do |fc| %>
-    <%# new_record = fc.object.new_record? %>
+  <%= f.fields_for :customer, (f.object.customer || (user_signed_in? && current_user.customer) || f.object.build_customer), include_id: !!f.object.customer do |fc| %>
     <% new_record = !fc.object.id %>
 
     <%= fc.input :email, :input_html => { :disabled => !new_record } %>
 
-    <% if new_record %>
-      <%= fc.input :password %>
-      <%= fc.input :password_confirmation %>
+    <% if new_record && !user_signed_in? %>
+      <%= fc.fields_for :user, (fc.object.user || fc.object.build_user) do |fu| %>
+        <%= fu.input :password %>
+        <%= fu.input :password_confirmation %>
+      <% end %>
 
       <%= link_to new_user_session_path do %>
         <%= t('glysellin.labels.customer.sign_in') %>

@@ -6,7 +6,7 @@
   <%= render partial: "recap", locals: { cart: current_cart } %>
 <% end %>
 
-<%= render partial: "glysellin/cart/states/#{ current_cart.state }", locals: { cart: current_cart } %>
+<%= render partial: "glysellin/cart_steps/states/#{ current_cart.state }", locals: { cart: current_cart } %>
 
 <% unless ready %>
   <%= link_to t("glysellin.labels.cart.cancel"), cart_path, method: "delete" %>

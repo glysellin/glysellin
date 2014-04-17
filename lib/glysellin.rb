@@ -9,7 +9,7 @@ require "glysellin/discount_type_calculator"
 require "glysellin/vat_rates"
 require "glysellin/products_list"
 require "glysellin/shipping_carrier"
-require "glysellin/cart"
+# require "glysellin/cart"
 require "glysellin/available_stock"
 require "glysellin/order_stock_migration"
 require "glysellin/payments"
@@ -75,8 +75,10 @@ module Glysellin
   mattr_accessor :shop_name
   @@shop_name = 'Example Shop Name'
 
+  mattr_accessor :default_store_client_key
+
   mattr_accessor :default_vat_rate
-  @@default_vat_rate = 19.6
+  @@default_vat_rate = 20
 
   mattr_accessor :default_product_weight
   @@default_product_weight = 0

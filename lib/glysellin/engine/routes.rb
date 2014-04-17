@@ -19,18 +19,18 @@ module ActionDispatch::Routing
         end
 
         resource :cart, controller: controllers[:cart], only: [:show, :destroy] do
-          resources :products, controller: 'glysellin/cart/products', only: [:create, :update, :destroy] do
+          resources :products, controller: 'glysellin/cart_steps/products', only: [:create, :update, :destroy] do
             collection do
               put 'contents/validate', action: 'validate', as: 'validate'
             end
           end
 
-          resource :discount_code, controller: 'glysellin/cart/discount_code', only: [:update]
-          resource :addresses, controller: 'glysellin/cart/addresses', only: [:update]
-          resource :shipping_method, controller: 'glysellin/cart/shipping_method', only: [:update]
-          resource :payment_method, controller: 'glysellin/cart/payment_method', only: [:update]
-          resource :state, controller: 'glysellin/cart/state', only: [:show] do
-            get 'state/:state', action: 'show', as: 'set'
+          resource :discount_code, controller: 'glysellin/cart_steps/discount_code', only: [:update]
+          resource :addresses, controller: 'glysellin/cart_steps/addresses', only: [:update]
+          resource :shipping_method, controller: 'glysellin/cart_steps/shipping_method', only: [:update]
+          resource :payment_method, controller: 'glysellin/cart_steps/payment_method', only: [:update]
+          resource :state, controller: 'glysellin/cart_steps/state', only: [:show] do
+            get ':state', action: 'show', as: 'set'
           end
         end
 

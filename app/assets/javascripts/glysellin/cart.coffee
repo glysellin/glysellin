@@ -31,7 +31,7 @@ class GlysellinCart
     # Trigger update callback if passed
     @options.onUpdated(this) if $.isFunction(@options.onUpdated)
 
-  # Default model handling
+  # Default modal handling
   handleDefaultModal: ($modal) ->
     $body = $('body')
 

@@ -2,11 +2,9 @@ module Glysellin
   class CartController < ApplicationController
     include ActionView::Helpers::NumberHelper
 
-    before_filter :set_cart
     after_filter :update_cart_in_session
 
     def show
-      current_cart.update_quantities!
     end
 
     def destroy
@@ -20,10 +18,6 @@ module Glysellin
       render partial: 'cart', locals: { cart: current_cart }
     end
 
-    def set_cart
-      @states = current_cart.available_states
-    end
-
     # Helper method to set cookie value
     def update_cart_in_session options = {}
       if current_cart.errors.any?
@@ -31,17 +25,18 @@ module Glysellin
           t("glysellin.errors.cart.state_transitions.#{ current_cart.state }")
       end
 
-      session["glysellin.cart"] = current_cart.serialize
+      session["glysellin.cart"] = current_cart.id
     end
 
     def totals_hash
-      adjustment = current_cart.discount
-      discount_name = adjustment.name rescue nil
-      discount_value = number_to_currency(adjustment.value) rescue nil
+      if (discount = current_cart.discounts.first)
+        discount_name = discount.name
+        discount_value = number_to_currency(discount.value)
+      end
 
       {
-        discount_name: discount_name,
-        discount_value: discount_value,
+        discount_name: discount && discount_name,
+        discount_value: discount && discount_value,
         total_eot_price: number_to_currency(current_cart.total_eot_price),
         total_price: number_to_currency(current_cart.total_price),
         eot_subtotal: number_to_currency(current_cart.eot_subtotal),

@@ -14,7 +14,6 @@ module Glysellin
       counter_cache: :children_count
 
     validates :name, presence: true
-    validates :barcode_ref, presence: true
 
     def self.order_and_print
       self.includes(:sellables).order('name asc').map { |b| ["#{b.name} (#{b.sellables.size} produit(s))", b.id] }

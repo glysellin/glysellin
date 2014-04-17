@@ -27,8 +27,9 @@ module Glysellin
     #
     # @return [String] The request button HTML
     def request_button order
-      g = Glysellin.gateways[order.payment_method.slug].new(order)
-      g.render_request_button
+      payment_method = order.payments.last.payment_method
+      gateway = Glysellin.gateways[payment_method.identifier].new(order)
+      gateway.render_request_button
     end
   end
 end

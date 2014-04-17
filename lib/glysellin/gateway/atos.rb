@@ -62,9 +62,10 @@ module Glysellin
         bin_path = "#{ @@bin_path }/request"
 
         begin
-          results = `#{bin_path} #{exec_chain}`.split('!')
+          data = `#{bin_path} #{exec_chain}`
+          results = data.presence ? data.split('!') : []
         # If OS didn't want to exec program
-        rescue Errno::ENOEXEC => msg
+        rescue Errno::ENOEXEC
           results = []
         end
 

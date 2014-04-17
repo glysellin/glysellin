@@ -1,6 +1,7 @@
 module Glysellin
   class Customer < ActiveRecord::Base
     include Orderer
+
     self.table_name = 'glysellin_customers'
 
     validates_presence_of :first_name, :last_name, unless: 'corporate_filled_in?'

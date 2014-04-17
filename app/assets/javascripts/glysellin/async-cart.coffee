@@ -67,8 +67,14 @@ class AsyncCart
       $el.val(quantity)
 
     @update(
-      "products/#{ $el.data('id') }",
-      { _method: "put", quantity: quantity}
+      "products/#{ $el.data('id') }"
+      {
+        _method: "put"
+        cart:
+          line_items_attributes:
+            id: $el.data('id')
+            quantity: quantity
+      }
       (resp) => @remoteQuantityUpdated(resp, $el)
     )
 

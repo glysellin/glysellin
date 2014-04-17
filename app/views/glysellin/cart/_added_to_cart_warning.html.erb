@@ -3,21 +3,26 @@
   Default behavior is triggered when [data-warning] attribute is present on the container
 %>
 
-<% product = current_cart.product(params[:cart][:product_id]).variant %>
-
 <div class="added-to-cart-warning" style="position:fixed;width:400px;height:200px;top:50%;left:50%;margin-left:-200px;margin-top:-140px;border:1px solid #CCC;border-radius:2px;padding:40px;box-shadow:0 0 15px #DDD;z-index:100;background:white;" data-warning>
-  <h3><%= t('glysellin.labels.cart.added_to_cart') %></h3>
-  <hr>
-  <strong>
-    <%= (quantity = params[:cart][:quantity].to_i) %> &times;
-  </strong>
-  <%= product.name %> - <%= number_to_currency product.price %>
-  <strong style="float:right;">
-    <%= number_to_currency (product.price * quantity) %>
-  </strong>
-  <br>
+  <h3>
+    <%= t('glysellin.labels.cart.added_to_cart') %>
+  </h3>
 
   <hr>
+
+  <strong>
+    <%= @line_item.quantity %> &times;
+  </strong>
+
+  <%= @line_item.name %> - <%= number_to_currency @line_item.price %>
+
+  <strong style="float:right;">
+    <%= number_to_currency @line_item.total_price %>
+  </strong>
+
+  <br>
+  <hr>
+
   <%= link_to "#", data: { dismiss: "warning" } do %>
     <%= t('glysellin.labels.cart.continue_shopping') %>
   <% end %>

@@ -1,7 +1,7 @@
 <% editable = false unless defined?(editable) && editable == true %>
 <% remote = Glysellin.async_cart %>
 
-<%= simple_form_for cart, url: validate_cart_products_path, method: "put", html: { class: "products-recap-form#{ ' editable' if editable }", data: { "cart-url" => cart_path } } do |form| %>
+<%= simple_form_for cart, as: :cart, url: validate_cart_products_path, method: "put", html: { class: "products-recap-form#{ ' editable' if editable }", data: { "cart-url" => cart_path } } do |form| %>
   <table id="order_recap_table" class="table table-bordered table-striped">
     <tr>
       <th><%= t('glysellin.labels.order.name') %></th>
@@ -13,33 +13,32 @@
         <th></th>
       <% end %>
     </tr>
-    <% cart.each_items do |item, quantity| %>
+    <% cart.line_items.each do |line_item| %>
       <tr>
         <td>
-          <%= item.name %>
+          <%= line_item.name %>
         </td>
         <td>
-          <%= number_to_currency(item.price) %>
+          <%= number_to_currency(line_item.price) %>
         </td>
         <td>
           <% if editable %>
-            <%= form.fields_for :products do |fp| %>
-              <%= fp.number_field :quantity, index: item.id, value: quantity, class: 'quantity-input', data: { id: item.id } %>
+            <%= form.fields_for :line_items, line_item do |fli| %>
+              <%= fli.number_field :quantity, value: line_item.quantity, class: 'quantity-input', data: { id: line_item.id } %>
             <% end %>
           <% else %>
-            <%= quantity %>
+            <%= line_item.quantity %>
           <% end %>
         </td>
         <td class="product-eot-price">
-          <% puts "***** #{quantity} -- #{item.inspect}" %>
-          <%= number_to_currency(quantity * item.eot_price) %>
+          <%= number_to_currency(line_item.total_eot_price) %>
         </td>
         <td class="product-price">
-          <%= number_to_currency(quantity * item.price) %>
+          <%= number_to_currency(line_item.total_price) %>
         </td>
         <% if editable %>
           <td>
-            <%= link_to cart_product_path(item.id), method: "delete" do %>
+            <%= link_to cart_product_path(line_item.id), method: "delete" do %>
               <%= t('glysellin.labels.cart.remove_from_cart') %>
             <% end %>
           </td>
@@ -63,24 +62,42 @@
         <td></td>
       <% end %>
     </tr>
-    <% if cart.adjustments_total != 0 %>
-      <% cart.adjustments.each do |adjustment| %>
-        <% if adjustment.valid %>
-          <tr class="adjustment-row" data-type="<%= adjustment.type %>">
+
+    <% if cart.adjustments.length > 0 %>
+      <% if cart.shipment && cart.shipment.persisted? %>
+        <tr class="adjustment-row" data-type="shipping-method">
+          <td colspan="4" class="adjustment-name">
+            <%= cart.shipment.shipping_method.name %>
+          </td>
+
+          <td class="adjustment-value">
+            <%= number_to_currency(cart.shipment.price) %>
+          </td>
+
+          <% if editable %>
+            <td></td>
+          <% end %>
+        </tr>
+      <% end %>
+
+      <% cart.discounts.each do |adjustment| %>
+        <% if discount.valid %>
+          <tr class="adjustment-row" data-type="discount-code">
             <td colspan="4" class="adjustment-name">
-              <%= adjustment.name %>
+              <%= discount.name %>
             </td>
+
             <td class="adjustment-value">
-              <%= number_to_currency(adjustment.value) %>
+              <%= number_to_currency(discount.price) %>
             </td>
+
             <% if editable %>
               <td></td>
             <% end %>
           </tr>
         <% end %>
       <% end %>
-    <% end %>
-    <% if editable && Glysellin.async_cart && !cart.discount %>
+    <% elsif editable && Glysellin.async_cart %>
       <tr class="adjustment-row" data-type="discount-code" style="display:none;">
         <td colspan="4" class="adjustment-name">
         </td>
@@ -89,6 +106,7 @@
         <td></td>
       </tr>
     <% end %>
+
     <tr class="products-total-row">
       <td colspan="3">
         <%= t('glysellin.labels.order.total') %>

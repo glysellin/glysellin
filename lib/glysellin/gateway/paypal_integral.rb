@@ -34,7 +34,7 @@ module Glysellin
 
       def render_request_button
         {
-          :partial => 'glysellin/payment_methods/paypal-integral',
+          :partial => 'glysellin/payment_methods/paypal_integral',
           :locals => { :order => @order }
         }
       end

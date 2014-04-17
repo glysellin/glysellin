@@ -13,11 +13,11 @@
     <tbody>
 
       <!-- Products -->
-      <% current_cart.each_items do |product, quantity| %>
+      <% current_cart.line_items.each do |line_item| %>
         <tr>
-          <td><%= product.name %></td>
-          <td>x <%= quantity %></td>
-          <td><%= number_to_currency(product.price * quantity) %></td>
+          <td><%= line_item.name %></td>
+          <td><%= line_item.quantity %></td>
+          <td><%= number_to_currency(line_item.total_price) %></td>
         </tr>
       <% end %>
 
@@ -32,17 +32,26 @@
       </tr>
 
       <!-- Adjustments -->
-      <% current_cart.adjustments.each do |adjustment| %>
-        <% if adjustment.valid %>
-          <tr>
-            <td colspan="2">
-              <%= adjustment.name %>
-            </td>
-            <td>
-              <%= number_to_currency(adjustment.value) %>
-            </td>
-          </tr>
-        <% end %>
+      <% current_cart.discounts.each do |discount| %>
+        <tr>
+          <td colspan="2">
+            <%= discount.name %>
+          </td>
+          <td>
+            <%= number_to_currency(discount.price) %>
+          </td>
+        </tr>
+      <% end %>
+
+      <% if current_cart.shipment && current_cart.shipment.persisted? %>
+        <tr>
+          <td colspan="2">
+            <%= current_cart.shipment.shipping_method.name %>
+          </td>
+          <td>
+            <%= number_to_currency(current_cart.shipment.price) %>
+          </td>
+        </tr>
       <% end %>
 
       <!-- Total row -->
