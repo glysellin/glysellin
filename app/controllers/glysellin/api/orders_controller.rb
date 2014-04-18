@@ -1,9 +1,6 @@
 module Glysellin
   module Api
-    class OrdersController < ApplicationController
-      respond_to :json
-      skip_before_filter :authenticate_admin_user!
-
+    class OrdersController < BaseController
       def create
         @order = Glysellin::Order.new order_params
 
