@@ -69,11 +69,18 @@ module Glysellin
 
     scope :to_be_shipped, -> {
       active
-        .joins('INNER JOIN glysellin_shipments ON glysellin_shipments.order_id = orders.id')
-        .where(glysellin_shipments: { state: "pending" })
+        .joins(
+          'INNER JOIN glysellin_shipments ' +
+          'ON glysellin_shipments.shippable_id = glysellin_orders.id'
+        )
+        .where(
+          glysellin_shipments: {
+            shippable_type: 'Glysellin::Order', state: "pending"
+          }
+        )
     }
 
-    scope :active, -> { where.not(orders: { state: 'canceled' }) }
+    scope :active, -> { where.not(glysellin_orders: { state: 'canceled' }) }
 
     def quantified_items
       parcels.map(&:line_items).flatten.map do |line_item|

@@ -5,7 +5,6 @@ module Glysellin
     attributes :id, :name
 
     has_many :line_items, include: true
-
     has_one :order
 
     def order
