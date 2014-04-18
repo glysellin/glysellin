@@ -21,6 +21,8 @@ module Glysellin
 
     has_many :line_items
 
+    has_many :variant_images, as: :imageable
+
     # validate :check_properties
     validate :generate_barcode, on: :create, unless: :sku
     validates_length_of :sku, :minimum => 13, :maximum => 13
