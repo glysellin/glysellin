@@ -1,7 +1,14 @@
 module Glysellin
   class PaymentSerializer < ActiveModel::Serializer
-    attributes :id, :received_on, :amount, :order_id
+    embed :ids
 
-    has_one :payment_method, embed: :ids, include: true
+    attributes :id, :received_on, :amount
+
+    has_one :payment_method, include: true
+    has_one :order
+
+    def order
+      object.payable
+    end
   end
 end

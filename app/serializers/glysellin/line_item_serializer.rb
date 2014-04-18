@@ -8,5 +8,9 @@ module Glysellin
     has_one :discount, include: true
     has_one :variant, include: true
     has_one :parcel
+
+    def parcel
+      object.container
+    end
   end
 end
