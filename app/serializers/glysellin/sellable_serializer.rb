@@ -4,5 +4,7 @@ module Glysellin
 
     attributes :id, :name, :description, :vat_rate, :eot_price, :price, :weight,
       :unlimited_stock, :barcode_ref, :variant_ids
+
+    has_many :variants, serializer: VariantWithoutSellableSerializer
   end
 end

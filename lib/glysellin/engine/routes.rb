@@ -36,6 +36,7 @@ module ActionDispatch::Routing
 
         scope module: 'glysellin' do
           namespace :api do
+            resource :store, controller: 'store'
             resources :sellables, only: [:index, :show]
             resources :variants, only: :index
             resources :properties, only: :index

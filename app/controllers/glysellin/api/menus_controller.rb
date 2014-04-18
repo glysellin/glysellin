@@ -1,8 +1,6 @@
 module Glysellin
   module Api
-    class MenusController < ApplicationController
-      skip_before_filter :authenticate_admin_user!
-
+    class MenusController < BaseController
       def index
         @taxonomies = Glysellin::Taxonomy.order('name desc').first.descendants(at_depth: 1)
         render json: @taxonomies, each_serializer: Glysellin::TaxonomySerializer
