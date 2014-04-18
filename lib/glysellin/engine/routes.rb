@@ -36,13 +36,15 @@ module ActionDispatch::Routing
 
         scope module: 'glysellin' do
           namespace :api do
-            resources :sellables, only: :index
+            resources :sellables, only: [:index, :show]
             resources :variants, only: :index
             resources :properties, only: :index
             resources :property_types, only: :index
             resources :orders, only: :create
             resources :menus, only: :index
-            resources :taxonomies, only: :index
+            resources :taxonomies, only: [:index, :show] do
+              resources :sellables
+            end
           end
         end
         # get '/' => 'glysellin/products#index', as: 'shop'

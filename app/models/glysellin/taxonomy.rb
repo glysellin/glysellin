@@ -15,6 +15,18 @@ module Glysellin
 
     validates :name, presence: true
 
+    def deep_sellables_count
+      count = sellables.size
+      children.each { |c| count += c.deep_sellables_count }
+      count
+    end
+
+    def deep_children_ids
+      ids = children.pluck :id
+      children.each { |c| ids.push c.deep_children_ids }
+      ids.flatten.compact
+    end
+
     def self.order_and_print
       self.includes(:sellables).order('name asc').map { |b| ["#{b.name} (#{b.sellables.size} produit(s))", b.id] }
     end
