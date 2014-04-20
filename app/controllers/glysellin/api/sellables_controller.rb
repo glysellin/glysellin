@@ -3,7 +3,7 @@ module Glysellin
     class SellablesController < BaseController
       def index
         @q = sellables_with_includes.search(params)
-        render json: @q.result, each_serializer: Glysellin::SellableSerializer
+        render json: @q.result, each_serializer: Glysellin::SellableWithoutVariantSerializer
       end
 
       def show
