@@ -7,7 +7,7 @@ module Glysellin
       end
 
       def show
-        @taxanomy = Glysellin::Taxonomy.includes(children: [:children, :parent]).where(id: params[:id]).first
+        @taxanomy = Glysellin::Taxonomy.includes(children: [children: :parent]).where(id: params[:id]).first
         render json: @taxanomy, each_serializer: Glysellin::TaxonomySerializer
       end
     end
