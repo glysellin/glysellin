@@ -4,7 +4,7 @@ module Glysellin
 
     attributes :id, :sku, :name, :eot_price, :price, :vat_rate
 
-    has_many :stocks
+    has_many :stocks, include: true
     has_many :variant_properties, include: true
 
     def stocks
