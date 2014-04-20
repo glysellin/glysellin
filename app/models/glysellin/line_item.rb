@@ -13,13 +13,13 @@ module Glysellin
 
     scope :join_orders, -> {
       joins(
-        "INNER JOIN glysellin_parcels parcels " +
-          "ON parcels.id = glysellin_line_items.parcel_id " +
-        "INNER JOIN glysellin_orders orders " +
-          "ON orders.id = parcels.sendable_id"
+        "INNER JOIN glysellin_parcels " +
+          "ON glysellin_parcels.id = glysellin_line_items.container_id " +
+        "INNER JOIN glysellin_orders " +
+          "ON glysellin_orders.id = glysellin_parcels.sendable_id"
       ).where(
-        line_items: { container_type: 'Glysellin::Parcel' },
-        parcels: { sendable_type: "Glysellin::Order"}
+        glysellin_line_items: { container_type: 'Glysellin::Parcel' },
+        glysellin_parcels: { sendable_type: "Glysellin::Order"}
       )
     }
 
