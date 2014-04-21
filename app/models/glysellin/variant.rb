@@ -78,6 +78,7 @@ module Glysellin
     end
 
     def stores_stocks
+      return {} unless stocks
       @stores_stocks ||= stocks.reduce({}) do |hash, stock|
         hash[stock.store] = stock
         hash
