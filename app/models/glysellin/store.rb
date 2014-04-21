@@ -17,8 +17,7 @@ class Glysellin::Store < ActiveRecord::Base
   end
 
   def available_quantity_for variant
-    available_quantities[variant.id] ||=
-      variant.stocks_for_all_stores[self].count
+    available_quantities[variant.id] ||= (variant.stocks_for_all_stores[self].try(:count) || 0)
   end
 
   private
