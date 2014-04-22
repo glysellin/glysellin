@@ -13,7 +13,20 @@ module Glysellin
 
     # Change the way order billing references are generated
     # Reproducting default generator would be this :
-    # config.order_reference_generator = lambda { |order| "#{ Time.now.strftime('%Y%m%d%H%M') }-#{ order.id }" }
+    #
+    # config.order_reference_generator = ->(order) {
+    #  "#{ Time.now.strftime('%Y%m%d%H%M') }-#{ order.id }"
+    # }
+
+    # Define the pattern to generate invoice orders when an invoice is created
+    # from an existing order
+    #
+    # If you want your invoice numbers to be "1", "2", "3" and so on, you can
+    # do it this way :
+    #
+    # config.invoice_number_generator = ->(order) {
+    #   (Glysellin::Invoice.last.try(:number) || 0).to_i + 1
+    # }
 
     # Configure your shop name, used to send e-mails
     config.shop_name = 'My super shop'

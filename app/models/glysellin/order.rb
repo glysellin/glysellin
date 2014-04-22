@@ -38,6 +38,8 @@ module Glysellin
 
     has_one :cart
 
+    has_one :invoice, dependent: :nullify
+
     # Payment tries
     has_many :payments,
              -> { extending Glysellin::Payments::AggregationMethods },
