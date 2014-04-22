@@ -14,7 +14,7 @@ module Glysellin
       private
 
       def sellables_with_includes
-        Glysellin::Sellable.includes(variants: [:stocks, variant_images: :image, variant_properties: [property: :property_type]])
+        Glysellin::Sellable.includes(variants: [:stocks, :variant_images, variant_properties: [property: :property_type]])
       end
     end
   end
