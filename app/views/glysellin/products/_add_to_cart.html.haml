@@ -1,14 +1,18 @@
 - if sellable.published_variants.length > 0
   = form_for Glysellin::LineItem.new, as: :line_item, url: cart_products_path, class: 'add-to-cart-form', remote: options[:remote], data: { "add-to-cart-form" => true } do |f|
 
-    .product-quantity
-      = f.number_field :quantity, value: 1
+    .form-group
+      .product-quantity
+        = f.number_field :quantity, value: 1, class: 'form-control', style: 'height: 34px;'
 
-    .submit-container
-      - if sellable.published_variants.length > 1
-        = f.select :variant_id, variants_options_for(sellable), prompt: t("glysellin.labels.sellables.choose_your_variant"), required: "required"
-      - else
-        = f.hidden_field :variant_id, value: sellable.published_variants.first.id
+    .form-group
+      .submit-container
+        - if sellable.published_variants.length > 1
+          = f.select :variant_id, variants_options_for(sellable), prompt: t("glysellin.labels.sellables.choose_your_variant"), required: "required"
+        - else
+          = f.hidden_field :variant_id, value: sellable.published_variants.first.id
 
-      %button.submit{ type: "submit" }
+    .form-group
+      %hr/
+      %button.btn.btn-success.submit{ type: "submit" }
         = t('glysellin.labels.cart.add_to_cart')
