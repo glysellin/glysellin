@@ -1,10 +1,6 @@
 module Glysellin
   module Api
     class SellablesController < BaseController
-      def index
-        @q = sellables_with_includes.search(params)
-        render json: @q.result, each_serializer: Glysellin::SellableWithoutVariantSerializer
-      end
 
       def show
         @sellable = sellables_with_includes.where(id: params[:id]).first
@@ -14,7 +10,7 @@ module Glysellin
       private
 
       def sellables_with_includes
-        Glysellin::Sellable.includes(variants: [:stocks, :variant_images, variant_properties: [property: :property_type]])
+        Glysellin::Sellable.includes(:variant_images, variants: [:stocks, :variant_images, variant_properties: [property: :property_type]])
       end
     end
   end
