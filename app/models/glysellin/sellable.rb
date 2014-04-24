@@ -10,17 +10,14 @@ module Glysellin
     belongs_to :brand, class_name: "Glysellin::Brand", inverse_of: :products
 
     validates_presence_of :name, :vat_rate, :eot_price, :price, :taxonomy_id
-
     validates_numericality_of :vat_rate, :eot_price, :price
 
-    has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable,
-      dependent: :destroy
+    has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable, dependent: :destroy
     accepts_nested_attributes_for :variants, allow_destroy: true
 
-    validates :variants, length: {
-      minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short")
-    }
+    has_many :variant_images, through: :variants
 
+    validates :variants, length: { minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short") }
     before_validation :check_prices
 
     # Published sellables are the ones that have at least one variant
