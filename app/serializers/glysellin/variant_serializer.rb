@@ -6,8 +6,12 @@ module Glysellin
 
     has_many :stocks, include: true
     has_many :variant_properties, include: true
-    has_one :sellable, include: true
+    has_many :variant_images, include: true
 
+    def stocks
+      object.stocks.select { |stock| stock.store_id == scope.store_id }
+    end
+    
     def vat_rate
       object.sellable.vat_rate
     end
