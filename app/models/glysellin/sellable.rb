@@ -20,6 +20,8 @@ module Glysellin
     validates :variants, length: { minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short") }
     before_validation :check_prices
 
+    after_create :set_thumb
+
     # Published sellables are the ones that have at least one variant
     # published.
     #
@@ -29,6 +31,12 @@ module Glysellin
     scope :published, -> {
       includes(:variants).where(glysellin_variants: { published: true })
     }
+
+    def set_thumb
+      variant_image = variant_images.first
+      url = variant_image.image.url(:thumb) if variant_image
+      update_column :thumb, url
+    end
 
     def published_variants
       variants.select { |v| v.published }
