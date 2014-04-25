@@ -1,6 +1,6 @@
 module Glysellin
   module Api
-    class OrdersController < BaseController
+    class OrdersController < ApplicationController
       def create
         @order = Glysellin::Order.new order_params
 
