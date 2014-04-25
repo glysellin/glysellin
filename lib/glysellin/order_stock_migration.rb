@@ -23,7 +23,8 @@ module Glysellin
     end
 
     def line_items
-      @line_items ||= order.line_items.includes(variant: { stocks: :store })
+      @line_items ||= order.line_items(cached: false)
+        .includes(variant: { stocks: :store })
         .where(glysellin_stores: { id: order.store_id })
     end
   end

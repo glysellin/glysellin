@@ -84,10 +84,9 @@ module Glysellin
 
     scope :active, -> { where.not(glysellin_orders: { state: 'canceled' }) }
 
-    def quantified_items
-      parcels.map(&:line_items).flatten.map do |line_item|
-        [line_item, line_item.quantity]
-      end
+    def line_items options = {}
+      cached = options.fetch(:cached, true)
+      cached ? parcels.map(&:line_items).flatten : super()
     end
 
     # Ensures there is always an order reference
