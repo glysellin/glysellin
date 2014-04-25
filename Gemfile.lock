@@ -4,6 +4,7 @@ PATH
     glysellin (0.4.1.1)
       active_model_serializers
       activemerchant
+      aws-sdk
       country_select
       devise
       friendly_id (~> 5.0)
@@ -30,7 +31,7 @@ GEM
     active_utils (2.0.2)
       activesupport (>= 2.3.11)
       i18n
-    activemerchant (1.42.7)
+    activemerchant (1.43.0)
       active_utils (~> 2.0, >= 2.0.1)
       activesupport (>= 2.3.14, < 5.0.0)
       builder (>= 2.1.2, < 4.0.0)
@@ -56,6 +57,9 @@ GEM
     addressable (2.3.6)
     arel (4.0.2)
     atomic (1.1.16)
+    aws-sdk (1.39.0)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
     bcrypt (3.1.7)
     builder (3.1.4)
     capybara (2.2.1)
@@ -202,9 +206,9 @@ GEM
       websocket (~> 1.0.4)
     shoulda-matchers (2.5.0)
       activesupport (>= 3.0.0)
-    simple_form (3.0.1)
-      actionpack (>= 4.0.0, < 4.1)
-      activemodel (>= 4.0.0, < 4.1)
+    simple_form (3.0.2)
+      actionpack (~> 4.0)
+      activemodel (~> 4.0)
     simplecov (0.8.2)
       docile (~> 1.1.0)
       multi_json
@@ -212,7 +216,7 @@ GEM
     simplecov-html (0.8.0)
     slop (3.5.0)
     spork (1.0.0rc4)
-    sprockets (2.12.0)
+    sprockets (2.12.1)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
