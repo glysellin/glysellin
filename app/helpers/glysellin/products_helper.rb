@@ -4,7 +4,7 @@ module Glysellin
       # Prepare ou arguments arrays
       all_variants, disabled_variants = [], []
       # Iterate on each variant to find which are enabled and disabled
-      sellable.published_variants.each do |variant|
+      sellable.variants.each do |variant|
         next unless variant.published?
         if @current_store.in_stock?(variant)
           name = variant.name
