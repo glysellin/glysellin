@@ -6,7 +6,7 @@ module Glysellin
       # Iterate on each variant to find which are enabled and disabled
       sellable.variants.each do |variant|
         next unless variant.published?
-        if @current_store.in_stock?(variant)
+        if current_store.in_stock?(variant)
           name = variant.name
         else
           disabled_variants << variant.id

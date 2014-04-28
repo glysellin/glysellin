@@ -4,7 +4,7 @@ module Glysellin
       extend ActiveSupport::Concern
 
       included do
-        helper_method :current_cart
+        helper_method :current_cart, :current_store
       end
 
       protected
@@ -16,7 +16,7 @@ module Glysellin
       end
 
       def current_store
-        @store ||= Store.where(
+        @current_store ||= Store.where(
           id: StoreClient.select(:store_id).where(
             key: Glysellin.default_store_client_key
           )

@@ -21,7 +21,7 @@ module Glysellin
 
     has_many :line_items
 
-    has_many :variant_images, as: :imageable
+    has_many :variant_images
 
     # validate :check_properties
     validate :generate_barcode, on: :create, unless: :sku
@@ -68,21 +68,11 @@ module Glysellin
     end
 
     def stocks_for_all_stores
-      @stocks_for_all_stores ||= begin
-        Glysellin::Store.all.each do |store|
-          stores_stocks[store] ||= stocks.build(store: store)
+      @stocks_for_all_stores ||=
+        Glysellin::Store.all.each_with_object({}) do |store, hash|
+          existing_stock = stocks.find { |stock| stock.store_id == store.id }
+          hash[store] = existing_stock || build(store: store)
         end
-
-        stores_stocks
-      end
-    end
-
-    def stores_stocks
-      return {} unless stocks
-      @stores_stocks ||= stocks.reduce({}) do |hash, stock|
-        hash[stock.store] = stock
-        hash
-      end
     end
 
     def generate_barcode
