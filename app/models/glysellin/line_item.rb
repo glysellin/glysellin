@@ -23,11 +23,7 @@ module Glysellin
       )
     }
 
-    def autofill_from_variant!
-      return unless variant_id
-
-      variant = Glysellin::Variant.find(variant_id)
-
+    def autofill_from variant
       %w(sku name eot_price vat_rate price weight).each do |key|
         self.public_send(:"#{ key }=", variant.public_send(key))
       end

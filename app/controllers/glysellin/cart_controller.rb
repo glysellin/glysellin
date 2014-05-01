@@ -2,6 +2,7 @@ module Glysellin
   class CartController < ApplicationController
     include ActionView::Helpers::NumberHelper
 
+    before_filter :prepare_associable_data
     after_filter :update_cart_in_session
 
     def show
@@ -42,6 +43,11 @@ module Glysellin
         eot_subtotal: number_to_currency(current_cart.eot_subtotal),
         subtotal: number_to_currency(current_cart.subtotal)
       }
+    end
+
+    def prepare_associable_data
+      @shipping_methods = Glysellin::ShippingMethod.ordered
+      @payment_methods = Glysellin::PaymentMethod.ordered
     end
   end
 end

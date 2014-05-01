@@ -3,7 +3,11 @@ module Glysellin
     class ProductsController < CartController
       def create
         @line_item = current_cart.line_items.build(line_item_params)
-        @line_item.autofill_from_variant!
+
+        if (variant = Glysellin::Variant.find(variant_id))
+          @line_item.autofill_from(variant)
+        end
+
         current_cart.line_items_added!
         render_cart_partial
       end
