@@ -25,7 +25,6 @@ module Glysellin
     def line_items
       @line_items ||= order.line_items(cached: false)
         .includes(variant: { stocks: :store })
-        .where(glysellin_stores: { id: order.store_id })
     end
   end
 
@@ -38,10 +37,12 @@ module Glysellin
     end
 
     def increment!
+      stock.save! if stock.new_record?
       stock.increment!(:count, line_item.quantity)
     end
 
     def decrement!
+      stock.save! if stock.new_record?
       stock.decrement!(:count, line_item.quantity)
     end
 

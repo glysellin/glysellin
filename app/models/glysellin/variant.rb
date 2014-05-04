@@ -54,7 +54,9 @@ module Glysellin
 
     def properties_hash
       @properties_hash ||= begin
-        properties = Glysellin::Property.includes(:property_type).where(id: variant_properties.map(&:property_id))
+        properties = Glysellin::Property
+          .includes(:property_type)
+          .where(id: variant_properties.map(&:property_id))
 
         properties.reduce({}) do |hash, property|
           hash[property.property_type.identifier] = property
@@ -71,7 +73,7 @@ module Glysellin
       @stocks_for_all_stores ||=
         Glysellin::Store.all.each_with_object({}) do |store, hash|
           existing_stock = stocks.find { |stock| stock.store_id == store.id }
-          hash[store] = existing_stock || build(store: store)
+          hash[store] = existing_stock || stocks.build(store: store)
         end
     end
 
