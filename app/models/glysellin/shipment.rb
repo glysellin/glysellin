@@ -41,7 +41,7 @@ module Glysellin
     end
 
     def stock_migration
-      Glysellin::OrderStockMigration.new(order)
+      Glysellin::OrderStockMigration.new(shippable)
     end
 
     def reset_shipment
