@@ -4,7 +4,7 @@ module Glysellin
       def create
         @line_item = current_cart.line_items.build(line_item_params)
 
-        if (variant = Glysellin::Variant.find(variant_id))
+        if (variant = Glysellin::Variant.where(params[:variant_id]).first)
           @line_item.autofill_from(variant)
         end
 

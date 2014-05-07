@@ -15,6 +15,14 @@ module Glysellin
       calculator.calculate
     end
 
+    def self.build_from discount_code
+      new.tap do |discount|
+        discount.discount_type = discount_code.discount_type
+        discount.value = discount_code.value
+        discount.name = discount_code.name
+      end
+    end
+
     private
 
     def calculator

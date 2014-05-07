@@ -23,7 +23,7 @@ class AsyncCart
       value: @adjustmentRow.find('.adjustment-value')
     }
 
-    @discountCode = @container.find('#glysellin_cart_basket_discount_code')
+    @discountCode = @container.find('#cart_discount_code')
 
     @cart_path = @container.data("cart-url")
 
@@ -41,8 +41,8 @@ class AsyncCart
     @container.find('.update-discount-code-btn').on 'click', (e) =>
       @discountCodeUpdated()
 
-    @discountCode.on 'change', (e) =>
-      @discountCodeUpdated()
+    # @discountCode.on 'change', (e) =>
+    #   @discountCodeUpdated()
 
     @adjustmentRow.find('.remove-discount-btn').on 'click', (e) =>
       @resetDiscountCode(); false
@@ -92,6 +92,10 @@ class AsyncCart
     @container.trigger('quantity-updated.glysellin')
 
   discountCodeUpdated: ->
+    @discountCode
+      .closest('.has-error').removeClass('has-error')
+      .find('.errors-container').remove()
+
     @update(
       "discount_code"
       { _method: "put", code: @discountCode.val() }
@@ -114,6 +118,12 @@ class AsyncCart
     else
       @subtotalsRow.fadeOut(200) unless $('.adjustment-row').length > 1
       @adjustmentRow.fadeOut(200, => @setDiscountValues(resp))
+      if resp.errors && (errors = resp.errors.discount_code) && errors.length
+        @discountCode.closest('.control-group').addClass('has-error')
+        $('<div/>').addClass('errors-container')
+          .html(errors.join('<br/>')).appendTo(@discountCode.parent())
+
+
 
     # Total row handling when
     @setTotals(resp)

@@ -25,7 +25,7 @@ module ActionDispatch::Routing
             end
           end
 
-          resource :discount_code, controller: 'glysellin/cart_steps/discount_code', only: [:update]
+          resource :discount_code, controller: 'glysellin/cart_steps/discount_codes', only: [:update]
           resource :addresses, controller: 'glysellin/cart_steps/addresses', only: [:update]
           resource :shipping_method, controller: 'glysellin/cart_steps/shipping_method', only: [:update]
           resource :payment_method, controller: 'glysellin/cart_steps/payment_method', only: [:update]

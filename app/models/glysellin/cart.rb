@@ -90,13 +90,16 @@ module Glysellin
     has_one :shipment, as: :shippable, dependent: :destroy
     accepts_nested_attributes_for :shipment, allow_destroy: true
 
-    has_many :discounts, as: :discountable, inverse_of: :discountable
+    has_many :discounts, as: :discountable, inverse_of: :discountable,
+      dependent: :destroy
     accepts_nested_attributes_for :discounts, allow_destroy: true,
                                   reject_if: :all_blank
+    attr_accessor :discount_code
 
     validate :line_items_variants_published
     validate :line_items_in_stock
     validate :line_items_stocks_available
+    validate :discount_code_valid, if: :discount_code
 
     def self.fetch_or_initialize options
       where(id: options[:id]).first_or_initialize do |cart|
@@ -167,6 +170,29 @@ module Glysellin
 
     def add_error(key, error_key, options = {})
       errors.add(key, I18n.t("glysellin.errors.cart.#{ error_key }", options))
+    end
+
+    def add_discount_code!(discount_code)
+      self.discount_code = discount_code
+      save
+    end
+
+    def discount_code_valid
+      puts "****", "VALIDATE DISCOUNT CODE : #{ discount_code.inspect }", "****"
+
+      if (code = DiscountCode.from_code(discount_code))
+        if code.applicable_for?(total_price)
+          discount = Discount.build_from(code)
+          self.discounts = [discount]
+        else
+          errors.add(
+            :discount_code,
+            I18n.t('glysellin.errors.discount_code.not_applicable')
+          )
+        end
+      else
+        errors.add(:discount_code, :invalid)
+      end
     end
 
     def generate_order!
