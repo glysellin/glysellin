@@ -38,8 +38,8 @@
         </td>
         <% if editable %>
           <td>
-            <%= link_to cart_product_path(line_item.id), method: "delete" do %>
-              <%= t('glysellin.labels.cart.remove_from_cart') %>
+            <%= link_to cart_product_path(line_item.id), class: "btn btn-block btn-lg btn-default", method: "delete", data: { confirm: t('glysellin.notices.cart.confirm_line_item_deletion', name: line_item.variant.name) }, title: t('glysellin.labels.cart.remove_from_cart') do %>
+              &nbsp;&times;&nbsp;
             <% end %>
           </td>
         <% end %>

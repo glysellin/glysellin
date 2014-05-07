@@ -46,6 +46,8 @@ module Glysellin
              as: :payable, inverse_of: :payable, dependent: :destroy
     accepts_nested_attributes_for :payments, allow_destroy: true
 
+    delegate :balanced?, to: :payments, prefix: true
+
     has_one :shipment, as: :shippable, dependent: :destroy
     accepts_nested_attributes_for :shipment, allow_destroy: true
 
