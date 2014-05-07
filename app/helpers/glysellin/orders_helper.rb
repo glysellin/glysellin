@@ -10,14 +10,13 @@ module Glysellin
       # Copy addresses from record to form object
       # if record
       #   %w(billing_address shipping_address).each do |addr|
+      #     next if (address = form.object.send(addr).presence) && address.id.present?
+      #       form.object.send("build_#{ addr }", attrs)
+
       #     if (address = record.send("#{ addr }"))
       #       attrs = address.attributes.select do |key, value|
       #         Glysellin::Address.accessible_attributes.include?(key)
       #       end
-      #     end
-
-      #     unless (address = form.object.send(addr).presence) && address.id.present?
-      #       form.object.send("build_#{ addr }", attrs)
       #     end
       #   end
 
@@ -26,8 +25,8 @@ module Glysellin
       #   end
       # end
 
-      form.object.build_billing_address unless form.object.billing_address
-      form.object.build_shipping_address unless form.object.shipping_address
+      form.object.build_billing_address  unless record.billing_address
+      form.object.build_shipping_address unless record.shipping_address
 
       render partial: 'glysellin/orders/addresses_fields', locals: { form: form }
     end
