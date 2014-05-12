@@ -28,7 +28,7 @@ module Glysellin
     def calculator
       @calculator ||= Glysellin.discount_type_calculators[
         discount_type.identifier
-      ].new(discountable, value)
+      ].new(discountable.discountable_amount, value)
     end
   end
 end

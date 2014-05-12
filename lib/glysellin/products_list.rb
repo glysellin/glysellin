@@ -48,6 +48,10 @@ module Glysellin
       discounts_total - discounts_eot_total
     end
 
+    def discountable_amount
+      subtotal
+    end
+
     def adjustments
       adjustments  = shipment ? [shipment] : []
       adjustments += discounts.to_a

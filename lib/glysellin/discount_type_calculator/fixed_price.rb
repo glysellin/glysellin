@@ -5,7 +5,7 @@ module Glysellin
 
       attr_reader :value
 
-      def initialize order, value
+      def initialize _, value
         @value = value
       end
 
