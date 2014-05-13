@@ -8,7 +8,7 @@ module Glysellin
     friendly_id :name, use: :slugged
 
     belongs_to :sellable, class_name: "Glysellin::Sellable",
-      inverse_of: :variants
+      inverse_of: :variants, counter_cache: true
 
     has_many :variant_properties, dependent: :destroy, inverse_of: :variant
     accepts_nested_attributes_for :variant_properties, allow_destroy: true
