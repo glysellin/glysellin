@@ -23,7 +23,7 @@ module Glysellin
     end
 
     def vat_rate
-      (1 - (eot_price / price)) * 100
+      ((price / eot_price) - 1) * 100
     end
 
     def total_vat
