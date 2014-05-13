@@ -19,10 +19,6 @@ module Glysellin
         event :over_paid do
           transition all => :over_paid
         end
-
-        after_transition on: :completed do |manager|
-          manager.order.execute_sold_callbacks
-        end
       end
 
       delegate :payments, to: :order
