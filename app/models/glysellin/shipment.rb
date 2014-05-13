@@ -1,9 +1,9 @@
 module Glysellin
   class Shipment < ActiveRecord::Base
-    self.table_name = "glysellin_shipments"
+    self.table_name = 'glysellin_shipments'
 
     belongs_to :shippable, polymorphic: true, autosave: true
-    belongs_to :shipping_method, class_name: "Glysellin::ShippingMethod"
+    belongs_to :shipping_method, class_name: 'Glysellin::ShippingMethod'
 
     state_machine initial: :pending do
       event :ship do
@@ -60,7 +60,7 @@ module Glysellin
       errors.add(
         :shipping_method_id,
         I18n.t(
-          "glysellin.errors.cart.shipping_method_unavailable_for_country",
+          'glysellin.errors.cart.shipping_method_unavailable_for_country',
           method: shipment.shipping_method.name,
           country: country
         )

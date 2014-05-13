@@ -1,25 +1,23 @@
 module Glysellin
   class LineItem < ActiveRecord::Base
-    self.table_name = "glysellin_line_items"
+    self.table_name = 'glysellin_line_items'
 
     belongs_to :variant
     belongs_to :container, polymorphic: true
 
-    has_one :discount, as: :discountable
+    has_one :discount, as: :discountable, inverse_of: :discountable
     accepts_nested_attributes_for :discount, allow_destroy: true,
       reject_if: :all_blank
 
-    # delegate :order, to: :parcel
-
     scope :join_orders, -> {
       joins(
-        "INNER JOIN glysellin_parcels " +
-          "ON glysellin_parcels.id = glysellin_line_items.container_id " +
-        "INNER JOIN glysellin_orders " +
-          "ON glysellin_orders.id = glysellin_parcels.sendable_id"
+        'INNER JOIN glysellin_parcels ' +
+          'ON glysellin_parcels.id = glysellin_line_items.container_id ' +
+        'INNER JOIN glysellin_orders ' +
+          'ON glysellin_orders.id = glysellin_parcels.sendable_id'
       ).where(
         glysellin_line_items: { container_type: 'Glysellin::Parcel' },
-        glysellin_parcels: { sendable_type: "Glysellin::Order"}
+        glysellin_parcels: { sendable_type: 'Glysellin::Order'}
       )
     }
 

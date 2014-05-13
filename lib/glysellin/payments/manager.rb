@@ -55,12 +55,6 @@ module Glysellin
           over_paid
         end
       end
-
-      # Callback invoked after event :paid
-      def set_payment
-        payment.pay!
-        update_attribute(:paid_on, payment.last_payment_action_on)
-      end
     end
   end
 end
