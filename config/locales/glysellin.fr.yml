@@ -162,3 +162,9 @@ fr:
           complete: "Payée"
           unbalanced: "Paiement partiel"
           over_paid: "Sur-Paiement"
+      estimate:
+        state:
+          draft: "Brouillon"
+          sent: 'Envoyé'
+          accepted: "Accepté"
+          canceled: "Annulé"

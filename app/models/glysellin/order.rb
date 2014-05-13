@@ -1,6 +1,25 @@
 module Glysellin
   class Order < AbstractOrder
+    state_machine :state, initial: :pending do
+      event :complete do
+        transition all => :completed
+      end
+
+      event :cancel do
+        transition all => :canceled
+      end
+
+      event :reset do
+        transition all => :pending
+      end
+
+      after_transition on: :cancel do |order|
+        order.shipment.cancel! if order.shipment.shipped?
+      end
+    end
+
     has_one :cart
+
     has_one :invoice, dependent: :nullify
 
     # Payment tries
