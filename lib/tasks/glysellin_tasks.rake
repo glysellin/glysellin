@@ -1,5 +1,5 @@
 # encoding: utf-8
-# require 'fileutils'
+require 'fileutils'
 
 namespace :glysellin do
   task :seed => :environment do

@@ -33,5 +33,9 @@ module Glysellin
         name << (str || "")
       end.join(" ")
     end
+
+    def location_string
+      [zip, city, country].map(&:presence).compact.join(', ')
+    end
   end
 end
