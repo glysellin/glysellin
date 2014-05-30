@@ -30,6 +30,10 @@ module Glysellin
       price - eot_price
     end
 
+    def filled?
+      shipping_method || (price && price > 0)
+    end
+
     private
 
     def migrate_stocks
