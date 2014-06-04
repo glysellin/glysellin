@@ -1,5 +1,7 @@
 module Glysellin
   class Estimate < AbstractOrder
+    belongs_to :order
+
     state_machine :state, initial: :draft do
       event :send_to_customer do
         transition all => :sent
