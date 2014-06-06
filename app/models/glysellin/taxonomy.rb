@@ -4,6 +4,17 @@ module Glysellin
 
     scope :roots, -> { where(parent_id: nil) }
     scope :selectable, -> { where(children_count: 0) }
+    scope :selectable_and_sorted, -> do
+        selectable.joins(
+          'INNER JOIN glysellin_taxonomies parent_taxonomy ' +
+          'ON glysellin_taxonomies.parent_id = parent_taxonomy.id ' +
+          'INNER JOIN glysellin_taxonomies grand_parent_taxonomy ' +
+          'ON parent_taxonomy.parent_id = grand_parent_taxonomy.id'
+         ).order(
+          'grand_parent_taxonomy.name DESC, parent_taxonomy.name ASC, ' +
+          'glysellin_taxonomies.name ASC'
+        )
+    end
 
     has_many :sellables, dependent: :nullify
 
@@ -14,6 +25,20 @@ module Glysellin
       counter_cache: :children_count
 
     validates :name, presence: true
+
+    after_save :update_children_path
+
+    def update_children_path
+      children.each &:update_path
+    end
+
+    def update_path
+      update_attributes(full_path: path_string)
+    end
+
+    def path_string
+      path.map(&:name).join(' - ')
+    end
 
     def deep_sellables_count
       count = sellables.size
