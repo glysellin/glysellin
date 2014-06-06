@@ -62,5 +62,12 @@ module Glysellin
     def weight
       super.presence || Glysellin.default_product_weight
     end
+
+    def dup
+      duplicated_item = super
+      duplicated_item.discount = discount.dup if discount
+      duplicated_item.container = nil
+      duplicated_item
+    end
   end
 end

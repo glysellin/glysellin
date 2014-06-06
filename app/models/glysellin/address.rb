@@ -20,14 +20,6 @@ module Glysellin
       clone_attributes == other.clone_attributes
     end
 
-    def clone_attributes
-      clone.attributes.reject do |key, value|
-        key = key.to_s
-        %w(id created_at updated_at).include?(key) ||
-          key.match(/_addressable_(type|id)$/)
-      end
-    end
-
     def full_name
       [first_name, last_name, company_name].reduce([]) do |name, str|
         name << (str || "")

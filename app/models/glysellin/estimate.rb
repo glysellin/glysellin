@@ -23,5 +23,22 @@ module Glysellin
         order.shipment.cancel! if order.shipment.shipped?
       end
     end
+
+    def generate_order!
+      build_order unless order
+
+      parcel = (order.parcels.first || order.parcels.build(name: 'Carton 1'))
+      parcel.line_items = line_items.map(&:dup)
+
+      order.customer = customer
+      order.use_another_address_for_shipping = use_another_address_for_shipping
+      order.billing_address = billing_address.dup
+      order.shipping_address = shipping_address.dup
+
+      order.shipment = shipment.dup
+
+      self.order = order
+      save!
+    end
   end
 end
