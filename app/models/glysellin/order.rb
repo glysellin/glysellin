@@ -18,8 +18,9 @@ module Glysellin
       end
     end
 
-    has_one :cart
+    belongs_to :customer, class_name: 'Glysellin::Customer'
 
+    has_one :cart
     has_one :invoice, dependent: :nullify
 
     # Payment tries

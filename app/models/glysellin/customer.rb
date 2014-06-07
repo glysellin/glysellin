@@ -8,9 +8,10 @@ module Glysellin
     validates_presence_of :email, if: 'user.present?'
     validates_uniqueness_of :email, if: 'email.present?'
 
+    has_many :orders, class_name: 'Glysellin::Order', foreign_key: :customer_id
     has_one :user, class_name: Glysellin.user_class_name
-    accepts_nested_attributes_for :user, reject_if: :all_blank
 
+    accepts_nested_attributes_for :user, reject_if: :all_blank
     before_validation :setup_user_email
 
     def full_name
