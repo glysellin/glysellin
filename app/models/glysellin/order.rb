@@ -21,7 +21,7 @@ module Glysellin
     belongs_to :customer, class_name: 'Glysellin::Customer'
 
     has_one :cart
-    has_one :invoice, dependent: :nullify
+    has_one :invoice, dependent: :destroy
 
     # Payment tries
     has_many :payments,
