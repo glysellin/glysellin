@@ -76,5 +76,9 @@ module Glysellin
     def payment_method
       payment.type rescue nil
     end
+
+    def self.export(format = :xls)
+      ExportOrder.new(format, all).file_path
+    end
   end
 end
