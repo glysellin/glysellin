@@ -3,17 +3,19 @@ module Glysellin
     self.table_name = 'glysellin_taxonomies'
 
     scope :roots, -> { where(parent_id: nil) }
+
     scope :selectable, -> { where(children_count: 0) }
-    scope :selectable_and_sorted, -> do
-        selectable.joins(
-          'INNER JOIN glysellin_taxonomies parent_taxonomy ' +
-          'ON glysellin_taxonomies.parent_id = parent_taxonomy.id ' +
-          'INNER JOIN glysellin_taxonomies grand_parent_taxonomy ' +
-          'ON parent_taxonomy.parent_id = grand_parent_taxonomy.id'
-         ).order(
-          'grand_parent_taxonomy.name DESC, parent_taxonomy.name ASC, ' +
-          'glysellin_taxonomies.name ASC'
-        )
+
+    scope :ordered, -> do
+      joins(
+        'INNER JOIN glysellin_taxonomies parent_taxonomy ' +
+        'ON glysellin_taxonomies.parent_id = parent_taxonomy.id ' +
+        'INNER JOIN glysellin_taxonomies grand_parent_taxonomy ' +
+        'ON parent_taxonomy.parent_id = grand_parent_taxonomy.id'
+       ).order(
+        'grand_parent_taxonomy.name DESC, parent_taxonomy.name ASC, ' +
+        'glysellin_taxonomies.name ASC'
+      )
     end
 
     has_many :sellables, dependent: :nullify
@@ -29,7 +31,7 @@ module Glysellin
     after_save :update_children_path
 
     def update_children_path
-      children.each &:update_path
+      children.each(&:update_path)
     end
 
     def update_path
@@ -53,7 +55,9 @@ module Glysellin
     end
 
     def self.order_and_print
-      self.includes(:sellables).order('name asc').map { |b| ["#{b.name} (#{b.sellables.size} produit(s))", b.id] }
+      self.includes(:sellables).ordered.map do |b|
+        ["#{ b.name } (#{ b.sellables.size } produit(s))", b.id]
+      end
     end
 
     def path
