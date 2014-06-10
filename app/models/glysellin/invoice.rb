@@ -9,5 +9,9 @@ module Glysellin
     before_validation do
       self.number ||= Glysellin.invoice_number_generator.call(order)
     end
+
+    def self.export(format = :xls)
+      ExportInvoice.new(format, all).file_path
+    end
   end
 end

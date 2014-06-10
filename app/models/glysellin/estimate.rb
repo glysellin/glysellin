@@ -40,5 +40,9 @@ module Glysellin
       self.order = order
       save!
     end
+
+    def self.export(format = :xls)
+      ExportEstimate.new(format, all).file_path
+    end
   end
 end
