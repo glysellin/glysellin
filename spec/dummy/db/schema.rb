@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20140411114207) do
     t.datetime "updated_at"
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "corporate"
+    t.string   "company_name"
     t.string   "email"
     t.boolean  "use_another_address_for_shipping", default: false
   end

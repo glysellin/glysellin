@@ -25,15 +25,15 @@ module Glysellin
     accepts_nested_attributes_for :discounts, allow_destroy: true,
                                   reject_if: :all_blank
 
-    validates_presence_of :billing_address, :parcels
+    validates :customer, :billing_address, :parcels, presence: true
 
-    validates_presence_of :shipping_address,
-                          if: :use_another_address_for_shipping
+    validates :shipping_address, presence: true,
+              if: :use_another_address_for_shipping
 
     before_validation :process_total_price
 
-    after_create      :ensure_customer_addresses
-    after_create      :ensure_ref
+    after_create :ensure_customer_addresses
+    after_create :ensure_ref
 
     scope :from_customer, ->(customer_id) { where(customer_id: customer_id) }
     scope :active, -> { where.not(glysellin_orders: { state: 'canceled' }) }
@@ -65,7 +65,7 @@ module Glysellin
         customer.use_another_address_for_shipping =
           use_another_address_for_shipping
 
-        if use_another_address_for_shipping
+        if use_another_address_for_shipping && !customer.shipping_address
           customer.create_shipping_address(shipping_address.clone_attributes)
         end
       end
