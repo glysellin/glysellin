@@ -60,14 +60,16 @@ module Glysellin
     #
     def ensure_customer_addresses
       if customer && !customer.billing_address
-        customer.create_billing_address(billing_address.clone_attributes)
+        customer.billing_address = billing_address.dup
 
         customer.use_another_address_for_shipping =
           use_another_address_for_shipping
 
         if use_another_address_for_shipping && !customer.shipping_address
-          customer.create_shipping_address(shipping_address.clone_attributes)
+          customer.shipping_address = shipping_address.dup
         end
+
+        customer.save
       end
     end
 
