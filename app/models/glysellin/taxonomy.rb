@@ -28,10 +28,15 @@ module Glysellin
 
     validates :name, presence: true
 
+    before_save :fill_path
     after_save :update_children_path
 
     def update_children_path
       children.each(&:update_path)
+    end
+
+    def fill_path
+      self.full_path = path_string
     end
 
     def update_path
