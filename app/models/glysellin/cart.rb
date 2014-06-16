@@ -41,7 +41,7 @@ module Glysellin
 
       # State validations
       state :line_items_added, :addresses, :choose_shipping_method, :choose_payment_method, :ready do
-        validates_presence_of :line_items
+        validates :line_items, presence: true
       end
 
       state :choose_shipping_method, :choose_payment_method, :ready do
@@ -99,7 +99,7 @@ module Glysellin
     validate :line_items_variants_published
     validate :line_items_in_stock
     validate :line_items_stocks_available
-    validate :discount_code_valid, if: :discount_code
+    validate :discount_code_valid, if: :"discount_code.presence"
 
     def self.fetch_or_initialize options
       where(id: options[:id]).first_or_initialize do |cart|
