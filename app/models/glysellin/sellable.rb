@@ -29,12 +29,11 @@ module Glysellin
     has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable, dependent: :destroy
     accepts_nested_attributes_for :variants, allow_destroy: true
 
-    has_many :variant_images, through: :variants
+    has_many :images, as: :imageable
+    has_many :variant_images, through: :variants, source: :images
 
     validates :variants, length: { minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short") }
     before_validation :check_prices
-
-    after_create :set_thumb
 
     # Published sellables are the ones that have at least one variant
     # published.
@@ -46,10 +45,8 @@ module Glysellin
       includes(:variants).where(glysellin_variants: { published: true })
     }
 
-    def set_thumb
-      variant_image = variant_images.first
-      url = variant_image.image.url(:thumb) if variant_image
-      update_column :thumb, url
+    def image_url=(url)
+      self.images = [Glysellin::Image.new(image: URI.parse(url))]
     end
 
     def published_variants
