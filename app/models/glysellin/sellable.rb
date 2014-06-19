@@ -4,6 +4,8 @@ module Glysellin
   class Sellable < ActiveRecord::Base
     self.table_name = 'glysellin_sellables'
 
+    include Glysellin::Imageable # has_many :images, as: :imageable
+
     scope :sorted, -> do
         joins(
           'INNER JOIN glysellin_taxonomies sellable_taxonomy ' +
@@ -29,7 +31,6 @@ module Glysellin
     has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable, dependent: :destroy
     accepts_nested_attributes_for :variants, allow_destroy: true
 
-    has_many :images, as: :imageable
     has_many :variant_images, through: :variants, source: :images
 
     validates :variants, length: { minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short") }
@@ -44,10 +45,6 @@ module Glysellin
     scope :published, -> {
       includes(:variants).where(glysellin_variants: { published: true })
     }
-
-    def image_url=(url)
-      self.images = [Glysellin::Image.new(image: URI.parse(url))]
-    end
 
     def published_variants
       variants.select { |v| v.published }
