@@ -7,6 +7,8 @@ module Glysellin
     extend FriendlyId
     friendly_id :name, use: :slugged
 
+    include Glysellin::Imageable # has_many :images, as: :imageable
+
     belongs_to :sellable, class_name: "Glysellin::Sellable",
       inverse_of: :variants, counter_cache: true
 
@@ -20,8 +22,6 @@ module Glysellin
     accepts_nested_attributes_for :stocks, allow_destroy: true
 
     has_many :line_items
-
-    has_many :variant_images
 
     # validate :check_properties
     validate :generate_barcode, on: :create, unless: :"sku.presence"
