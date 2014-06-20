@@ -27,6 +27,10 @@ module Glysellin
       end
     end
 
+    def price
+      eot_price * (1 + vat_rate_division)
+    end
+
     def vat_rate_division
       (vat_rate / 100.0)
     end
@@ -40,15 +44,15 @@ module Glysellin
     end
 
     def total_eot_price
-      eot_subtotal + discount_price
+      (eot_subtotal + discount_price).round 2
     end
 
     def total_price
-      subtotal + discount_price
+      (subtotal + discount_price).round 2
     end
 
     def total_vat
-      (total_eot_price * vat_rate_division).round 2
+      total_eot_price * vat_rate_division
     end
 
     def discountable_amount
