@@ -22,33 +22,49 @@ module Glysellin
     }
 
     def autofill_from variant
-      %w(sku name eot_price vat_rate price weight).each do |key|
+      %w(sku name eot_price price vat_rate weight).each do |key|
         self.public_send(:"#{ key }=", variant.public_send(key))
       end
+    end
+
+    def price
+      eot_price * (1 + vat_rate_division)
+    end
+
+    def vat_rate_division
+      (vat_rate / 100.0)
     end
 
     def eot_subtotal
       quantity * eot_price
     end
 
+    def subtotal
+      price * quantity
+    end
+
     def total_eot_price
-      eot_subtotal + discount_price
+      (eot_subtotal + discount_price).round 2
     end
 
     def total_price
-      total_eot_price + total_vat
+      (subtotal + discount_price).round 2
     end
 
     def total_vat
-      total_eot_price * (vat_rate / 100.0)
+      total_eot_price * vat_rate_division
     end
 
     def discountable_amount
       eot_subtotal
     end
 
+    def discount_eot_price
+      @discount_eot_price ||= (discount && discount.price) || 0
+    end
+
     def discount_price
-      @discount_price ||= (discount && discount.price) || 0
+      (discount_eot_price * (1 + vat_rate_division)).round 2
     end
 
     def total_weight
