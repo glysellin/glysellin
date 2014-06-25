@@ -4,23 +4,13 @@ module Glysellin
   class Sellable < ActiveRecord::Base
     self.table_name = 'glysellin_sellables'
 
-    include Glysellin::Imageable # has_many :images, as: :imageable
-
-    scope :sorted, -> do
-        joins(
-          'INNER JOIN glysellin_taxonomies sellable_taxonomy ' +
-          'ON glysellin_sellables.taxonomy_id = sellable_taxonomy.id ' +
-          'INNER JOIN glysellin_taxonomies parent_taxonomy ' +
-          'ON sellable_taxonomy.parent_id = parent_taxonomy.id ' +
-          'INNER JOIN glysellin_taxonomies grand_parent_taxonomy ' +
-          'ON parent_taxonomy.parent_id = grand_parent_taxonomy.id'
-         ).order(
-          'grand_parent_taxonomy.name DESC, parent_taxonomy.name ASC, ' +
-          'sellable_taxonomy.name ASC'
-        )
-    end
-
     cattr_accessor :sold_callback
+
+    has_many :imageables, as: :imageable_owner
+    accepts_nested_attributes_for :imageables, allow_destroy: true
+
+    has_many :images, through: :imageables
+
 
     belongs_to :taxonomy, class_name: "Glysellin::Taxonomy"
     belongs_to :brand, class_name: "Glysellin::Brand", inverse_of: :products
@@ -45,6 +35,20 @@ module Glysellin
     scope :published, -> {
       includes(:variants).where(glysellin_variants: { published: true })
     }
+
+    scope :sorted, -> do
+      joins(
+        'INNER JOIN glysellin_taxonomies sellable_taxonomy ' +
+        'ON glysellin_sellables.taxonomy_id = sellable_taxonomy.id ' +
+        'INNER JOIN glysellin_taxonomies parent_taxonomy ' +
+        'ON sellable_taxonomy.parent_id = parent_taxonomy.id ' +
+        'INNER JOIN glysellin_taxonomies grand_parent_taxonomy ' +
+        'ON parent_taxonomy.parent_id = grand_parent_taxonomy.id'
+       ).order(
+        'grand_parent_taxonomy.name DESC, parent_taxonomy.name ASC, ' +
+        'sellable_taxonomy.name ASC'
+      )
+    end
 
     def published_variants
       variants.select { |v| v.published }

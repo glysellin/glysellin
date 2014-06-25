@@ -7,7 +7,10 @@ module Glysellin
     extend FriendlyId
     friendly_id :name, use: :slugged
 
-    include Glysellin::Imageable # has_many :images, as: :imageable
+    has_many :imageables, as: :imageable_owner, dependent: :destroy
+    accepts_nested_attributes_for :imageables, allow_destroy: true
+
+    has_many :images, through: :imageables
 
     belongs_to :sellable, class_name: "Glysellin::Sellable",
       inverse_of: :variants, counter_cache: true

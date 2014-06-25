@@ -14,8 +14,6 @@ require "glysellin/available_stock"
 require "glysellin/order_stock_migration"
 require "glysellin/payments"
 
-require "glysellin/imageable"
-
 module Glysellin
   ################################################################
   #
