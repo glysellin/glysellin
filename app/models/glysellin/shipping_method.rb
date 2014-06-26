@@ -11,11 +11,14 @@ module Glysellin
 
     scope :ordered, -> { order("name ASC") }
 
+    def carrier order
+      Glysellin.shipping_carriers[identifier].new(order)
+    end
+
     private
 
     def adjustment_value_for order
-      calculator = Glysellin.shipping_carriers[identifier]
-      calculator.new(order).calculate
+      carrier(order).calculate
     end
   end
 end

@@ -47,8 +47,11 @@ module Glysellin
         nil
       end
 
-      def process_rate order, rates
+      def trackable?
+        false
+      end
 
+      def process_rate order, rates
       end
     end
   end
