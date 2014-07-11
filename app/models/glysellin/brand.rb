@@ -2,13 +2,18 @@ module Glysellin
   class Brand < ActiveRecord::Base
     self.table_name = "glysellin_brands"
 
-    has_many :products, class_name: 'Glysellin::Sellable'
-    has_attached_file :image, styles: {thumb: '150x150#'}
+    has_many :sellables
 
-    validates_presence_of :name
+    has_attached_file :image, styles: {
+      thumb: '150x150#'
+    }
+
+    validates :name, presence: true
 
     def self.order_and_print
-      self.includes(:products).order('name asc').map { |b| ["#{b.name} (#{b.products.size} produit(s))", b.id] }
+      order('glysellin_brands.name ASC').map do |brand|
+        ["#{ brand.name } (#{ brand.sellables_count } produit(s))", brand.id]
+      end
     end
   end
 end
