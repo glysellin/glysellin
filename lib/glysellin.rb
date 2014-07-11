@@ -81,8 +81,6 @@ module Glysellin
   mattr_accessor :shop_name
   @@shop_name = 'Example Shop Name'
 
-  mattr_accessor :default_store_client_key
-
   mattr_accessor :default_vat_rate
   @@default_vat_rate = 20
 
@@ -114,7 +112,7 @@ module Glysellin
     @@mailer_subjects = -> { I18n.t('glysellin.mailer').merge(hash) }
   end
 
-  mattr_accessor :mailer_subjects
+  mattr_reader :mailer_subjects
   @@mailer_subjects = -> { I18n.t('glysellin.mailer') }
 
   # Permits using config block in order to set
