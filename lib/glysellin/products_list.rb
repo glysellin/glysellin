@@ -65,18 +65,13 @@ module Glysellin
       adjustments.map(&:eot_price).reduce(&:+) || 0
     end
 
-    # Gets order total price from subtotal and adjustments
-    #
-    # @param [Boolean] df Defines if we want to get duty free price or not
-    #
-    # @return [BigDecimal] the calculated total price
-    # def total_price
-    #   ((subtotal + adjustments_total) * 100).floor / 100
-    # end
+    def total_price
+      subtotal + adjustments_total
+    end
 
-    # def total_eot_price
-    #   ((eot_subtotal + eot_adjustments_total) * 100).floor / 100
-    # end
+    def total_eot_price
+      eot_subtotal + eot_adjustments_total
+    end
 
     def total_price_before_discount
       subtotal + shipment.price

@@ -51,14 +51,6 @@ module Glysellin
       end
     end
 
-    def total_price
-      subtotal + adjustments_total
-    end
-
-    def total_eot_price
-      eot_subtotal + eot_adjustments_total
-    end
-
     def process_total_price
       write_attribute(:total_price, total_price)
       write_attribute(:total_eot_price, total_eot_price)

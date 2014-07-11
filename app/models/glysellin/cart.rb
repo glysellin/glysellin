@@ -178,8 +178,6 @@ module Glysellin
     end
 
     def discount_code_valid
-      puts "****", "VALIDATE DISCOUNT CODE : #{ discount_code.inspect }", "****"
-
       if (code = DiscountCode.from_code(discount_code))
         if code.applicable_for?(total_price)
           discount = Discount.build_from(code)
