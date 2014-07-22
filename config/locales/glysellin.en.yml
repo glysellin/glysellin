@@ -14,6 +14,10 @@ en:
           addresses: "Errors were found in the form you submitted, please review its fields before it can be saved"
           choose_shipping_method: "Please choose a shipping method"
           choose_payment_method: "Please choose a payment method"
+    notices:
+      cart:
+        confirm_line_item_deletion: |
+          Do you really want to delete %{name} from your cart ?
     labels:
       misc:
         back_to_homepage: "Back to home page"
