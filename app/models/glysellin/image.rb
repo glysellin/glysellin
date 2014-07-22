@@ -2,8 +2,8 @@ module Glysellin
   class Image < ActiveRecord::Base
     self.table_name = 'glysellin_images'
 
-    belongs_to :imageable, polymorphic: true, dependent: :destroy
-    has_many :imageable_owners, through: :imageable
+    belongs_to :imageable, dependent: :destroy
+    has_many :imageable_owners, through: :imageable, source: :imageable_owner
 
     has_attached_file :image, styles: Glysellin.product_images_styles
 
@@ -15,8 +15,8 @@ module Glysellin
       self.image = URI.parse(url)
     end
 
-    def image_url
-      image? && image.url(:thumb)
+    def image_url(style = :thumb)
+      image? && image.url(style)
     end
   end
 end

@@ -28,7 +28,6 @@ module Glysellin
 
     # validate :check_properties
     validate :generate_barcode, on: :create, unless: :"sku.presence"
-    validates_length_of :sku, :minimum => 13, :maximum => 13
 
     scope :available, -> {
       where(published: true).where(

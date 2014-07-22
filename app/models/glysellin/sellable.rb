@@ -10,6 +10,7 @@ module Glysellin
     accepts_nested_attributes_for :imageables, allow_destroy: true
 
     has_many :images, through: :imageables
+    accepts_nested_attributes_for :images, allow_destroy: true
 
     belongs_to :taxonomy, class_name: "Glysellin::Taxonomy", counter_cache: true
 

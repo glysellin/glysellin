@@ -13,6 +13,7 @@ require "glysellin/shipping_carrier"
 require "glysellin/available_stock"
 require "glysellin/order_stock_migration"
 require "glysellin/payments"
+require "glysellin/barcode_generator"
 
 module Glysellin
   ################################################################
@@ -33,6 +34,8 @@ module Glysellin
   # Defines which user class will be used to bind Customer model to an
   #   authenticable user
   mattr_accessor :barcode_class_name
+  @@barcode_class_name = 'Glysellin::BarcodeGenerator'
+
   mattr_accessor :user_class_name
   @@user_class_name = 'User'
 
@@ -80,6 +83,9 @@ module Glysellin
   #   the app and e-mails
   mattr_accessor :shop_name
   @@shop_name = 'Example Shop Name'
+
+  mattr_accessor :multi_store
+  @@multi_store = false
 
   mattr_accessor :default_vat_rate
   @@default_vat_rate = 20

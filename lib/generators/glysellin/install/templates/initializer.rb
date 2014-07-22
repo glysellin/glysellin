@@ -38,7 +38,10 @@ module Glysellin
     # Configure recipient e-mail address used to send orders when completed
     config.admin_email = 'change-me-in-glysellin-initialize-file@example.com'
 
-    config.default_store_client_key = 'default'
+    # Allow multi-store management
+    # Defaults to false
+    #
+    # config.multi_store = true
 
     # Set default VAT rate for products when it is not set in db
     config.default_vat_rate = 19.6

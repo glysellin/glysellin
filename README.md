@@ -46,7 +46,7 @@ The shopping cart contents are stored in user's cookies, with the key `glysellin
 To display the cart you must render it's partial in your layout :
 
 ```erb
-<%= render_cart(current_cart) %>
+<%= render_cart %>
 ```
 
 
