@@ -57,7 +57,7 @@ module Glysellin
     end
 
     def published_variants
-      variants.select { |v| v.published }
+      variants.where(published: true)
     end
 
     def check_prices

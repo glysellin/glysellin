@@ -27,7 +27,9 @@ module Glysellin
     has_many :line_items
 
     # validate :check_properties
+    before_validation :check_prices
     validate :generate_barcode, on: :create, unless: :"sku.presence"
+    validates_numericality_of :eot_price, :price
 
     scope :available, -> {
       where(published: true).where(
@@ -39,19 +41,31 @@ module Glysellin
 
     scope :published, -> { where(published: true) }
 
-    delegate :eot_price, :price, :vat_rate, :vat_ratio, :weight, to: :sellable
+    delegate :vat_rate, :vat_ratio, :weight, to: :sellable
 
     # def check_properties
     #   errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']
     #   errors.add(:missing_property, 'Merci de renseigner une collection !') unless properties_hash['collection']
     # end
 
-    def name
-      properties_names = variant_properties.map do |variant_property|
-        variant_property.property.value
-      end.join(', ')
+    def price
+      read_attribute(:price) || (sellable && sellable.price)
+    end
 
-      [sellable.name, properties_names].join(" - ")
+    def eot_price
+      read_attribute(:eot_price) || (sellable && sellable.eot_price)
+    end
+
+    def custom_name
+      if variant_properties.any?
+        properties_names = variant_properties.map do |variant_property|
+          variant_property.property.value
+        end.join(', ')
+
+        [sellable.name, properties_names].join(" - ")
+      else
+        [sellable.name, name].join(' – ')
+      end
     end
 
     def properties_hash
@@ -93,6 +107,35 @@ module Glysellin
 
     def marked_down?
       (p = unmarked_price.presence) && p != price
+    end
+
+    def check_prices
+      return unless price.present? && eot_price.present?
+      # If we have to fill one of the prices when changed
+      if eot_changed_alone?
+        self.price = (eot_price * vat_ratio).round(2)
+      elsif price_changed_alone?
+        self.eot_price = (price / vat_ratio).round(2)
+      end
+    end
+
+    def eot_changed_alone?
+      eot_changed_alone = eot_price_changed? && !price_changed?
+      new_record_eot_alone = new_record? && eot_price && !price
+
+      eot_changed_alone || new_record_eot_alone
+    end
+
+    def price_changed_alone?
+      price_changed? || (new_record? && price)
+    end
+
+    def vat_rate
+      Glysellin.default_vat_rate
+    end
+
+    def vat_ratio
+      1 + vat_rate / 100
     end
   end
 end
