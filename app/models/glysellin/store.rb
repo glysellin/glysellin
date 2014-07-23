@@ -9,11 +9,11 @@ class Glysellin::Store < ActiveRecord::Base
   validates :name, presence: true
 
   def in_stock? variant
-    available_quantity_for(variant) > 0
+    variant.sellable.unlimited_stock or (available_quantity_for(variant) > 0)
   end
 
   def available? variant, quantity
-    available_quantity_for(variant) > quantity
+    variant.sellable.unlimited_stock or (available_quantity_for(variant) > quantity)
   end
 
   def available_quantity_for variant

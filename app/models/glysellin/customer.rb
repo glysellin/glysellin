@@ -16,6 +16,10 @@ module Glysellin
     accepts_nested_attributes_for :user, reject_if: :all_blank
     before_validation :setup_user_email
 
+    def name
+      full_name
+    end
+
     def full_name
       [first_name, last_name, company_name].reduce([]) do |name, str|
         name << (str || "")
