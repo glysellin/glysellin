@@ -23,10 +23,12 @@ module Glysellin
     end
 
     def vat_rate
+      return 0 unless price && eot_price
       ((price / eot_price) - 1) * 100
     end
 
     def total_vat
+      return 0 unless price && eot_price
       price - eot_price
     end
 
