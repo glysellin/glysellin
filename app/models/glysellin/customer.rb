@@ -11,10 +11,14 @@ module Glysellin
     validates_uniqueness_of :email, if: :'email.present?'
 
     has_many :orders, class_name: 'Glysellin::Order', foreign_key: :customer_id
-    has_one :user, class_name: Glysellin.user_class_name
+    belongs_to :user, class_name: 'User'
 
     accepts_nested_attributes_for :user, reject_if: :all_blank
     before_validation :setup_user_email
+
+    def name
+      full_name
+    end
 
     def full_name
       [first_name, last_name, company_name].reduce([]) do |name, str|

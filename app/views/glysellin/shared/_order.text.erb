@@ -29,7 +29,7 @@ Tél: <%= shipping_address.tel %>
 Produits :
 ------------------------------
 
-<%- order.products.each do |item| -%>
+<%- order.line_items.each do |item| -%>
 Nom : <%= item.name %>
 Quantité : <%= item.quantity %>
 Prix TTC : <%= number_to_currency(item.price) %>

@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/vala/paperclip-s3.git
+  revision: 237473c36b1cc9e50c03c2a4a7610a91d675a07e
+  branch: no_custom_domain
+  specs:
+    paperclip-s3 (3.0.0)
+      aws-sdk (~> 1.2)
+      paperclip (>= 2.4)
+
 PATH
   remote: .
   specs:
@@ -256,6 +265,8 @@ DEPENDENCIES
   jquery-rails
   json (~> 1.8)
   launchy
+  paperclip (~> 4.0)
+  paperclip-s3!
   rspec-rails (~> 3.0.0.beta)
   selenium-webdriver
   shoulda-matchers

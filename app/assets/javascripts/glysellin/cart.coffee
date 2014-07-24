@@ -14,14 +14,17 @@ class GlysellinCart
   update: (markup) ->
     $markup = $(markup)
     $cart = $markup.find('.cart-container')
-    $warning = $markup.find('.added-to-cart-warning').remove()
+    $modal = $markup.find('.added-to-cart-warning').remove()
 
     @container.html($cart.html())
 
-    if $warning.length > 0
-      $warning.prependTo('body')
-      if ($default_modal = $warning.filter("[data-warning]"))
-        @handleDefaultModal($default_modal)
+    if $modal.length > 0
+      if @options.handleAddedToCartModal
+        @options.handleAddedToCartModal($modal)
+      else
+        $modal.prependTo('body') 
+        if ($default_modal = $modal.filter("[data-warning]"))
+          @handleDefaultModal($default_modal)
 
     @updated()
 

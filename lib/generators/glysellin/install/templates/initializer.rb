@@ -5,7 +5,7 @@ module Glysellin
     # User model must be set in order to bind customers to authenticable users
     #   default: 'User'
     config.barcode_class_name = 'Barcode'
-    config.user_class_name = 'Customer'
+    config.user_class_name = 'User'
 
     # Add additional fields to address model
     #   default: []
