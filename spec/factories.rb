@@ -3,12 +3,29 @@ require "factory_girl"
 FactoryGirl.define do
   factory :sellable, class: Glysellin::Sellable do
     sequence(:name) { |n| "Product #{ n }" }
+    price (0..1000).to_a.sample
+    eot_price (0..1000).to_a.sample
+    taxonomy
   end
 
   factory :variant, class: Glysellin::Variant do
     sequence(:name) { |n| "Variant #{ n }" }
-    price 10
-    in_stock 10
+    eot_price (0..1000).to_a.sample
+    price (0..1000).to_a.sample
+  end
+
+  factory :property, class: Glysellin::Property do
+    sequence(:value) { |n| "VariantProperty #{ n }" }
+    barcode_ref '013245678912'
+  end
+
+  factory :property_type, class: Glysellin::PropertyType do
+    sequence(:name) { |n| "PropertyType #{ n }" }
+    identifier 'identifier'
+  end
+
+  factory :taxonomy, class: Glysellin::Taxonomy do
+    sequence(:name) { |n| "Taxonomy #{ n }" }
   end
 
   factory :order, class: Glysellin::Order do
@@ -30,6 +47,13 @@ FactoryGirl.define do
     first_name 'first_name'
     last_name 'last_name'
     sequence(:email) { |n| "customer-#{ n }@example.com" }
+  end
+
+  factory :user, class: User do
+    sequence(:email) { |n| "user-#{ n }@example.com" }
+    password 'password'
+    password_confirmation 'password'
+    confirmed_at Time.now
   end
 
   factory :discount_code, class: Glysellin::DiscountCode do

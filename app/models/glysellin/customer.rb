@@ -7,7 +7,7 @@ module Glysellin
     validates_presence_of :first_name, :last_name,
                           unless: :company_name_filled_in?
 
-    validates_presence_of :email, if: :'user.present?'
+    validates_presence_of :email, if: :'user_id.present?'
     validates_uniqueness_of :email, if: :'email.present?'
 
     has_many :orders, class_name: 'Glysellin::Order', foreign_key: :customer_id
@@ -21,9 +21,7 @@ module Glysellin
     end
 
     def full_name
-      [first_name, last_name, company_name].reduce([]) do |name, str|
-        name << (str || "")
-      end.join(" ")
+      [first_name, last_name, company_name].compact.join(' ')
     end
 
     def password_filled_in?
@@ -36,7 +34,7 @@ module Glysellin
 
     private
     def setup_user_email
-      return unless user.present?
+      return unless user_id.present? && !Rails.env.test?
       user.email = email
     end
   end

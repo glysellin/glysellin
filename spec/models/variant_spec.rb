@@ -2,71 +2,137 @@ require "spec_helper"
 
 describe Glysellin::Variant do
   it { should belong_to(:sellable) }
+
   it { should have_many(:properties) }
   it { should have_many(:stocks) }
   it { should have_many(:stores) }
   it { should have_many(:variant_properties) }
   it { should have_many(:properties) }
 
-  it { should accept_nested_attributes_for(:properties) }
+  it { should have_many(:imageables) }
+  it { should have_many(:images) }
+  it { should have_many(:line_items) }
+
+  it { should accept_nested_attributes_for(:variant_properties) }
+  it { should accept_nested_attributes_for(:imageables) }
   it { should accept_nested_attributes_for(:stocks) }
 
   it { should validate_presence_of(:name) }
+  it { should validate_numericality_of(:eot_price) }
   it { should validate_numericality_of(:price) }
-  it { should validate_numericality_of(:in_stock) }
 
-  let(:sellable) { FactoryGirl.build(:sellable) }
-  let(:variant) { FactoryGirl.build(:variant, sellable: sellable) }
+  before(:each) do
+    @variant = create(:variant)
+  end
 
   context "before validation" do
     it "checks prices" do
-      expect(variant).to receive(:check_prices)
-      variant.save
+      expect(@variant).to receive(:check_prices)
+      @variant.save
     end
   end
 
-  describe ".available" do
-    it "returns all variants published and with stock to be bought" do
-      available_variant = FactoryGirl.create(
-        :variant, published: true, unlimited_stock: true
-      )
-      expect(Glysellin::Variant.available).to include(available_variant)
+  describe '.properties_hash' do
+    it 'returns a hash with identifier -> property' do
+      property_type_1 = create(:property_type, identifier: '001')
+      property_type_2 = create(:property_type, identifier: '002')
+
+      property_1 = create(:property, value: 'Propriété 1', property_type: property_type_1)
+      property_2 = create(:property, value: 'Propriété 2', property_type: property_type_2)
+
+      @variant.properties << property_1
+      @variant.properties << property_2
+
+      hash = {}
+      hash['001'] = property_1
+      hash['002'] = property_2
+
+      expect(@variant.properties_hash).to eq hash
+    end
+  end
+
+  describe '.custom_name' do
+    it 'returns the variant custom_name if no properties' do
+      variant = create(:variant, name: 'Jaune', properties: [])
+      sellable = create(:sellable, name: 'Tshirt', variants: [variant])
+      expect(variant.custom_name).to eq 'Tshirt — Jaune'
     end
 
-    it "doesn't return unpublished variants" do
-      unpublished_variant = FactoryGirl.create(:variant, published: false)
-      expect(Glysellin::Variant.available).not_to include(unpublished_variant)
+    it 'returns the variant custom_name if no properties' do
+      variant = create(:variant, name: 'Jaune', properties: [])
+      sellable = create(:sellable, name: 'Tshirt', variants: [variant])
+      variant.properties << create(:property, value: 'Propriété 1')
+      variant.properties << create(:property, value: 'Propriété 2')
+      expect(variant.custom_name).to eq 'Tshirt — Propriété 1, Propriété 2'
+    end
+  end
+
+  describe '.price' do
+    it 'returns sellable price if no variant price present' do
+      sellable = create(:sellable, variants: [@variant])
+      @variant.price = nil
+      @variant.save!
+      expect(@variant.price).to eq sellable.price
     end
 
-    it "doesn't return items with no stock" do
-      no_stock_variant = FactoryGirl.create(
-        :variant, published: true, unlimited_stock: false, in_stock: 0
-      )
-      expect(Glysellin::Variant.available).not_to include(no_stock_variant)
+    it 'returns variant price if present' do
+      sellable = create(:sellable, variants: [@variant])
+      @variant.price = 10
+      @variant.save!
+      expect(@variant.price).to eq 10
+    end
+  end
+
+  describe '.eot_price' do
+    it 'returns sellable price if no variant price present' do
+      sellable = create(:sellable, variants: [@variant])
+      @variant.eot_price = nil
+      @variant.save!
+      expect(@variant.price).to eq sellable.price
+      expect(@variant.eot_price).to eq sellable.eot_price
+    end
+
+    it 'returns variant price if present' do
+      sellable = create(:sellable, variants: [@variant])
+      @variant.eot_price = 10
+      @variant.save!
+      expect(@variant.eot_price).to eq 10
+    end
+  end
+
+  describe '.vat_rate' do
+    it 'returns default vat_rate' do
+      expect(@variant.vat_rate).to eq Glysellin.default_vat_rate
+    end
+  end
+
+  describe '.vat_ratio' do
+    it 'returns the variant vat_ratio' do
+      expect(@variant.vat_ratio).to eq (1 + @variant.vat_rate / 100)
     end
   end
 
   describe ".published" do
     it "returns all published variants" do
-      published_variant = FactoryGirl.create(:variant, published: true)
+      published_variant = create(:variant, published: true)
       expect(Glysellin::Variant.published).to include(published_variant)
     end
 
     it "does't return unpublished variants" do
-      unpublished_variant = FactoryGirl.create(:variant, published: false)
+      unpublished_variant = create(:variant, published: false)
       expect(Glysellin::Variant.published).not_to include(unpublished_variant)
     end
   end
 
-  describe "#description" do
+  describe ".description" do
     it "returns the associated sellable's description when a sellable is set" do
-      allow(variant).to receive(:sellable) { double(description: "text") }
-      expect(variant.description).to eq("text")
+      allow(@variant).to receive(:sellable) { double(description: "text") }
+      expect(@variant.description).to eq("text")
     end
 
     it "returns an empty string when no sellable is set" do
-      variant.sellable = nil
-      expect(variant.description).to eq("")
+      @variant.sellable = nil
+      expect(@variant.description).to eq("")
     end
   end
 end

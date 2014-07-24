@@ -28,16 +28,10 @@ module Glysellin
 
     # validate :check_properties
     before_validation :check_prices
+
     validate :generate_barcode, on: :create, unless: :"sku.presence"
     validates_numericality_of :eot_price, :price
-
-    scope :available, -> {
-      where(published: true).where(
-        "glysellin_variants.unlimited_stock = ? OR " +
-        "glysellin_variants.in_stock > ?",
-        true, 0
-      )
-    }
+    validates :name, presence: true
 
     scope :published, -> { where(published: true) }
 
@@ -58,16 +52,14 @@ module Glysellin
 
     def custom_name
       if variant_properties.any?
-        properties_names = variant_properties.map do |variant_property|
-          variant_property.property.value
-        end.join(', ')
-
-        [sellable.name, properties_names].join(" - ")
+        properties_names = properties.map(&:value).join(', ')
+        [sellable.name, properties_names].join(' — ')
       else
-        [sellable.name, name].join(' – ')
+        [sellable.name, name].join(' — ')
       end
     end
 
+    # EAGER LOAD PROPERTYTYPE TO AVOID N+1
     def properties_hash
       @properties_hash ||= begin
         properties = Glysellin::Property
