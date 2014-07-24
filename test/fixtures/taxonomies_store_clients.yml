@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  taxonomy_id: 1
-  store_client_id: 1
-
-two:
-  taxonomy_id: 1
-  store_client_id: 1

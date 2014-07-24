@@ -6,7 +6,10 @@ class AddImageToVariants < ActiveRecord::Migration
       t.string :name
       t.integer :imageable_id
       t.string :imageable_type
-      t.add_attachment :image
+      t.string :image_file_name
+      t.string :image_content_type
+      t.integer :image_file_size
+      t.datetime :image_updated_at
       t.timestamps
     end
   end
