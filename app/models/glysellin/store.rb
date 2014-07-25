@@ -13,7 +13,7 @@ class Glysellin::Store < ActiveRecord::Base
   end
 
   def available? variant, quantity
-    variant.sellable.unlimited_stock or (available_quantity_for(variant) > quantity)
+    variant.sellable.unlimited_stock or (available_quantity_for(variant) >= quantity)
   end
 
   def available_quantity_for variant
