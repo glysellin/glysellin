@@ -6,6 +6,10 @@ FactoryGirl.define do
     price (0..1000).to_a.sample
     eot_price (0..1000).to_a.sample
     taxonomy
+
+    before(:create) do |sellable, evaluator|
+      sellable.variants << create(:variant)
+    end
   end
 
   factory :variant, class: Glysellin::Variant do
