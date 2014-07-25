@@ -32,6 +32,35 @@ describe Glysellin::Variant do
     end
   end
 
+  describe '.stocks_for_all_stores' do
+    it 'returns stocks for all stores' do
+      store_1 = create(:store)
+      store_2 = create(:store)
+      store_3 = create(:store)
+      store_4 = create(:store)
+
+      stock_1 = create(:stock, store: store_1)
+      stock_2 = create(:stock, store: store_2)
+      stock_3 = create(:stock, store: store_3)
+      stock_4 = create(:stock, store: store_4)
+
+      @variant.stocks << stock_1
+      @variant.stocks << stock_2
+      @variant.stocks << stock_3
+
+      hash = {}
+      hash[store_1] = stock_1
+      hash[store_2] = stock_2
+      hash[store_3] = stock_3
+      hash[store_4] = build(:stock, store: store_4, variant: @variant)
+
+      expect(@variant.stocks_for_all_stores[store_1]).to eq hash[store_1]
+      expect(@variant.stocks_for_all_stores[store_2]).to eq hash[store_2]
+      expect(@variant.stocks_for_all_stores[store_3]).to eq hash[store_3]
+      expect(@variant.stocks_for_all_stores[store_4].new_record?).to eq hash[store_4].new_record?
+    end
+  end
+
   describe '.properties_hash' do
     it 'returns a hash with identifier -> property' do
       property_type_1 = create(:property_type, identifier: '001')

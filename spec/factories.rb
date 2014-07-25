@@ -19,6 +19,12 @@ FactoryGirl.define do
     barcode_ref '013245678912'
   end
 
+  factory :stock, class: Glysellin::Stock
+
+  factory :store, class: Glysellin::Store do
+    sequence(:name) { |n| "Store #{ n }" }
+  end
+
   factory :property_type, class: Glysellin::PropertyType do
     sequence(:name) { |n| "PropertyType #{ n }" }
     identifier 'identifier'

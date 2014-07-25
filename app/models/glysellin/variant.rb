@@ -74,7 +74,7 @@ module Glysellin
     end
 
     def description
-      sellable ? sellable.description : ""
+      sellable ? sellable.description : ''
     end
 
     def stocks_for_all_stores
@@ -95,10 +95,6 @@ module Glysellin
           errors.add :sku, message
         end
       end
-    end
-
-    def marked_down?
-      (p = unmarked_price.presence) && p != price
     end
 
     def check_prices
