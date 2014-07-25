@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Glysellin::Variant do
   it { should belong_to(:sellable) }
@@ -25,14 +25,14 @@ describe Glysellin::Variant do
     @variant = create(:variant)
   end
 
-  context "before validation" do
-    it "checks prices" do
+  context 'before validation' do
+    it 'checks prices' do
       expect(@variant).to receive(:check_prices)
       @variant.save
     end
   end
 
-  describe '.stocks_for_all_stores' do
+  describe '#stocks_for_all_stores' do
     it 'returns stocks for all stores' do
       store_1 = create(:store)
       store_2 = create(:store)
@@ -61,7 +61,7 @@ describe Glysellin::Variant do
     end
   end
 
-  describe '.properties_hash' do
+  describe '#properties_hash' do
     it 'returns a hash with identifier -> property' do
       property_type_1 = create(:property_type, identifier: '001')
       property_type_2 = create(:property_type, identifier: '002')
@@ -80,7 +80,7 @@ describe Glysellin::Variant do
     end
   end
 
-  describe '.custom_name' do
+  describe '#custom_name' do
     it 'returns the variant custom_name if no properties' do
       variant = create(:variant, name: 'Jaune', properties: [])
       sellable = create(:sellable, name: 'Tshirt', variants: [variant])
@@ -96,7 +96,7 @@ describe Glysellin::Variant do
     end
   end
 
-  describe '.price' do
+  describe '#price' do
     it 'returns sellable price if no variant price present' do
       sellable = create(:sellable, variants: [@variant])
       @variant.price = nil
@@ -112,7 +112,7 @@ describe Glysellin::Variant do
     end
   end
 
-  describe '.eot_price' do
+  describe '#eot_price' do
     it 'returns sellable price if no variant price present' do
       sellable = create(:sellable, variants: [@variant])
       @variant.eot_price = nil
@@ -129,39 +129,39 @@ describe Glysellin::Variant do
     end
   end
 
-  describe '.vat_rate' do
+  describe '#vat_rate' do
     it 'returns default vat_rate' do
       expect(@variant.vat_rate).to eq Glysellin.default_vat_rate
     end
   end
 
-  describe '.vat_ratio' do
+  describe '#vat_ratio' do
     it 'returns the variant vat_ratio' do
       expect(@variant.vat_ratio).to eq (1 + @variant.vat_rate / 100)
     end
   end
 
-  describe ".published" do
-    it "returns all published variants" do
+  describe '#published' do
+    it 'returns all published variants' do
       published_variant = create(:variant, published: true)
       expect(Glysellin::Variant.published).to include(published_variant)
     end
 
-    it "does't return unpublished variants" do
+    it 'does\'t return unpublished variants' do
       unpublished_variant = create(:variant, published: false)
       expect(Glysellin::Variant.published).not_to include(unpublished_variant)
     end
   end
 
-  describe ".description" do
-    it "returns the associated sellable's description when a sellable is set" do
-      allow(@variant).to receive(:sellable) { double(description: "text") }
-      expect(@variant.description).to eq("text")
+  describe '#description' do
+    it 'returns the associated sellable\'s description when a sellable is set' do
+      allow(@variant).to receive(:sellable) { double(description: 'text') }
+      expect(@variant.description).to eq('text')
     end
 
-    it "returns an empty string when no sellable is set" do
+    it 'returns an empty string when no sellable is set' do
       @variant.sellable = nil
-      expect(@variant.description).to eq("")
+      expect(@variant.description).to eq ''
     end
   end
 end

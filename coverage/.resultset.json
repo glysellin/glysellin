@@ -2439,16 +2439,6 @@
         null,
         null
       ],
-      "/Users/zenati/Documents/glysellin/app/models/glysellin/imageable.rb": [
-        1,
-        1,
-        1,
-        null,
-        1,
-        1,
-        null,
-        null
-      ],
       "/Users/zenati/Documents/glysellin/app/models/glysellin/line_item.rb": [
         1,
         1,
@@ -2549,8 +2539,18 @@
         1,
         null,
         null
+      ],
+      "/Users/zenati/Documents/glysellin/app/models/glysellin/imageable.rb": [
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        null,
+        null
       ]
     },
-    "timestamp": 1406280701
+    "timestamp": 1406280835
   }
 }
