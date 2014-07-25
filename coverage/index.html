@@ -14,7 +14,7 @@
       <img src="./assets/0.8.0/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2014-07-25T14:21:00+02:00">2014-07-25T14:21:00+02:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2014-07-25T14:24:33+02:00">2014-07-25T14:24:33+02:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -25,7 +25,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         1.0
+         1.03
        </span>
     </span> hits/line)
   </h2>
@@ -207,7 +207,7 @@
         <td>16</td>
         <td>16</td>
         <td>0</td>
-        <td>1.8</td>
+        <td>2.0</td>
       </tr>
       
       <tr>
@@ -227,7 +227,7 @@
         <td>66</td>
         <td>50</td>
         <td>16</td>
-        <td>3.5</td>
+        <td>3.9</td>
       </tr>
       
       <tr>
@@ -277,7 +277,7 @@
         <td>9</td>
         <td>9</td>
         <td>0</td>
-        <td>2.7</td>
+        <td>3.0</td>
       </tr>
       
       <tr>
@@ -610,7 +610,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         1.67
+         1.76
        </span>
     </span> hits/line)
   </h2>
@@ -752,7 +752,7 @@
         <td>16</td>
         <td>16</td>
         <td>0</td>
-        <td>1.8</td>
+        <td>2.0</td>
       </tr>
       
       <tr>
@@ -772,7 +772,7 @@
         <td>66</td>
         <td>50</td>
         <td>16</td>
-        <td>3.5</td>
+        <td>3.9</td>
       </tr>
       
     </tbody>
@@ -973,7 +973,7 @@
         <td>9</td>
         <td>9</td>
         <td>0</td>
-        <td>2.7</td>
+        <td>3.0</td>
       </tr>
       
       <tr>
@@ -4795,14 +4795,14 @@
           <code class="ruby">  def available_quantity_for variant</code>
         </li>
       
-        <li class="covered" data-hits="4" data-linenumber="20">
-          <span class="hits">4</span>
+        <li class="covered" data-hits="5" data-linenumber="20">
+          <span class="hits">5</span>
           
           <code class="ruby">    available_quantities[variant.id] ||=</code>
         </li>
       
-        <li class="covered" data-hits="4" data-linenumber="21">
-          <span class="hits">4</span>
+        <li class="covered" data-hits="5" data-linenumber="21">
+          <span class="hits">5</span>
           
           <code class="ruby">      variant.stocks.find { |stock| stock.store_id == self.id }.try(:count) || 0</code>
         </li>
@@ -4837,8 +4837,8 @@
           <code class="ruby">  def available_quantities</code>
         </li>
       
-        <li class="covered" data-hits="4" data-linenumber="27">
-          <span class="hits">4</span>
+        <li class="covered" data-hits="5" data-linenumber="27">
+          <span class="hits">5</span>
           
           <code class="ruby">    @available_quantities ||= {}</code>
         </li>
@@ -5677,8 +5677,8 @@
           <code class="ruby">    def price</code>
         </li>
       
-        <li class="covered" data-hits="42" data-linenumber="46">
-          <span class="hits">42</span>
+        <li class="covered" data-hits="47" data-linenumber="46">
+          <span class="hits">47</span>
           
           <code class="ruby">      read_attribute(:price) || (sellable &amp;&amp; sellable.price)</code>
         </li>
@@ -5701,8 +5701,8 @@
           <code class="ruby">    def eot_price</code>
         </li>
       
-        <li class="covered" data-hits="36" data-linenumber="50">
-          <span class="hits">36</span>
+        <li class="covered" data-hits="40" data-linenumber="50">
+          <span class="hits">40</span>
           
           <code class="ruby">      read_attribute(:eot_price) || (sellable &amp;&amp; sellable.eot_price)</code>
         </li>
@@ -5935,8 +5935,8 @@
           <code class="ruby">    def generate_barcode</code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="89">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="7" data-linenumber="89">
+          <span class="hits">7</span>
           
           <code class="ruby">      barcode = Glysellin.barcode_class_name.constantize.new(self)</code>
         </li>
@@ -5947,14 +5947,14 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="91">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="7" data-linenumber="91">
+          <span class="hits">7</span>
           
           <code class="ruby">      if barcode.valid?</code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="92">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="7" data-linenumber="92">
+          <span class="hits">7</span>
           
           <code class="ruby">        self.sku = barcode.generate</code>
         </li>
@@ -6007,8 +6007,8 @@
           <code class="ruby">    def check_prices</code>
         </li>
       
-        <li class="covered" data-hits="12" data-linenumber="101">
-          <span class="hits">12</span>
+        <li class="covered" data-hits="13" data-linenumber="101">
+          <span class="hits">13</span>
           
           <code class="ruby">      return unless price.present? &amp;&amp; eot_price.present?</code>
         </li>
@@ -6019,8 +6019,8 @@
           <code class="ruby">      # If we have to fill one of the prices when changed</code>
         </li>
       
-        <li class="covered" data-hits="12" data-linenumber="103">
-          <span class="hits">12</span>
+        <li class="covered" data-hits="13" data-linenumber="103">
+          <span class="hits">13</span>
           
           <code class="ruby">      if eot_changed_alone?</code>
         </li>
@@ -6031,14 +6031,14 @@
           <code class="ruby">        self.price = (eot_price * vat_ratio).round(2)</code>
         </li>
       
-        <li class="covered" data-hits="12" data-linenumber="105">
-          <span class="hits">12</span>
+        <li class="covered" data-hits="13" data-linenumber="105">
+          <span class="hits">13</span>
           
           <code class="ruby">      elsif price_changed_alone?</code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="106">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="7" data-linenumber="106">
+          <span class="hits">7</span>
           
           <code class="ruby">        self.eot_price = (price / vat_ratio).round(2)</code>
         </li>
@@ -6067,14 +6067,14 @@
           <code class="ruby">    def eot_changed_alone?</code>
         </li>
       
-        <li class="covered" data-hits="12" data-linenumber="111">
-          <span class="hits">12</span>
+        <li class="covered" data-hits="13" data-linenumber="111">
+          <span class="hits">13</span>
           
           <code class="ruby">      eot_changed_alone = eot_price_changed? &amp;&amp; !price_changed?</code>
         </li>
       
-        <li class="covered" data-hits="12" data-linenumber="112">
-          <span class="hits">12</span>
+        <li class="covered" data-hits="13" data-linenumber="112">
+          <span class="hits">13</span>
           
           <code class="ruby">      new_record_eot_alone = new_record? &amp;&amp; eot_price &amp;&amp; !price</code>
         </li>
@@ -6085,8 +6085,8 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="12" data-linenumber="114">
-          <span class="hits">12</span>
+        <li class="covered" data-hits="13" data-linenumber="114">
+          <span class="hits">13</span>
           
           <code class="ruby">      eot_changed_alone || new_record_eot_alone</code>
         </li>
@@ -6109,8 +6109,8 @@
           <code class="ruby">    def price_changed_alone?</code>
         </li>
       
-        <li class="covered" data-hits="12" data-linenumber="118">
-          <span class="hits">12</span>
+        <li class="covered" data-hits="13" data-linenumber="118">
+          <span class="hits">13</span>
           
           <code class="ruby">      price_changed? || (new_record? &amp;&amp; price)</code>
         </li>
@@ -6133,8 +6133,8 @@
           <code class="ruby">    def vat_rate</code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="122">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="7" data-linenumber="122">
+          <span class="hits">7</span>
           
           <code class="ruby">      Glysellin.default_vat_rate</code>
         </li>
@@ -6157,8 +6157,8 @@
           <code class="ruby">    def vat_ratio</code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="126">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="7" data-linenumber="126">
+          <span class="hits">7</span>
           
           <code class="ruby">      1 + vat_rate / 100</code>
         </li>
@@ -8005,8 +8005,8 @@
           <code class="ruby">    def initialize(variant)</code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="8">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="7" data-linenumber="8">
+          <span class="hits">7</span>
           
           <code class="ruby">      @variant = variant</code>
         </li>
@@ -8029,14 +8029,14 @@
           <code class="ruby">    def generate</code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="12">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="7" data-linenumber="12">
+          <span class="hits">7</span>
           
           <code class="ruby">      last = Glysellin::Variant.order(&#39;glysellin_variants.sku DESC&#39;).first</code>
         </li>
       
-        <li class="covered" data-hits="6" data-linenumber="13">
-          <span class="hits">6</span>
+        <li class="covered" data-hits="7" data-linenumber="13">
+          <span class="hits">7</span>
           
           <code class="ruby">      (last &amp;&amp; last.sku.to_i + 1) || 1</code>
         </li>

@@ -76,4 +76,17 @@ describe Glysellin::Store do
       expect(store.available?(variant, 11)).to eq false
     end
   end
+
+  describe '#available_quantity_for(variant)' do
+    it 'returns the available variant quantity' do
+      variant = create(:variant)
+      variant.stores << store
+
+      stock = variant.stocks.where(store_id: store.id).first
+      stock.count = 10
+      stock.save!
+
+      expect(store.available_quantity_for(variant)).to eq 10
+    end
+  end
 end
