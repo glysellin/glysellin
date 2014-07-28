@@ -38,19 +38,39 @@ FactoryGirl.define do
     sequence(:name) { |n| "Taxonomy #{ n }" }
   end
 
+  factory :line_item, class: Glysellin::LineItem do
+    sequence(:name) { |n| "LineItem #{ n }" }
+    sequence(:vat_rate) { |n| n }
+    sequence(:quantity) { |n| n }
+    price 10.0
+    eot_price 10.0
+  end
+
+  factory :parcel, class: Glysellin::Parcel do
+    sequence(:name) { |n| "Parcel #{ n }" }
+
+    before(:create) do |parcel, evaluator|
+      parcel.line_items << create(:line_item)
+    end
+  end
+
   factory :order, class: Glysellin::Order do
-    customer { FactoryGirl.create(:customer) }
-    billing_address { FactoryGirl.create(:address) }
-    shipping_address { FactoryGirl.create(:address) }
+    customer
+    billing_address { create(:address) }
+    shipping_address { create(:address) }
+
+    before(:create) do |order, evaluator|
+      order.parcels << create(:parcel)
+    end
   end
 
   factory :address, class: Glysellin::Address do
     sequence(:first_name) { |n| "First name #{ n }" }
     sequence(:last_name) { |n| "Last name #{ n }" }
-    address "Address"
-    zip "11223"
-    city "City"
-    country "Country"
+    sequence(:address) { |n| "Address #{ n }" }
+    sequence(:zip) { |n| "Zip #{ n }" }
+    sequence(:city) { |n| "City #{ n }" }
+    sequence(:country) { |n| "Country #{ n }" }
   end
 
   factory :customer, class: Glysellin::Customer do
@@ -70,8 +90,8 @@ FactoryGirl.define do
     sequence(:name) { |n| "discount-#{ n }" }
     sequence(:code) { |n| "code-#{ n }" }
     value 5
-    discount_type { FactoryGirl.build(:discount_type) }
     expires_on { 10.days.from_now }
+    discount_type
   end
 
   factory :discount_type, class: Glysellin::DiscountType do
