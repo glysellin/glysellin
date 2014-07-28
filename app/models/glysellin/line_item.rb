@@ -9,6 +9,8 @@ module Glysellin
     accepts_nested_attributes_for :discount, allow_destroy: true,
       reject_if: :all_blank
 
+    validates :vat_rate, :eot_price, :price, :quantity, presence: true
+
     scope :join_orders, -> {
       joins(
         'INNER JOIN glysellin_parcels ' +
