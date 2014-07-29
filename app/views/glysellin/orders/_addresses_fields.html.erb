@@ -3,7 +3,7 @@
     <%= form.simple_fields_for :billing_address do |fsa| %>
       <%= fsa.input :last_name %>
       <%= fsa.input :first_name %>
-      <%= fsa.input :address, :as => :string %>
+      <%= fsa.input :address, :as => :text %>
       <%= fsa.input :zip %>
       <%= fsa.input :city %>
       <%= fsa.input :country, collection: countries_option_list %>
@@ -19,7 +19,7 @@
     <%= form.simple_fields_for :shipping_address do |fsa| %>
       <%= fsa.input :last_name %>
       <%= fsa.input :first_name %>
-      <%= fsa.input :address, :as => :string %>
+      <%= fsa.input :address, :as => :text %>
       <%= fsa.input :zip %>
       <%= fsa.input :city %>
       <%= fsa.input :country, collection: countries_option_list %>
