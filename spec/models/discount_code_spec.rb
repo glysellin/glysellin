@@ -1,11 +1,6 @@
 require "spec_helper"
 
 describe Glysellin::DiscountCode do
-  begin
-    it_behaves_like("an adjustment")
-  rescue Exception => e
-  end
-
   it { should belong_to(:discount_type) }
   it { should have_many(:order_adjustments) }
 
@@ -22,20 +17,51 @@ describe Glysellin::DiscountCode do
     end
   end
 
-  describe "#applicable?" do
-    it "returns true if the code has no expiration date" do
-      discount_code = build(:discount_code, expires_on: nil)
-      expect(discount_code.applicable?).to eq(true)
+  describe "#applicable_for?(price)" do
+    before(:each) do
+      @discount_code = create(:discount_code)
     end
 
-    it "returns true if the code has an expiration date that is in the future" do
-      discount_code = build(:discount_code, expires_on: 3.days.from_now)
-      expect(discount_code.applicable?).to eq(true)
-    end
+    [
+      [true,  true,  false, false,  true],
+      [true,  true,  false, true,   true],
+      [true,  true,  true,  false, false],
+      [true,  true,  true,  true,   true],
+      [true,  false, true,  false, false],
+      [true,  false, true,  true,  false],
+      [true,  false, false, true,  false],
+      [true,  false, false, false, false],
+      [false, true,  true,  false, false],
+      [false, true,  true,  true,   true],
+      [false, true,  false, true,   true],
+      [false, true,  false, false,  true],
+      [false, false, true,  true,   true],
+      [false, false, true,  false, false],
+      [false, false, false, true,   true],
+      [false, false, false, false,  true]
+    ].each do |(expires_on_presence, expires_on_gt_than_time_now, order_minimum_presence, order_minimum_lteq_than_price, expected_result)|
 
-    it "returns fale if the code has an expiration date that is in the past" do
-      discount_code = build(:discount_code, expires_on: 20.minutes.ago)
-      expect(discount_code.applicable?).to eq(false)
+      it "execites applicable_for? with following arguments: {
+        (
+          #{expires_on_presence},
+          #{expires_on_gt_than_time_now},
+          #{order_minimum_presence},
+          #{order_minimum_lteq_than_price},
+          #{expected_result}
+        )
+      }" do
+        price = rand(1000)
+
+        if expires_on_presence
+          @discount_code.expires_on = expires_on_gt_than_time_now ? (Time.now + 1.day) : (Time.now - 1.day)
+        end
+
+        if order_minimum_presence
+          @discount_code.order_minimum = order_minimum_lteq_than_price ? (price - rand(0..10)) : (price + rand(10))
+        end
+
+        expect(@discount_code.applicable_for?(price)).to eq expected_result
+      end
     end
   end
 end

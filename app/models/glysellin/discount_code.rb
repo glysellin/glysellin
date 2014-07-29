@@ -1,7 +1,5 @@
 module Glysellin
   class DiscountCode < ActiveRecord::Base
-    include Adjustment
-
     self.table_name = 'glysellin_discount_codes'
 
     belongs_to :discount_type, inverse_of: :discount_codes
@@ -22,13 +20,6 @@ module Glysellin
       def from_code code
         code && find_by_code(code.downcase)
       end
-    end
-
-    private
-
-    def adjustment_value_for order
-      calculator = Glysellin.discount_type_calculators[discount_type.identifier]
-      calculator.new(order, value).calculate
     end
   end
 end
