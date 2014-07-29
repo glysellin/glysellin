@@ -57,7 +57,7 @@ describe Glysellin::DiscountCode do
         end
 
         if order_minimum_presence
-          @discount_code.order_minimum = order_minimum_lteq_than_price ? (price - rand(0..10)) : (price + rand(10))
+          @discount_code.order_minimum = order_minimum_lteq_than_price ? (price - rand(0..10)) : (price + rand(1..10))
         end
 
         expect(@discount_code.applicable_for?(price)).to eq expected_result
