@@ -2,6 +2,8 @@ module Glysellin
   class DiscountCode < ActiveRecord::Base
     self.table_name = 'glysellin_discount_codes'
 
+    scope :from_code, -> (code) { where(code: code.try(:downcase)) }
+
     belongs_to :discount_type, inverse_of: :discount_codes
     has_many :order_adjustments, as: :adjustment
 
@@ -14,12 +16,6 @@ module Glysellin
     def applicable_for?(price)
       (!expires_on || expires_on > Time.now) &&
         (!order_minimum.presence || order_minimum <= price)
-    end
-
-    class << self
-      def from_code code
-        code && find_by_code(code.downcase)
-      end
     end
   end
 end
