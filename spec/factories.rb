@@ -24,6 +24,8 @@ FactoryGirl.define do
   end
 
   factory :stock, class: Glysellin::Stock
+  factory :shipment, class: Glysellin::Shipment
+  factory :payment, class: Glysellin::Payment
 
   factory :store, class: Glysellin::Store do
     sequence(:name) { |n| "Store #{ n }" }
