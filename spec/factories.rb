@@ -27,6 +27,16 @@ FactoryGirl.define do
   factory :shipment, class: Glysellin::Shipment
   factory :payment, class: Glysellin::Payment
 
+  factory :abstract_order, class: Glysellin::AbstractOrder do
+    customer { create(:customer) }
+    shipping_address { create(:address) }
+    billing_address { create(:address) }
+
+    before(:create) do |abstract_order, evaluator|
+      abstract_order.parcels << create(:parcel)
+    end
+  end
+
   factory :store, class: Glysellin::Store do
     sequence(:name) { |n| "Store #{ n }" }
   end
