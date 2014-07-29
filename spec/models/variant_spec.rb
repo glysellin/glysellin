@@ -30,53 +30,63 @@ describe Glysellin::Variant do
       expect(@variant).to receive(:check_prices)
       @variant.save
     end
+
+    it 'ensures the variant has a name' do
+      expect(@variant).to receive(:ensure_name)
+      @variant.save
+    end
+  end
+
+  describe '#ensure_name' do
+    context 'when no name is given by the user' do
+      before do
+        sellable = create(:sellable)
+        @variant = build(:variant, name: nil, sellable: sellable)
+      end
+
+      it 'generates a name from the properties when there are properties' do
+        property_type = create(:property_type)
+        @variant.properties << build(:property, property_type: property_type)
+        @variant.ensure_name
+        expect(@variant.name).not_to be_nil
+      end
+
+      it 'does not generate a name when there are no properties' do
+        @variant.ensure_name
+        expect(@variant.name).to be_nil
+      end
+    end
+
+    context 'when a name exists' do
+      it 'does not generate a new name' do
+        @variant.name = 'Variant name'
+        @variant.ensure_name
+        expect(@variant.name).to eq 'Variant name'
+      end
+    end
   end
 
   describe '#stocks_for_all_stores' do
-    it 'returns stocks for all stores' do
+    it 'returns a stock for all the existing stores, building those which do not exist' do
       store_1 = create(:store)
       store_2 = create(:store)
-      store_3 = create(:store)
-      store_4 = create(:store)
 
-      stock_1 = create(:stock, store: store_1)
-      stock_2 = create(:stock, store: store_2)
-      stock_3 = create(:stock, store: store_3)
-      stock_4 = create(:stock, store: store_4)
+      stock = create(:stock, store: store_1, count: 10)
 
-      @variant.stocks << stock_1
-      @variant.stocks << stock_2
-      @variant.stocks << stock_3
+      @variant.stocks << stock
 
-      hash = {}
-      hash[store_1] = stock_1
-      hash[store_2] = stock_2
-      hash[store_3] = stock_3
-      hash[store_4] = build(:stock, store: store_4, variant: @variant)
-
-      expect(@variant.stocks_for_all_stores[store_1]).to eq hash[store_1]
-      expect(@variant.stocks_for_all_stores[store_2]).to eq hash[store_2]
-      expect(@variant.stocks_for_all_stores[store_3]).to eq hash[store_3]
-      expect(@variant.stocks_for_all_stores[store_4].new_record?).to eq hash[store_4].new_record?
+      expect(@variant.stocks_for_all_stores[store_1]).to eq stock
+      expect(@variant.stocks_for_all_stores[store_2]).to be_instance_of Glysellin::Stock
     end
   end
 
   describe '#properties_hash' do
     it 'returns a hash with identifier -> property' do
-      property_type_1 = create(:property_type, identifier: '001')
-      property_type_2 = create(:property_type, identifier: '002')
+      property_type = create(:property_type, identifier: '001')
+      property = create(:property, value: 'Propriété 1', property_type: property_type)
+      @variant.properties << property
 
-      property_1 = create(:property, value: 'Propriété 1', property_type: property_type_1)
-      property_2 = create(:property, value: 'Propriété 2', property_type: property_type_2)
-
-      @variant.properties << property_1
-      @variant.properties << property_2
-
-      hash = {}
-      hash['001'] = property_1
-      hash['002'] = property_2
-
-      expect(@variant.properties_hash).to eq hash
+      expect(@variant.properties_hash['001']).to eq property
     end
   end
 
