@@ -36,7 +36,7 @@ module Glysellin
     after_create :ensure_ref
 
     scope :from_customer, ->(customer_id) { where(customer_id: customer_id) }
-    scope :active, -> { where.not(glysellin_orders: { state: 'canceled' }) }
+    scope :active, -> { where.not(state: :canceled) }
 
     def line_items options = {}
       cached = options.fetch(:cached, true)

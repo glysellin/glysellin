@@ -1,5 +1,21 @@
 module Glysellin
   class Order < AbstractOrder
+
+    scope :to_be_shipped, -> { active.search(shipment_state_eq: :pending).result }
+
+    before_validation :process_payments
+
+    has_one :cart
+    has_one :invoice, dependent: :destroy
+
+    has_many :payments, -> {
+      extending Glysellin::Payments::AggregationMethods
+    }, as: :payable, inverse_of: :payable, dependent: :destroy
+    accepts_nested_attributes_for :payments, allow_destroy: true
+
+    belongs_to :customer, class_name: 'Glysellin::Customer'
+    delegate :balanced?, to: :payments, prefix: true
+
     state_machine :state, initial: :pending do
       event :complete do
         transition all => :completed
@@ -18,34 +34,6 @@ module Glysellin
       end
     end
 
-    belongs_to :customer, class_name: 'Glysellin::Customer'
-
-    has_one :cart
-    has_one :invoice, dependent: :destroy
-
-    # Payment tries
-    has_many :payments,
-             -> { extending Glysellin::Payments::AggregationMethods },
-             as: :payable, inverse_of: :payable, dependent: :destroy
-    accepts_nested_attributes_for :payments, allow_destroy: true
-
-    delegate :balanced?, to: :payments, prefix: true
-
-    before_validation :process_payments
-
-    scope :to_be_shipped, -> {
-      active
-        .joins(
-          'INNER JOIN glysellin_shipments ' +
-          'ON glysellin_shipments.shippable_id = glysellin_orders.id'
-        )
-        .where(
-          glysellin_shipments: {
-            shippable_type: 'Glysellin::Order', state: "pending"
-          }
-        )
-    }
-
     def process_payments
       payments_manager.save
     end
@@ -54,25 +42,10 @@ module Glysellin
       @payments_manager ||= Glysellin::Payments::Manager.new(self)
     end
 
-    ########################################
-    #
-    #               Payment
-    #
-    ########################################
-
-    # Gives the last payment found for that order
-    #
-    # @return [Payment, nil] the found Payment item or nil
-    #
     def payment
       payments.last
     end
 
-    # Returns the last payment method used if there has already been
-    #   a payment try
-    #
-    # @return [PaymentType, nil] the PaymentMethod or nil
-    #
     def payment_method
       payment.type rescue nil
     end

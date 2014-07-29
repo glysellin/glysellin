@@ -32,6 +32,24 @@ describe Glysellin::Order do
     end
   end
 
+  describe '#payment' do
+    it 'returns the last order payment' do
+      @order.payments << create(:payment)
+      expect(@order.payment).to eq @order.payments.last
+    end
+  end
+
+  describe '#payment_method' do
+    it 'returns the last order payment type if available' do
+      @order.payments << create(:payment)
+      expect(@order.payment_method).to eq @order.payments.last.payment_method
+    end
+
+    it 'returns nil if the last order payment is not available' do
+      expect(@order.payment_method).to eq nil
+    end
+  end
+
   describe "#ensure_ref" do
     it "sets the order reference to TIMESTAMP-ORDER_ID by defaut" do
       @order.ensure_ref
@@ -47,6 +65,25 @@ describe Glysellin::Order do
     it "uses Glysellin.order_reference_generator" do
       @order.ensure_ref
       expect(@order.ref).to eq "#{ Time.now.strftime('%Y%m%d%H%M') }-#{ @order.id }"
+    end
+  end
+
+  describe '.to_be_shipped' do
+    it 'returns orders to be shipped' do
+      order_1 = create(:order, state: 'pending')
+      order_2 = create(:order, state: 'pending')
+      order_3 = create(:order, state: 'pending')
+      order_4 = create(:order, state: 'completed')
+      order_5 = create(:order, state: 'canceled')
+
+      order_1.shipment = create(:shipment, state: 'shipped')
+      order_2.shipment = create(:shipment, state: 'pending')
+      order_3.shipment = create(:shipment)
+      order_4.shipment = create(:shipment, state: 'pending')
+      order_5.shipment = create(:shipment, state: 'pending')
+
+      expect(Glysellin::Order.active.pluck(:id)).to eq [@order, order_1, order_2, order_3, order_4].map(&:id)
+      expect(Glysellin::Order.to_be_shipped.pluck(:id)).to eq [order_2, order_3, order_4].map(&:id)
     end
   end
 

@@ -10,3 +10,4 @@ gem "jquery-rails"
 gem "json", "~> 1.8"
 gem 'paperclip', '~> 4.0'
 gem 'paperclip-s3', git: 'git://github.com/vala/paperclip-s3.git', branch: 'no_custom_domain'
+gem 'ransack'
