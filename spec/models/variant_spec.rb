@@ -33,50 +33,26 @@ describe Glysellin::Variant do
   end
 
   describe '#stocks_for_all_stores' do
-    it 'returns stocks for all stores' do
+    it 'returns a stock for all the existing stores, building those which do not exist' do
       store_1 = create(:store)
       store_2 = create(:store)
-      store_3 = create(:store)
-      store_4 = create(:store)
 
-      stock_1 = create(:stock, store: store_1)
-      stock_2 = create(:stock, store: store_2)
-      stock_3 = create(:stock, store: store_3)
-      stock_4 = create(:stock, store: store_4)
+      stock = create(:stock, store: store_1, count: 10)
 
-      @variant.stocks << stock_1
-      @variant.stocks << stock_2
-      @variant.stocks << stock_3
+      @variant.stocks << stock
 
-      hash = {}
-      hash[store_1] = stock_1
-      hash[store_2] = stock_2
-      hash[store_3] = stock_3
-      hash[store_4] = build(:stock, store: store_4, variant: @variant)
-
-      expect(@variant.stocks_for_all_stores[store_1]).to eq hash[store_1]
-      expect(@variant.stocks_for_all_stores[store_2]).to eq hash[store_2]
-      expect(@variant.stocks_for_all_stores[store_3]).to eq hash[store_3]
-      expect(@variant.stocks_for_all_stores[store_4].new_record?).to eq hash[store_4].new_record?
+      expect(@variant.stocks_for_all_stores[store_1]).to eq stock
+      expect(@variant.stocks_for_all_stores[store_2]).to be_instance_of Glysellin::Stock
     end
   end
 
   describe '#properties_hash' do
     it 'returns a hash with identifier -> property' do
-      property_type_1 = create(:property_type, identifier: '001')
-      property_type_2 = create(:property_type, identifier: '002')
+      property_type = create(:property_type, identifier: '001')
+      property = create(:property, value: 'Propriété 1', property_type: property_type)
+      @variant.properties << property
 
-      property_1 = create(:property, value: 'Propriété 1', property_type: property_type_1)
-      property_2 = create(:property, value: 'Propriété 2', property_type: property_type_2)
-
-      @variant.properties << property_1
-      @variant.properties << property_2
-
-      hash = {}
-      hash['001'] = property_1
-      hash['002'] = property_2
-
-      expect(@variant.properties_hash).to eq hash
+      expect(@variant.properties_hash['001']).to eq property
     end
   end
 
