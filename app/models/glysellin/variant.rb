@@ -39,7 +39,7 @@ module Glysellin
     delegate :vat_rate, :vat_ratio, :weight, to: :sellable
 
     def ensure_name
-      return if name || properties.length == 0
+      return if name.presence || variant_properties.length == 0
       self.name = custom_name
     end
 
