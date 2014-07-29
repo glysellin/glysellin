@@ -45,6 +45,11 @@ FactoryGirl.define do
     sequence(:name) { |n| "Store #{ n }" }
   end
 
+  factory :discount, class: Glysellin::Discount do
+    value 10
+    discountable { create(:order) }
+  end
+
   factory :property_type, class: Glysellin::PropertyType do
     sequence(:name) { |n| "PropertyType #{ n }" }
     identifier { name.parameterize }
