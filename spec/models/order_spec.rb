@@ -39,6 +39,17 @@ describe Glysellin::Order do
     end
   end
 
+  describe '#payment_method' do
+    it 'returns the last order payment type if available' do
+      @order.payments << create(:payment)
+      expect(@order.payment_method).to eq @order.payments.last.payment_method
+    end
+
+    it 'returns nil if the last order payment is not available' do
+      expect(@order.payment_method).to eq nil
+    end
+  end
+
   describe "#ensure_ref" do
     it "sets the order reference to TIMESTAMP-ORDER_ID by defaut" do
       @order.ensure_ref

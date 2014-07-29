@@ -22,11 +22,7 @@ module Glysellin
     end
 
     def last_transaction_id
-      last_transaction = self.class
-        .where('transaction_id > 0')
-        .order('transaction_id DESC')
-        .first
-
+      last_transaction = self.class.where('transaction_id > 0').order('transaction_id DESC').first
       last_transaction ? last_transaction.transaction_id : 0
     end
 
