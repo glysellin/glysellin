@@ -30,6 +30,40 @@ describe Glysellin::Variant do
       expect(@variant).to receive(:check_prices)
       @variant.save
     end
+
+    it 'ensures the variant has a name' do
+      expect(@variant).to receive(:ensure_name)
+      @variant.save
+    end
+  end
+
+  describe '#ensure_name' do
+    context 'when no name is given by the user' do
+      before do
+        sellable = create(:sellable)
+        @variant = build(:variant, name: nil, sellable: sellable)
+      end
+
+      it 'generates a name from the properties when there are properties' do
+        property_type = create(:property_type)
+        @variant.properties << build(:property, property_type: property_type)
+        @variant.ensure_name
+        expect(@variant.name).not_to be_nil
+      end
+
+      it 'does not generate a name when there are no properties' do
+        @variant.ensure_name
+        expect(@variant.name).to be_nil
+      end
+    end
+
+    context 'when a name exists' do
+      it 'does not generate a new name' do
+        @variant.name = 'Variant name'
+        @variant.ensure_name
+        expect(@variant.name).to eq 'Variant name'
+      end
+    end
   end
 
   describe '#stocks_for_all_stores' do

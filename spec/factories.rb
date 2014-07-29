@@ -31,7 +31,7 @@ FactoryGirl.define do
 
   factory :property_type, class: Glysellin::PropertyType do
     sequence(:name) { |n| "PropertyType #{ n }" }
-    identifier 'identifier'
+    identifier { name.parameterize }
   end
 
   factory :taxonomy, class: Glysellin::Taxonomy do

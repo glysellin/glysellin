@@ -28,6 +28,7 @@ module Glysellin
 
     # validate :check_properties
     before_validation :check_prices
+    before_validation :ensure_name
 
     validate :generate_barcode, on: :create, unless: :"sku.presence"
     validates_numericality_of :eot_price, :price
@@ -36,6 +37,21 @@ module Glysellin
     scope :published, -> { where(published: true) }
 
     delegate :vat_rate, :vat_ratio, :weight, to: :sellable
+
+    def ensure_name
+      return if name || properties.length == 0
+      self.name = custom_name
+    end
+
+    def check_prices
+      return unless price.present? && eot_price.present?
+      # If we have to fill one of the prices when changed
+      if eot_changed_alone?
+        self.price = (eot_price * vat_ratio).round(2)
+      elsif price_changed_alone?
+        self.eot_price = (price / vat_ratio).round(2)
+      end
+    end
 
     # def check_properties
     #   errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']
@@ -94,16 +110,6 @@ module Glysellin
         for message in barcode.errors.full_messages
           errors.add :sku, message
         end
-      end
-    end
-
-    def check_prices
-      return unless price.present? && eot_price.present?
-      # If we have to fill one of the prices when changed
-      if eot_changed_alone?
-        self.price = (eot_price * vat_ratio).round(2)
-      elsif price_changed_alone?
-        self.eot_price = (price / vat_ratio).round(2)
       end
     end
 
