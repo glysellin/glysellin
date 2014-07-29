@@ -2,8 +2,9 @@ module Glysellin
   class Brand < ActiveRecord::Base
     self.table_name = "glysellin_brands"
 
-    has_many :sellables
+    scope :ordered, -> { order('glysellin_brands.name ASC') }
 
+    has_many :sellables, dependent: :nullify
     has_attached_file :image, styles: {
       thumb: '150x150#'
     }
@@ -11,7 +12,7 @@ module Glysellin
     validates :name, presence: true
 
     def self.order_and_print
-      order('glysellin_brands.name ASC').map do |brand|
+      ordered.map do |brand|
         ["#{ brand.name } (#{ brand.sellables_count } produit(s))", brand.id]
       end
     end

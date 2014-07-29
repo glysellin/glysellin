@@ -27,6 +27,10 @@ FactoryGirl.define do
   factory :shipment, class: Glysellin::Shipment
   factory :payment, class: Glysellin::Payment
 
+  factory :brand, class: Glysellin::Brand do
+    sequence(:name) { |n| "Brand #{ n }" }
+  end
+
   factory :abstract_order, class: Glysellin::AbstractOrder do
     customer { create(:customer) }
     shipping_address { create(:address) }
