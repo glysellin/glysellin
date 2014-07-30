@@ -34,14 +34,16 @@ describe Glysellin::Order do
 
   describe '#payment' do
     it 'returns the last order payment' do
-      @order.payments << create(:payment)
+      @order.payments << build(:payment)
+      @order.save!
       expect(@order.payment).to eq @order.payments.last
     end
   end
 
   describe '#payment_method' do
     it 'returns the last order payment type if available' do
-      @order.payments << create(:payment)
+      @order.payments << build(:payment)
+      @order.save!
       expect(@order.payment_method).to eq @order.payments.last.payment_method
     end
 

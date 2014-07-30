@@ -51,17 +51,15 @@ module Glysellin
     end
 
     def ensure_customer_addresses
-      if customer && !customer.billing_address
+      if customer && customer.billing_address.blank?
         customer.billing_address = billing_address.dup
+        customer.use_another_address_for_shipping = use_another_address_for_shipping
 
-        customer.use_another_address_for_shipping =
-          use_another_address_for_shipping
-
-        if use_another_address_for_shipping && !customer.shipping_address
+        if use_another_address_for_shipping && customer.shipping_address.blank?
           customer.shipping_address = shipping_address.dup
         end
 
-        customer.save
+        customer.save!
       end
     end
 

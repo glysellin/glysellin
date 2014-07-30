@@ -1,32 +1,29 @@
 require 'rubygems'
 require 'spork'
 require 'pp'
-require "paperclip/matchers"
+require 'paperclip/matchers'
 
 # uncomment the following line to use spork with the debugger
 # require 'spork/ext/ruby-debug'
 
 Spork.prefork do
-  ENV["RAILS_ENV"] ||= 'test'
+  ENV['RAILS_ENV'] ||= 'test'
 
   unless ENV['DRB']
     require 'simplecov'
     SimpleCov.start 'rails'
   end
 
-  require "rails/application"
+  require 'rails/application'
 
   Spork.trap_method(Rails::Application, :eager_load!)
   Spork.trap_method(Rails::Application::RoutesReloader, :reload!)
 
-  require File.expand_path("../dummy/config/environment", __FILE__)
+  require File.expand_path('../dummy/config/environment', __FILE__)
   require 'rspec/rails'
-  require 'rspec/autorun'
-
-  require 'shoulda/matchers/integrations/rspec'
-
-  require "factory_girl"
-  require "database_cleaner"
+  require 'shoulda/matchers'
+  require 'factory_girl'
+  require 'database_cleaner'
 
   RSpec.configure do |config|
     config.include FactoryGirl::Syntax::Methods
@@ -67,7 +64,7 @@ Spork.prefork do
     # order dependency and want to debug it, you can fix the order by providing
     # the seed, which is printed after each run.
     #     --seed 1234
-    config.order = "random"
+    config.order = 'random'
 
     # config.render_views = true
   end
@@ -86,8 +83,8 @@ Spork.each_run do
 
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
-  Dir[File.expand_path("../spec/support/**/*.rb", __FILE__)].each { |f| puts("REQUIRE #{ f }"); require f }
-  Dir[File.expand_path("lib/**/*.rb", __FILE__)].each { |f| require f }
+  Dir[File.expand_path('../spec/support/**/*.rb', __FILE__)].each { |f| puts('REQUIRE #{ f }'); require f }
+  Dir[File.expand_path('lib/**/*.rb', __FILE__)].each { |f| require f }
 
   FactoryGirl.reload
 end

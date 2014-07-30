@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140729101922) do
+ActiveRecord::Schema.define(version: 20140730085944) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -153,8 +153,6 @@ ActiveRecord::Schema.define(version: 20140729101922) do
 
   create_table "glysellin_orders", force: true do |t|
     t.string   "ref"
-    t.string   "status"
-    t.datetime "paid_on"
     t.integer  "user_id"
     t.integer  "customer_id"
     t.datetime "created_at"

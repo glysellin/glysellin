@@ -122,23 +122,23 @@ describe Glysellin::AbstractOrder do
           #{comparator_2}
         )
       }" do
-        @abstract_order.customer.billing_address = billing_address ? create(:address) : nil
-        @abstract_order.customer.shipping_address = shipping_address ? create(:address) : nil
-        @abstract_order.customer.use_another_address_for_shipping = use_another_address_for_shipping
+        customer = @abstract_order.customer
+        customer.billing_address = billing_address ? create(:address) : nil
+        customer.shipping_address = shipping_address ? create(:address) : nil
+
+        @abstract_order.use_another_address_for_shipping = use_another_address_for_shipping
         @abstract_order.ensure_customer_addresses
-
-        customer_billing_address = @abstract_order.customer.billing_address
-        customer_shipping_address = @abstract_order.customer.shipping_address
-
-        order_billing_address = @abstract_order.billing_address
-        order_shipping_address = @abstract_order.shipping_address
 
         for attribute in [:first_name, :last_name, :address, :zip, :city, :country]
           unless billing_address
-            expect(customer_billing_address.send(attribute)).send(comparator_1, eq(order_billing_address.send(attribute)))
+            expect(customer.billing_address.send(attribute)).send(
+              comparator_1, eq(@abstract_order.billing_address.send(attribute))
+            )
 
             if use_another_address_for_shipping && !shipping_address
-              expect(customer_shipping_address.send(attribute)).send(comparator_2, eq(order_shipping_address.send(attribute)))
+              expect(customer.shipping_address.send(attribute)).send(
+                comparator_2, eq(@abstract_order.shipping_address.send(attribute))
+              )
             end
           end
         end
