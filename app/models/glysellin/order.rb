@@ -16,6 +16,8 @@ module Glysellin
     belongs_to :customer, class_name: 'Glysellin::Customer'
     delegate :balanced?, to: :payments, prefix: true
 
+    after_save :set_prices_cache_columns
+
     state_machine :state, initial: :pending do
       event :complete do
         transition all => :completed
@@ -32,6 +34,12 @@ module Glysellin
       after_transition on: :cancel do |order|
         order.shipment.cancel! if order.shipment.shipped?
       end
+    end
+
+    def set_prices_cache_columns
+      # (!) is ugly but we should have errors here at all, nil.to_s return ''
+      update_column :total_price_cache, total_price.to_s.gsub('.', ',')
+      update_column :total_eot_price_cache, total_eot_price.to_s.gsub('.', ',')
     end
 
     def process_payments

@@ -1,3 +1,5 @@
+require 'abstract_controller/base'
+
 module Glysellin
 
   def self.gateways

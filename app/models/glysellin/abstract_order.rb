@@ -7,16 +7,10 @@ module Glysellin
 
     attr_accessor :discount_code
 
+    has_many :line_items, through: :parcels
     has_many :parcels, as: :sendable, inverse_of: :sendable
     accepts_nested_attributes_for :parcels, allow_destroy: true,
                                   reject_if: :all_blank
-
-    has_many :line_items, through: :parcels
-
-    # The actual buyer
-    belongs_to :customer
-
-    belongs_to :store
 
     has_one :shipment, as: :shippable, dependent: :destroy
     accepts_nested_attributes_for :shipment, allow_destroy: true
@@ -26,7 +20,6 @@ module Glysellin
                                   reject_if: :all_blank
 
     validates :customer, :billing_address, :parcels, presence: true
-
     validates :shipping_address, presence: true,
               if: :use_another_address_for_shipping
 
@@ -34,6 +27,9 @@ module Glysellin
 
     after_create :ensure_customer_addresses
     after_create :ensure_ref
+
+    belongs_to :customer
+    belongs_to :store
 
     scope :from_customer, ->(customer_id) { where(customer_id: customer_id) }
     scope :active, -> { where.not(state: :canceled) }
@@ -43,8 +39,6 @@ module Glysellin
       cached ? parcels.map(&:line_items).flatten : super()
     end
 
-    # Ensures there is always an order reference
-    #
     def ensure_ref
       unless ref
         update_column(:ref, Glysellin.order_reference_generator.call(self))
@@ -56,26 +50,19 @@ module Glysellin
       write_attribute(:total_eot_price, total_eot_price)
     end
 
-    # Ensures that the customer has a billing and, if needed shipping, address.
-    #
     def ensure_customer_addresses
-      if customer && !customer.billing_address
+      if customer && customer.billing_address.blank?
         customer.billing_address = billing_address.dup
+        customer.use_another_address_for_shipping = use_another_address_for_shipping
 
-        customer.use_another_address_for_shipping =
-          use_another_address_for_shipping
-
-        if use_another_address_for_shipping && !customer.shipping_address
+        if use_another_address_for_shipping && customer.shipping_address.blank?
           customer.shipping_address = shipping_address.dup
         end
 
-        customer.save
+        customer.save!
       end
     end
 
-    # Customer's e-mail directly accessible from the order
-    #
-    # @return [String] the wanted e-mail string
     def email
       customer && customer.email
     end

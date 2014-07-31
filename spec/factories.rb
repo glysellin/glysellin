@@ -27,8 +27,27 @@ FactoryGirl.define do
   factory :shipment, class: Glysellin::Shipment
   factory :payment, class: Glysellin::Payment
 
+  factory :brand, class: Glysellin::Brand do
+    sequence(:name) { |n| "Brand #{ n }" }
+  end
+
+  factory :abstract_order, class: Glysellin::AbstractOrder do
+    customer { create(:customer) }
+    shipping_address { create(:address) }
+    billing_address { create(:address) }
+
+    before(:create) do |abstract_order, evaluator|
+      abstract_order.parcels << create(:parcel)
+    end
+  end
+
   factory :store, class: Glysellin::Store do
     sequence(:name) { |n| "Store #{ n }" }
+  end
+
+  factory :discount, class: Glysellin::Discount do
+    value 10
+    discountable { create(:order) }
   end
 
   factory :property_type, class: Glysellin::PropertyType do

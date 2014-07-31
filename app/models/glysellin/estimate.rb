@@ -32,10 +32,9 @@ module Glysellin
 
       order.customer = customer
       order.use_another_address_for_shipping = use_another_address_for_shipping
-      order.billing_address = billing_address.dup
-      order.shipping_address = shipping_address.dup
-
-      order.shipment = shipment.dup
+      order.billing_address = billing_address.try(:dup)
+      order.shipping_address = shipping_address.try(:dup)
+      order.shipment = shipment.try(:dup)
 
       self.order = order
       save!

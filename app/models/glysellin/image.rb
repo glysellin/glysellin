@@ -3,8 +3,6 @@ module Glysellin
     self.table_name = 'glysellin_images'
 
     belongs_to :imageable, dependent: :destroy
-    has_many :imageable_owners, through: :imageable, source: :imageable_owner
-
     has_attached_file :image, styles: Glysellin.product_images_styles
 
     validates_attachment :image, content_type: {

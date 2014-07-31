@@ -2,32 +2,20 @@ module Glysellin
   class Address < ActiveRecord::Base
     self.table_name = 'glysellin_addresses'
 
-    # Additional fields can be added through Glysellin.config.additional_address_fields in an app initializer
     store :additional_fields, :accessors => Glysellin.additional_address_fields
-    # Relations
-    #
-    # And address can be used as shipping or billing address
+
     belongs_to :shipped_addressable, polymorphic: true
     belongs_to :billed_addressable, polymorphic: true
 
-    # Validations
-    #
-    # Validates presence of the fields defined in the config file or the glysellin initializer
     validates_presence_of :company_name, unless: :first_name
     validates_presence_of :first_name, :last_name, unless: :company_name
 
-    def same_as?(other)
-      clone_attributes == other.clone_attributes
-    end
-
     def full_name
-      [first_name, last_name, company_name].reduce([]) do |name, str|
-        name << (str || "")
-      end.join(" ")
+      [first_name, last_name, company_name].map(&:presence).compact.join ' '
     end
 
     def location_string
-      [zip, city, country].map(&:presence).compact.join(', ')
+      [zip, city, country].map(&:presence).compact.join ', '
     end
   end
 end

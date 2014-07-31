@@ -9,8 +9,8 @@ module Glysellin
     validates_presence_of :first_name, :last_name,
                           unless: :company_name_filled_in?
 
-    validates_presence_of :email, if: proc { |customer| customer.user_id.present? }
-    validates_uniqueness_of :email, if: proc { |customer| customer.email.present? }
+    validates_presence_of :email,   if: Proc.new { |customer| customer.user.present? }
+    validates_uniqueness_of :email, if: Proc.new { |customer| customer.email.present? }
 
     has_many :orders, class_name: 'Glysellin::Order', foreign_key: :customer_id
     belongs_to :user, class_name: 'User'
