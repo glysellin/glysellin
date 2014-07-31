@@ -4,11 +4,13 @@ module Glysellin
 
     self.table_name = 'glysellin_customers'
 
+    acts_as_taggable_on :groups
+
     validates_presence_of :first_name, :last_name,
                           unless: :company_name_filled_in?
 
-    validates_presence_of :email, if: :'user_id.present?'
-    validates_uniqueness_of :email, if: :'email.present?'
+    validates_presence_of :email, if: proc { |customer| customer.user_id.present? }
+    validates_uniqueness_of :email, if: proc { |customer| customer.email.present? }
 
     has_many :orders, class_name: 'Glysellin::Order', foreign_key: :customer_id
     belongs_to :user, class_name: 'User'

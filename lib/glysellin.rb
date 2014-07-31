@@ -1,6 +1,10 @@
 require "active_model/model"
 require "paperclip"
 require "state_machine"
+require "acts-as-taggable-on"
+
+require 'countries'
+require 'country_select'
 
 require "glysellin/engine"
 require "glysellin/gateway"
@@ -9,7 +13,6 @@ require "glysellin/discount_type_calculator"
 require "glysellin/vat_rates"
 require "glysellin/products_list"
 require "glysellin/shipping_carrier"
-# require "glysellin/cart"
 require "glysellin/available_stock"
 require "glysellin/order_stock_migration"
 require "glysellin/payments"
