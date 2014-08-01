@@ -6,7 +6,7 @@
       <%= fsa.input :address, :as => :text %>
       <%= fsa.input :zip %>
       <%= fsa.input :city %>
-      <%= fsa.input :country, collection: countries_option_list %>
+      <%= fsa.input :country, collection: ISO3166::Country::Names %>
       <%= fsa.input :tel %>
     <% end %>
   </div>
@@ -22,7 +22,7 @@
       <%= fsa.input :address, :as => :text %>
       <%= fsa.input :zip %>
       <%= fsa.input :city %>
-      <%= fsa.input :country, collection: countries_option_list %>
+      <%= fsa.input :country, collection: ISO3166::Country::Names %>
       <%= fsa.input :tel %>
     <% end %>
   </div>

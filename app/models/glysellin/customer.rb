@@ -4,6 +4,8 @@ module Glysellin
 
     self.table_name = 'glysellin_customers'
 
+    acts_as_taggable_on :groups
+
     validates_presence_of :first_name, :last_name,
                           unless: :company_name_filled_in?
 
