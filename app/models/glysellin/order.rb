@@ -37,7 +37,6 @@ module Glysellin
     end
 
     def set_prices_cache_columns
-      # (!) is ugly but we should have errors here at all, nil.to_s return ''
       update_column :total_price_cache, total_price.to_s.gsub('.', ',')
       update_column :total_eot_price_cache, total_eot_price.to_s.gsub('.', ',')
     end
