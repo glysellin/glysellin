@@ -34,6 +34,21 @@ module Glysellin
       company_name.present?
     end
 
+    def regenerate_password
+      password = Devise.friendly_token.first(8)
+      unless user
+        self.update! user:
+          create_user! do |u|
+            u.email = email
+            u.password = password
+          end
+      else
+        self.user.update! password: password
+      end
+
+      password
+    end
+
     private
 
     def setup_user_email
