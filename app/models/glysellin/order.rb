@@ -14,6 +14,7 @@ module Glysellin
     accepts_nested_attributes_for :payments, allow_destroy: true
 
     belongs_to :customer, class_name: 'Glysellin::Customer'
+    belongs_to :store_client, class_name: 'Glysellin::StoreClient'
     delegate :balanced?, to: :payments, prefix: true
 
     after_save :set_prices_cache_columns
