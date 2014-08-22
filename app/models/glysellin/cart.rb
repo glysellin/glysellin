@@ -99,7 +99,7 @@ module Glysellin
     validate :line_items_variants_published
     validate :line_items_in_stock
     validate :line_items_stocks_available
-    validate :discount_code_valid, if: :"discount_code.presence"
+    validate :discount_code_valid, if: Proc.new { |cart| discount_code.present? }
 
     def self.fetch_or_initialize options
       where(id: options[:id]).first_or_initialize do |cart|

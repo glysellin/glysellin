@@ -34,10 +34,21 @@ module Glysellin
       company_name.present?
     end
 
+    def ensure_user!
+      unless user
+        self.update! user:
+          create_user! do |u|
+            u.email = email
+            u.password = Devise.friendly_token.first(8)
+          end
+      end
+    end
+
     private
+
     def setup_user_email
-      return unless user_id.present? && !Rails.env.test?
-      user.email = email
+      return unless user.present? && !Rails.env.test?
+      user.update! email: email
     end
   end
 end
