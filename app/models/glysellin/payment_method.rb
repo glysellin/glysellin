@@ -26,10 +26,10 @@ module Glysellin
     # @param [Order] order The order to get the payment request for
     #
     # @return [String] The request button HTML
-    def request_button order
+    def request_button order, options = {}
       payment_method = order.payments.last.payment_method
       gateway = Glysellin.gateways[payment_method.identifier].new(order)
-      gateway.render_request_button
+      gateway.render_request_button(options)
     end
   end
 end

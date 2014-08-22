@@ -21,6 +21,9 @@ module Glysellin
       mattr_accessor :capture_days
       @@capture_days = nil
 
+      mattr_accessor :data_generator
+      @@data_generator = nil
+
       attr_accessor :errors, :order
 
       def initialize order
@@ -48,21 +51,25 @@ module Glysellin
         end
       end
 
-      def render_request_button
-        exec_chain = {
+      def render_request_button(options = {})
+        default_options = {
           :merchant_id => @@merchant_id,
           :merchant_country => @@merchant_country,
           :capture_mode => @@capture_mode,
           :pathfile => @@pathfile_path,
-          :data => @order.id,
+          :data => @@data_generator && @@data_generator.call(@order),
           :amount => (@order.total_price * 100).to_i,
           :transaction_id => @order.payment.get_new_transaction_id
-        }.to_a.map { |item| item[0].to_s + '=' + item[1].to_s }.join(' ')
+        }
+
+        exec_chain = default_options.merge(options).map do |key, value|
+          "#{ key }=#{ value }" if value
+        end.compact.join(' ')
 
         bin_path = "#{ @@bin_path }/request"
 
         begin
-          data = `#{bin_path} #{exec_chain}`
+          data = `#{ bin_path } #{ exec_chain }`
           results = data.presence ? data.split('!') : []
         # If OS didn't want to exec program
         rescue Errno::ENOEXEC

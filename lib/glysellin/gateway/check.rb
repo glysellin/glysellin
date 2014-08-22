@@ -18,7 +18,7 @@ module Glysellin
         @errors = []
       end
 
-      def render_request_button
+      def render_request_button(options = {})
          { :text => @@check_payment_description.call(@order) }
       end
 

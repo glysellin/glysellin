@@ -92,8 +92,15 @@ module Glysellin
     #   atos.bin_path = Rails.root.join('bin')
     #   atos.merchant_country = 'fr'
     #   atos.capture_mode = 'AUTHOR_CAPTURE'
-    #   atos.capture_days = nil
+    #
+    #   # Activate debugging local API calls
     #   atos.activate_logger = false
+    #
+    #   # The `data` field allows sending raw data to be stored with the
+    #   # transaction, on the bank server side.
+    #   # This parameter lets you define how to generate this data from the
+    #   # passed order
+    #   atos.data_generator = ->(order) { order.id }
     # end
 
     # config.gateways['check'].config do |c|
