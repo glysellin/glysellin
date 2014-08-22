@@ -52,7 +52,7 @@ module ActionDispatch::Routing
         cart: 'glysellin/cart'
       }
 
-      defaults.merge(options)
+      defaults.merge(options.fetch(:controllers, {}))
     end
   end
 end
