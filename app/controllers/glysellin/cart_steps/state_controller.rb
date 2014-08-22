@@ -4,8 +4,8 @@ module Glysellin
       def show
         state = params[:state]
 
-        if current_cart.available_events.include?(state)
-          current_cart.public_send(:"#{ state }!")
+        if current_cart.available_states.include?(state)
+          current_cart.update_attributes(state: state)
         end
 
         redirect_to cart_path

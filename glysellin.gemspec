@@ -15,11 +15,11 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{app,config,db,lib}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'README.md']
 
-  s.add_dependency 'rails', '~> 4.1.4'
+  s.add_dependency 'rails', '~> 4.0'
   s.add_dependency 'paperclip'
   s.add_dependency 'aws-sdk'
   s.add_dependency 'money'
-  s.add_dependency 'activemerchant'
+  s.add_dependency 'offsite_payments'
   s.add_dependency 'simple_form'
   s.add_dependency 'countries'
   s.add_dependency 'country_select'

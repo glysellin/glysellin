@@ -1,13 +1,13 @@
 require 'money'
-require 'active_merchant'
-require 'active_merchant/billing/integrations/action_view_helper'
+require 'offsite_payments'
+require 'offsite_payments/action_view_helper'
 
-ActionView::Base.send(:include, ActiveMerchant::Billing::Integrations::ActionViewHelper)
+ActionView::Base.send(:include, OffsitePayments::ActionViewHelper)
 
 module Glysellin
   module Gateway
     class PaypalIntegral < Glysellin::Gateway::Base
-      include ActiveMerchant::Billing::Integrations
+      include OffsitePayments::Integrations
       register 'paypal-integral', self
 
       mattr_accessor :account
@@ -24,10 +24,10 @@ module Glysellin
         @errors = []
       end
 
-      # Switch between test and prod modes for ActiveMerchant Paypal
+      # Switch between test and prod modes for OffsitePayments Paypal
       class << self
         def test=(val)
-          ActiveMerchant::Billing::Base.mode = val ? :test : :production
+          OffsitePayments.mode = val ? :test : :production
           @@test = val
         end
       end
