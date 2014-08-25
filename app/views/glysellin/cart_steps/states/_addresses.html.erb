@@ -4,9 +4,9 @@
   <%= f.fields_for :customer, (f.object.customer || (current_user && current_user.customer) || f.object.build_customer), include_id: !!f.object.customer do |fc| %>
     <% new_record = !fc.object.id %>
 
-    <%= fc.input :email, input_html: { disabled: current_user.present?, value: current_user.try(:email) } %>
+    <%= fc.input :email, input_html: { disabled: current_user.present?, value: (fc.object.email.presence || (current_user && current_user.email) || nil) } %>
 
-    <% if new_record && !current_user %>
+    <% if !current_user %>
       <%= fc.fields_for :user, (fc.object.user || fc.object.build_user) do |fu| %>
         <%= fu.input :password %>
         <%= fu.input :password_confirmation %>

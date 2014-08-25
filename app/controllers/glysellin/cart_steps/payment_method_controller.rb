@@ -2,11 +2,15 @@ module Glysellin
   module CartSteps
     class PaymentMethodController < CartController
       def update
-        if current_cart.update_attributes(cart_params)
+        if params[:cart] && current_cart.update_attributes(cart_params)
           current_cart.payment_method_chosen!
           OrderCustomerMailer.send_order_created_email(current_cart.order).deliver
           redirect_to cart_path
         else
+          if !params[:cart]
+            flash[:error] = t('glysellin.errors.cart.state_transitions.choose_payment_method')
+          end
+
           current_cart.state = "choose_payment_method"
           render "glysellin/cart/show"
         end
