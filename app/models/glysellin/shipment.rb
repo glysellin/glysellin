@@ -36,6 +36,14 @@ module Glysellin
       shipping_method || (price && price > 0)
     end
 
+    def eot_price
+      read_attribute(:price) || 0
+    end
+
+    def price
+      read_attribute(:price) || 0
+    end
+
     private
 
     def migrate_stocks
