@@ -38,7 +38,7 @@ module Glysellin
     end
 
     def eot_subtotal
-      quantity * eot_price
+      eot_price * quantity
     end
 
     def subtotal
