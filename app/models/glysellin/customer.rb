@@ -48,7 +48,7 @@ module Glysellin
 
     def setup_user_email
       return unless user.present? && !Rails.env.test?
-      user.update! email: email
+      user.email = email
     end
   end
 end
