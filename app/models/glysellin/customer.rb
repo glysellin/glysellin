@@ -14,6 +14,7 @@ module Glysellin
 
     has_many :orders, class_name: 'Glysellin::Order', foreign_key: :customer_id
     belongs_to :user, class_name: 'User'
+    belongs_to :customer_type, class_name: 'Glysellin::CustomerType'
 
     accepts_nested_attributes_for :user, reject_if: :all_blank
     before_validation :setup_user_email

@@ -18,6 +18,7 @@ module Glysellin
     has_many :variant_properties, dependent: :destroy, inverse_of: :variant
     accepts_nested_attributes_for :variant_properties, allow_destroy: true
 
+    has_many :customer_types_variants, dependent: :destroy, class_name: 'Glysellin::CustomerTypesVariant'
     has_many :properties, through: :variant_properties
 
     has_many :stocks, dependent: :destroy
