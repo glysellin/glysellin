@@ -39,6 +39,10 @@ module Glysellin
 
     delegate :vat_rate, :vat_ratio, :weight, to: :sellable
 
+    def eot_price_for(customer)
+      customer_types_variants.where(customer_type: customer.customer_type).first.try(:eot_price) || eot_price
+    end
+
     def ensure_name
       return if name.presence || variant_properties.length == 0
       self.name = custom_name
