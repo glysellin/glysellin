@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140730085944) do
+ActiveRecord::Schema.define(version: 20140828113127) do
 
   create_table "glysellin_addresses", force: true do |t|
     t.boolean  "activated",                default: true
@@ -166,6 +166,9 @@ ActiveRecord::Schema.define(version: 20140730085944) do
     t.string   "state"
     t.string   "type"
     t.integer  "order_id"
+    t.string   "total_price_cache"
+    t.string   "total_eot_price_cache"
+    t.integer  "store_client_id"
   end
 
   create_table "glysellin_parcels", force: true do |t|
@@ -266,6 +269,7 @@ ActiveRecord::Schema.define(version: 20140730085944) do
     t.integer  "variant_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "threshold"
   end
 
   create_table "glysellin_store_clients", force: true do |t|

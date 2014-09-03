@@ -18,6 +18,7 @@ module Glysellin
     has_many :variant_properties, dependent: :destroy, inverse_of: :variant
     accepts_nested_attributes_for :variant_properties, allow_destroy: true
 
+    has_many :customer_types_variants, dependent: :destroy, class_name: 'Glysellin::CustomerTypesVariant'
     has_many :properties, through: :variant_properties
 
     has_many :stocks, dependent: :destroy
@@ -37,6 +38,10 @@ module Glysellin
     scope :published, -> { where(published: true) }
 
     delegate :vat_rate, :vat_ratio, :weight, to: :sellable
+
+    def eot_price_for(customer_type)
+      customer_types_variants.where(customer_type: customer_type).first.try(:eot_price) || eot_price
+    end
 
     def ensure_name
       return if name.presence || variant_properties.length == 0
