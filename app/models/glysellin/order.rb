@@ -31,6 +31,8 @@ module Glysellin
       after_transition on: :paid, do: :set_payment
     end
 
+    has_one :invoice, dependent: :destroy
+
     # Relations
     #
     # Order items are used to map order to cloned and simplified products
@@ -232,7 +234,7 @@ module Glysellin
       # If we are given a specific shipping address
       if use_another_address && data[:shipping_address_attributes]
         self.build_shipping_address(data[:shipping_address_attributes])
-    
+
       # Define shipping address if we must use same address
       else
         self.build_shipping_address(billing_params)
