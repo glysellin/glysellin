@@ -12,6 +12,10 @@ module Glysellin
       end
     end
 
+    def vat_rates
+      @vat_rates ||= Glysellin::VatRates.new(self)
+    end
+
     # Gets order subtotal from items only
     #
     # @param [Boolean] df Defines if we want to get duty free price or not
@@ -29,6 +33,18 @@ module Glysellin
         item, quantity = quantified_item
         total + (item.eot_price * quantity)
       end
+    end
+
+    def discounts_eot_total
+      discounts.map(&:eot_price).reduce(&:+) || 0
+    end
+
+    def discounts_total
+      discounts.map(&:price).reduce(&:+) || 0
+    end
+
+    def discounts_total_vat
+      discounts_total - discounts_eot_total
     end
 
     # Not implemented yet

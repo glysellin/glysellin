@@ -42,5 +42,13 @@ module Glysellin
     def by_check?
       type.slug == 'check'
     end
+
+    def payment_method
+      type
+    end
+
+    def amount
+      order && order.total_price || 0
+    end
   end
 end

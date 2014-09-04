@@ -4,7 +4,7 @@ module Glysellin
 
     # Additional fields can be added through Glysellin.config.additional_address_fields in an app initializer
     store :additional_fields, :accessors => Glysellin.additional_address_fields
-    attr_accessible *Glysellin.additional_address_fields
+    attr_accessible(*Glysellin.additional_address_fields)
     # Relations
     #
     # And address can be used as shipping or billing address
@@ -19,6 +19,14 @@ module Glysellin
     # Validations
     #
     # Validates presence of the fields defined in the config file or the glysellin initializer
-    validates_presence_of *Glysellin.address_presence_validation_keys
+    validates_presence_of(*Glysellin.address_presence_validation_keys)
+
+    def full_name
+      [first_name, last_name, company_name].map(&:presence).compact.join ' '
+    end
+
+    def location_string
+      [zip, city, country].map(&:presence).compact.join ', '
+    end
   end
 end

@@ -2,6 +2,7 @@ require "glysellin/engine"
 require "glysellin/helpers"
 require "glysellin/gateway"
 require "glysellin/product_methods"
+require "glysellin/vat_rates"
 require "glysellin/products_list"
 require "glysellin/cart"
 
@@ -88,6 +89,12 @@ module Glysellin
     address: ORDER_STEP_PAYMENT_METHOD,
     payment: ORDER_STEP_PAYMENT
   }
+
+  mattr_accessor :order_paid_email_attachments
+  @@order_paid_email_attachments = nil
+
+  mattr_accessor :invoice_number_generator
+  @@invoice_number_generator = nil
 
   # Product images paperclip styles
   mattr_accessor :product_images_styles

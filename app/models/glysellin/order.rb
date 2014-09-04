@@ -70,6 +70,22 @@ module Glysellin
       items.map { |product| [product, product.quantity] }
     end
 
+    def line_items
+      items
+    end
+
+    def discounts
+      []
+    end
+
+    def shipment
+      nil
+    end
+
+    def comment
+      nil
+    end
+
     # Ensure there is always an order reference for billing purposes
     def check_ref
       update_attribute(:ref, self.generate_ref) unless self.ref

@@ -43,5 +43,17 @@ module Glysellin
     def total_price
       quantity * price
     end
+
+    def discount
+      nil
+    end
+
+    def total_vat
+      total_eot_price * vat_rate_division
+    end
+
+    def vat_rate_division
+      (vat_rate / 100.0)
+    end
   end
 end
