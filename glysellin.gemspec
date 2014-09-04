@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 3.2.0"
   s.add_dependency "paperclip"
   s.add_dependency "money"
-  s.add_dependency "activemerchant"
+  s.add_dependency "activemerchant", "1.32.1"
   s.add_dependency "simple_form"
   s.add_dependency "country_select"
   s.add_dependency "state_machine"
