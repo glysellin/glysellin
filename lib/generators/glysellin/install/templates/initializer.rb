@@ -63,10 +63,13 @@ module Glysellin
     #
     # config.send_email_on_check_order_placed = true
 
-    # Set steps order to be used while using automatic order process
+    # Allows to generate attachments to add to e-mails when order is
+    # paid
     #
-    # config.step_routes = {
-    #   payment_method_chosen: ORDER_STEP_PAYMENT
+    # config.order_paid_email_attachments = ->(order) {
+    #     Return an array of objects that respond to :
+    #       - file_name (e.g. Invoice.pdf)
+    #       - read (text or binary data to encode and attach to the mail)
     # }
 
     # Config paypal account

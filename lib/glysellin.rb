@@ -124,6 +124,9 @@ module Glysellin
   mattr_reader :mailer_subjects
   @@mailer_subjects = -> { I18n.t('glysellin.mailer') }
 
+  mattr_accessor :order_paid_email_attachments
+  @@order_paid_email_attachments = nil
+
   # Permits using config block in order to set
   #   Glysellin module attributes
   #
