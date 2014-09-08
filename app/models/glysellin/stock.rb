@@ -10,4 +10,8 @@ class Glysellin::Stock < ActiveRecord::Base
   def available_stock
     @available_stock ||= Glysellin::AvailableStock.new(self)
   end
+
+  def threshold
+    read_attribute(:threshold) || Glysellin.default_stock_alert_threshold
+  end
 end

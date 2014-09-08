@@ -63,6 +63,14 @@ module Glysellin
     #
     # config.send_email_on_check_order_placed = true
 
+    # Configure a default stock alert threshold to be returned by
+    # stock instances.
+    #
+    # It allows for example to create alerts for products that are out of stock
+    # and notify them to the shop admin
+    #
+    # config.default_stock_alert_threshold = 0
+
     # Allows to generate attachments to add to e-mails when order is
     # paid
     #

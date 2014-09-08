@@ -127,7 +127,10 @@ module Glysellin
   mattr_accessor :order_paid_email_attachments
   @@order_paid_email_attachments = nil
 
-  # Permits using config block in order to set
+  mattr_accessor :default_stock_alert_threshold
+  @@default_stock_alert_threshold = 0
+
+  # Allows using config block in order to set
   #   Glysellin module attributes
   #
   # Examples
