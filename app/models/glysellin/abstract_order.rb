@@ -15,6 +15,8 @@ module Glysellin
     accepts_nested_attributes_for :line_items, allow_destroy: true,
                                   reject_if: :all_blank
 
+    has_many :variants, through: :line_items, class_name: 'Glysellin::Variant'
+
     has_one :shipment, as: :shippable, dependent: :destroy
     accepts_nested_attributes_for :shipment, allow_destroy: true
 
