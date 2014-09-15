@@ -32,7 +32,7 @@ module Glysellin
     before_validation :ensure_name
 
     validate :generate_barcode, on: :create, unless: Proc.new { |variant| variant.sku.present? }
-    validates_numericality_of :eot_price, :price
+    # validates_numericality_of :eot_price, :price
     validates :name, presence: true
 
     scope :published, -> { where(published: true) }
@@ -44,7 +44,7 @@ module Glysellin
     end
 
     def ensure_name
-      return if name.presence || variant_properties.length == 0
+      return if name.presence || properties.length == 0
       self.name = custom_name
     end
 
@@ -72,7 +72,7 @@ module Glysellin
     end
 
     def custom_name
-      if variant_properties.any?
+      if properties.any?
         properties_names = properties.map(&:value).join(', ')
         [sellable.name, properties_names].join(' — ')
       else
