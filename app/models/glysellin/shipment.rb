@@ -20,6 +20,11 @@ module Glysellin
 
       before_transition on: :ship, do: :migrate_stocks
       before_transition on: :cancel, do: :reset_shipment
+
+      before_transition on: :ship do |base, transition|
+        base.sent_on = Time.now
+        base.migrate_stocks
+      end
     end
 
     def vat_rate
@@ -44,11 +49,11 @@ module Glysellin
       read_attribute(:price) || 0
     end
 
-    private
-
     def migrate_stocks
       stock_migration.apply
     end
+
+    private
 
     def rollback_stocks
       stock_migration.rollback
