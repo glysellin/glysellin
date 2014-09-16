@@ -18,9 +18,7 @@ module Glysellin
         before_save :ship, if: :sent_on
       end
 
-      before_transition on: :ship, do: :migrate_stocks
       before_transition on: :cancel, do: :reset_shipment
-
       before_transition on: :ship do |base, transition|
         base.sent_on = Time.now
         base.migrate_stocks
