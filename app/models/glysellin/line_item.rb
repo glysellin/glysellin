@@ -23,11 +23,20 @@ module Glysellin
       )
     }
 
-    def autofill_from(variant)
+    def autofill_from(variant, customer_type = nil)
       self.variant_id = variant.id
 
-      %w(sku name eot_price price vat_rate weight).each do |key|
-        self.public_send(:"#{ key }=", variant.public_send(key))
+      unless customer_type
+        %w(sku name eot_price price vat_rate weight).each do |key|
+          self.public_send(:"#{ key }=", variant.public_send(key))
+        end
+      else
+        %w(sku name vat_rate weight).each do |key|
+          self.public_send(:"#{ key }=", variant.public_send(key))
+        end
+
+        self.eot_price = variant.eot_price_for(customer_type)
+        self.price = price
       end
     end
 
