@@ -40,6 +40,7 @@ module Glysellin
     delegate :vat_rate, :vat_ratio, :weight, to: :sellable
 
     def eot_price_for(customer_type)
+      return eot_price unless customer_type.present?
       customer_types_variants.where(customer_type: customer_type).first.try(:eot_price) || eot_price
     end
 
