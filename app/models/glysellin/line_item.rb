@@ -3,7 +3,7 @@ module Glysellin
     self.table_name = 'glysellin_line_items'
 
     belongs_to :variant
-    belongs_to :container, polymorphic: true
+    belongs_to :container, polymorphic: true, touch: true
 
     has_one :discount, as: :discountable, inverse_of: :discountable
     accepts_nested_attributes_for :discount, allow_destroy: true,

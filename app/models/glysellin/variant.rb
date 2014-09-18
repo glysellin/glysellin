@@ -80,6 +80,15 @@ module Glysellin
       end
     end
 
+    def long_name
+      if properties.any?
+        properties_names = properties.map(&:value).join(', ')
+        [sellable.taxonomy.path[1..-1].map(&:name).flatten, sellable.name, properties_names].join(' — ')
+      else
+        [sellable.taxonomy.path[1..-1].map(&:name).flatten, sellable.name].join(' — ')
+      end
+    end
+
     # EAGER LOAD PROPERTYTYPE TO AVOID N+1
     def properties_hash
       @properties_hash ||= begin

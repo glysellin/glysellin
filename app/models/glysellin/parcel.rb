@@ -2,7 +2,7 @@ module Glysellin
   class Parcel < ActiveRecord::Base
     self.table_name = 'glysellin_parcels'
 
-    belongs_to :sendable, polymorphic: true
+    belongs_to :sendable, polymorphic: true, touch: true
 
     has_many :line_items, as: :container, inverse_of: :container
     accepts_nested_attributes_for :line_items, allow_destroy: true,
