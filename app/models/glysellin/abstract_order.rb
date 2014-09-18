@@ -7,7 +7,7 @@ module Glysellin
 
     attr_accessor :discount_code
 
-    has_many :parcels, as: :sendable, inverse_of: :sendable
+    has_many :parcels, as: :sendable, inverse_of: :sendable, dependent: :destroy
     accepts_nested_attributes_for :parcels, allow_destroy: true,
                                   reject_if: :all_blank
 
