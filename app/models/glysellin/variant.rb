@@ -82,11 +82,19 @@ module Glysellin
     end
 
     def long_name
-      if properties.any?
-        properties_names = properties.map(&:value).join(', ')
-        [sellable.taxonomy.path[1..-1].map(&:name).flatten, sellable.name, properties_names].join(' — ')
+      properties = variant_properties.map(&:property)
+
+      if properties.length > 0
+        [
+          sellable.taxonomy.path[1..-1].map(&:name).flatten,
+          sellable.name,
+          properties.map(&:value).join(', ')
+        ].join(' - ')
       else
-        [sellable.taxonomy.path[1..-1].map(&:name).flatten, sellable.name].join(' — ')
+        [
+          sellable.taxonomy.path[1..-1].map(&:name).flatten,
+          sellable.name
+        ].join(' - ')
       end
     end
 
