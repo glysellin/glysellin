@@ -41,7 +41,28 @@ module Glysellin
 
     def eot_price_for(customer_type)
       return eot_price unless customer_type.present?
-      customer_types_variants.where(customer_type: customer_type).first.try(:eot_price) || eot_price
+
+      customer_type_id = if customer_type.is_a?(Glysellin::CustomerType)
+        customer_type.id
+      else
+        customer_type.to_i
+      end
+
+      variant_price = customer_types_variants.find do |customer_types_variant|
+        customer_types_variant.customer_type_id == customer_type_id
+      end
+
+      if variant_price
+        variant_price.eot_price
+      else
+        eot_price
+      end
+    end
+
+    def price_for(customer_type)
+      return eot_price unless customer_type.present?
+
+      (eot_price_for(customer_type) * vat_ratio).round(2)
     end
 
     def ensure_name
