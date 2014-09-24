@@ -30,6 +30,7 @@ module Glysellin
     # validate :check_properties
     before_validation :check_prices
     before_validation :ensure_name
+    before_validation :refresh_long_name
 
     validate :generate_barcode, on: :create, unless: Proc.new { |variant| variant.sku.present? }
     # validates_numericality_of :eot_price, :price
@@ -102,21 +103,23 @@ module Glysellin
       end
     end
 
-    def long_name
+    def refresh_long_name
       properties = variant_properties.map(&:property)
 
-      if properties.length > 0
+      long_name = if properties.length > 0
         [
-          sellable.taxonomy.path[1..-1].map(&:name).flatten,
+          *sellable.taxonomy.path[1..-1].map(&:name).flatten,
           sellable.name,
-          properties.map(&:value).join(', ')
-        ].join(' - ')
+          properties.map(&:value).join(', ').presence
+        ]
       else
         [
-          sellable.taxonomy.path[1..-1].map(&:name).flatten,
+          *sellable.taxonomy.path[1..-1].map(&:name).flatten,
           sellable.name
-        ].join(' - ')
+        ]
       end
+
+      self.long_name = long_name.compact.join(' - ')
     end
 
     # EAGER LOAD PROPERTYTYPE TO AVOID N+1
