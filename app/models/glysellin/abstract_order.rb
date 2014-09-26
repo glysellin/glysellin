@@ -74,8 +74,7 @@ module Glysellin
     end
 
     def name
-      customer && customer.full_name ||
-        billing_address && billing_address.full_name
+      (customer && customer.name) || (billing_address && billing_address.name)
     end
   end
 end
