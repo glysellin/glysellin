@@ -4,6 +4,8 @@ module Glysellin
   class Sellable < ActiveRecord::Base
     self.table_name = 'glysellin_sellables'
 
+    include Glysellin::VariantCacheable
+
     cattr_accessor :sold_callback
 
     has_many :imageables, as: :imageable_owner

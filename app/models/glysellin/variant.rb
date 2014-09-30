@@ -81,11 +81,6 @@ module Glysellin
       end
     end
 
-    # def check_properties
-    #   errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']
-    #   errors.add(:missing_property, 'Merci de renseigner une collection !') unless properties_hash['collection']
-    # end
-
     def price
       read_attribute(:price) || (sellable && sellable.price)
     end
@@ -104,25 +99,17 @@ module Glysellin
     end
 
     def refresh_long_name
-      properties = variant_properties.map(&:property)
+      taxonomy_parts = sellable.taxonomy.path[1..-1].map(&:name).flatten
 
-      long_name = if properties.length > 0
-        [
-          *sellable.taxonomy.path[1..-1].map(&:name).flatten,
-          sellable.name,
-          properties.map(&:value).join(', ').presence
-        ]
-      else
-        [
-          *sellable.taxonomy.path[1..-1].map(&:name).flatten,
-          sellable.name
-        ]
+      properties = variant_properties.map(&:property)
+      properties_parts = if properties.length > 0
+        properties.map(&:value).join(', ').presence
       end
 
-      self.long_name = long_name.compact.join(' - ')
+      parts = [*taxonomy_parts, sellable.name, properties_parts]
+      self.long_name = parts.compact.join(' - ')
     end
 
-    # EAGER LOAD PROPERTYTYPE TO AVOID N+1
     def properties_hash
       @properties_hash ||= begin
         properties = Glysellin::Property

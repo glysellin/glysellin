@@ -2,6 +2,8 @@ module Glysellin
   class Taxonomy < ActiveRecord::Base
     self.table_name = 'glysellin_taxonomies'
 
+    include Glysellin::VariantCacheable
+
     scope :roots, -> { where(parent_id: nil) }
     scope :selectable, -> { where(children_count: 0) }
     scope :ordered, -> do
@@ -30,6 +32,16 @@ module Glysellin
 
     before_save :fill_path
     after_save :update_children_path
+
+    def variants
+      Glysellin::Variant.joins(sellable: { taxonomy: { parent: :parent } })
+        .where(
+          "glysellin_taxonomies.id = :id OR " \
+          "parents_glysellin_taxonomies.id = :id OR " \
+          "parents_glysellin_taxonomies_2.id = :id",
+          id: id
+        )
+    end
 
     def update_children_path
       children.each(&:update_path)
