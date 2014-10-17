@@ -20,11 +20,11 @@ module Glysellin
     before_validation :setup_user_email
 
     def name
-      full_name
+      [full_name, company_name].map(&:presence).compact.join(' - ')
     end
 
     def full_name
-      [first_name, last_name, company_name].compact.join(' ')
+      [first_name, last_name].map(&:presence).compact.join(' ')
     end
 
     def password_filled_in?

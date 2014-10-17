@@ -30,6 +30,7 @@ module Glysellin
     # validate :check_properties
     before_validation :check_prices
     before_validation :ensure_name
+    before_validation :refresh_long_name
 
     validate :generate_barcode, on: :create, unless: Proc.new { |variant| variant.sku.present? }
     # validates_numericality_of :eot_price, :price
@@ -41,7 +42,28 @@ module Glysellin
 
     def eot_price_for(customer_type)
       return eot_price unless customer_type.present?
-      customer_types_variants.where(customer_type: customer_type).first.try(:eot_price) || eot_price
+
+      customer_type_id = if customer_type.is_a?(Glysellin::CustomerType)
+        customer_type.id
+      else
+        customer_type.to_i
+      end
+
+      variant_price = customer_types_variants.find do |customer_types_variant|
+        customer_types_variant.customer_type_id == customer_type_id
+      end
+
+      if variant_price
+        variant_price.eot_price
+      else
+        eot_price
+      end
+    end
+
+    def price_for(customer_type)
+      return eot_price unless customer_type.present?
+
+      (eot_price_for(customer_type) * vat_ratio).round(2)
     end
 
     def ensure_name
@@ -58,11 +80,6 @@ module Glysellin
         self.eot_price = (price / vat_ratio).round(2)
       end
     end
-
-    # def check_properties
-    #   errors.add(:missing_property, 'Merci de renseigner un genre !') unless properties_hash['gender']
-    #   errors.add(:missing_property, 'Merci de renseigner une collection !') unless properties_hash['collection']
-    # end
 
     def price
       read_attribute(:price) || (sellable && sellable.price)
@@ -81,16 +98,18 @@ module Glysellin
       end
     end
 
-    def long_name
-      if properties.any?
-        properties_names = properties.map(&:value).join(', ')
-        [sellable.taxonomy.path[1..-1].map(&:name).flatten, sellable.name, properties_names].join(' — ')
-      else
-        [sellable.taxonomy.path[1..-1].map(&:name).flatten, sellable.name].join(' — ')
+    def refresh_long_name
+      taxonomy_parts = sellable.taxonomy.path[1..-1].map(&:name).flatten
+
+      properties = variant_properties.map(&:property)
+      properties_parts = if properties.length > 0
+        properties.map(&:value).join(', ').presence
       end
+
+      parts = [*taxonomy_parts, sellable.name, properties_parts]
+      self.long_name = parts.compact.join(' - ')
     end
 
-    # EAGER LOAD PROPERTYTYPE TO AVOID N+1
     def properties_hash
       @properties_hash ||= begin
         properties = Glysellin::Property

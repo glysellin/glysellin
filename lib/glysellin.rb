@@ -17,6 +17,7 @@ require "glysellin/available_stock"
 require "glysellin/order_stock_migration"
 require "glysellin/payments"
 require "glysellin/barcode_generator"
+require "glysellin/variant_cacheable"
 
 module Glysellin
   ################################################################
