@@ -19,6 +19,8 @@ module Glysellin
     accepts_nested_attributes_for :variant_properties, allow_destroy: true
 
     has_many :customer_types_variants, dependent: :destroy, class_name: 'Glysellin::CustomerTypesVariant'
+    accepts_nested_attributes_for :customer_types_variants, allow_destroy: true
+
     has_many :properties, through: :variant_properties
 
     has_many :stocks, dependent: :destroy

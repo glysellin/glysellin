@@ -1,5 +1,10 @@
 class Glysellin::CustomerType < ActiveRecord::Base
-    self.table_name = "glysellin_customer_types"
+  self.table_name = "glysellin_customer_types"
+
   has_many :customers, dependent: :nullify
-  has_many :customer_types_variants, dependent: :destroy, class_name: 'Glysellin::CustomerTypesVariant'
+
+  has_many :customer_types_variants, dependent: :destroy,
+           class_name: 'Glysellin::CustomerTypesVariant'
+
+  scope :ordered, -> { order('glysellin_customer_types.name ASC') }
 end
