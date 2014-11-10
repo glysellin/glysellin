@@ -67,7 +67,7 @@ module Glysellin
     end
 
     def ensure_name
-      return if name.presence || properties.length == 0
+      return if name.presence || variant_properties.length == 0
       self.name = custom_name
     end
 
@@ -90,8 +90,8 @@ module Glysellin
     end
 
     def custom_name
-      if properties.any?
-        properties_names = properties.map(&:value).join(', ')
+      if variant_properties.any?
+        properties_names = variant_properties.map(&:property).flatten.map(&:value).join(', ')
         [sellable.name, properties_names].join(' — ')
       else
         [sellable.name, name].join(' — ')
