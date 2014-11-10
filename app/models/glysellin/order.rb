@@ -1,10 +1,5 @@
 module Glysellin
   class Order < AbstractOrder
-
-    scope :to_be_shipped, -> { active.search(shipment_state_eq: :pending).result }
-
-    before_validation :process_payments
-
     has_one :cart
     has_one :invoice, dependent: :destroy
 
@@ -18,6 +13,12 @@ module Glysellin
     delegate :balanced?, to: :payments, prefix: true
 
     after_save :set_prices_cache_columns
+
+    before_validation :process_payments
+
+    scope :to_be_shipped, -> {
+      active.joins(:shipment).where(glysellin_shipments: { state: :pending })
+    }
 
     state_machine :state, initial: :pending do
       event :complete do

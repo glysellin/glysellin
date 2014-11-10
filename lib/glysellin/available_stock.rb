@@ -30,7 +30,7 @@ module Glysellin
     end
 
     def variant_pending_line_items
-      variant.line_items.join_orders.merge(Order.to_be_shipped)
+      variant.line_items.join_to_be_shipped_orders
         .where(glysellin_orders: { store_id: stock.store_id })
     end
   end

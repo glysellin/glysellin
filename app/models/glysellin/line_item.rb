@@ -11,6 +11,18 @@ module Glysellin
 
     validates :vat_rate, :eot_price, :price, :quantity, presence: true
 
+    # scope :join_orders, -> {
+    #   joins(
+    #     'INNER JOIN glysellin_parcels ' +
+    #       'ON glysellin_parcels.id = glysellin_line_items.container_id ' +
+    #     'INNER JOIN glysellin_orders ' +
+    #       'ON glysellin_orders.id = glysellin_parcels.sendable_id'
+    #   ).where(
+    #     glysellin_line_items: { container_type: 'Glysellin::Parcel' },
+    #     glysellin_parcels: { sendable_type: 'Glysellin::Order'}
+    #   )
+    # }
+
     scope :join_orders, -> {
       joins(
         'INNER JOIN glysellin_parcels ' +
@@ -20,6 +32,20 @@ module Glysellin
       ).where(
         glysellin_line_items: { container_type: 'Glysellin::Parcel' },
         glysellin_parcels: { sendable_type: 'Glysellin::Order'}
+      )
+    }
+
+    scope :join_to_be_shipped_orders, -> {
+      join_orders.joins(
+        'INNER JOIN glysellin_shipments ' +
+          'ON glysellin_shipments.shippable_id = glysellin_orders.id'
+      ).where(
+        glysellin_shipments: {
+          shippable_type: 'Glysellin::Order',
+          state: 'pending'
+        }
+      ).where.not(
+        glysellin_orders: { state: 'canceled' }
       )
     }
 
