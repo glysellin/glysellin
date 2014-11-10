@@ -44,20 +44,6 @@ module Glysellin
       includes(:variants).where(glysellin_variants: { published: true })
     }
 
-    scope :sorted, -> do
-      joins(
-        'INNER JOIN glysellin_taxonomies sellable_taxonomy ' +
-        'ON glysellin_sellables.taxonomy_id = sellable_taxonomy.id ' +
-        'INNER JOIN glysellin_taxonomies parent_taxonomy ' +
-        'ON sellable_taxonomy.parent_id = parent_taxonomy.id ' +
-        'INNER JOIN glysellin_taxonomies grand_parent_taxonomy ' +
-        'ON parent_taxonomy.parent_id = grand_parent_taxonomy.id'
-       ).order(
-        'grand_parent_taxonomy.name DESC, parent_taxonomy.name ASC, ' +
-        'sellable_taxonomy.name ASC'
-      )
-    end
-
     def published_variants
       variants.where(published: true)
     end
