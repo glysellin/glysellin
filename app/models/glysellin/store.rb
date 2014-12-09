@@ -8,6 +8,9 @@ class Glysellin::Store < ActiveRecord::Base
 
   validates :name, presence: true
 
+  scope :ordered, -> { order('glysellin_stores.name ASC') }
+  scope :with_alerts_enabled, -> { where(alerts_enabled: true) }
+
   def in_stock? variant
     variant.sellable.unlimited_stock or (available_quantity_for(variant) > 0)
   end
