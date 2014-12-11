@@ -15,6 +15,10 @@ module Glysellin
       to_i.to_s
     end
 
+    def as_json
+      to_i
+    end
+
     private
 
     def available_stock_count
