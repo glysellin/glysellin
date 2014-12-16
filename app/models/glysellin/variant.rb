@@ -42,8 +42,8 @@ module Glysellin
 
     delegate :vat_rate, :vat_ratio, :weight, to: :sellable
 
-    def eot_price_for(customer_type)
-      return eot_price unless customer_type.present?
+    def customer_types_variant_for(customer_type)
+      return unless customer_type.present?
 
       customer_type_id = if customer_type.is_a?(Glysellin::CustomerType)
         customer_type.id
@@ -51,12 +51,14 @@ module Glysellin
         customer_type.to_i
       end
 
-      variant_price = customer_types_variants.find do |customer_types_variant|
+      customer_types_variants.find do |customer_types_variant|
         customer_types_variant.customer_type_id == customer_type_id
       end
+    end
 
-      if variant_price
-        variant_price.eot_price
+    def eot_price_for(customer_type)
+      if (customer_types_variant = customer_types_variant_for(customer_type))
+        customer_types_variant.eot_price
       else
         eot_price
       end
