@@ -125,18 +125,6 @@ module Glysellin
         end
     end
 
-    def generate_barcode
-      barcode = Glysellin.barcode_class_name.constantize.new(self)
-
-      if barcode.valid?
-        self.sku = barcode.generate
-      else
-        for message in barcode.errors.full_messages
-          errors.add :sku, message
-        end
-      end
-    end
-
     def eot_changed_alone?
       eot_changed_alone = eot_price_changed? && !price_changed?
       new_record_eot_alone = new_record? && eot_price && !price
