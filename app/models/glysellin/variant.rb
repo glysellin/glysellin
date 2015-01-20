@@ -32,7 +32,6 @@ module Glysellin
     # validate :check_properties
     before_validation :check_prices
     before_validation :ensure_name
-    before_validation :refresh_long_name
 
     validate :generate_barcode, on: :create, unless: Proc.new { |variant| variant.sku.present? }
     # validates_numericality_of :eot_price, :price
@@ -100,18 +99,6 @@ module Glysellin
       else
         [sellable.name, name].join(' — ')
       end
-    end
-
-    def refresh_long_name
-      taxonomy_parts = sellable.taxonomy.path[1..-1].map(&:name).flatten
-
-      properties = variant_properties.map(&:property)
-      properties_parts = if properties.length > 0
-        properties.map(&:value).join(', ').presence
-      end
-
-      parts = [*taxonomy_parts, sellable.name, properties_parts]
-      self.long_name = parts.compact.join(' - ')
     end
 
     def properties_hash
