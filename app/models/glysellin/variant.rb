@@ -67,7 +67,9 @@ module Glysellin
     def price_for(customer_type)
       return eot_price unless customer_type.present?
 
-      (eot_price_for(customer_type) * vat_ratio).round(2)
+      if (eot_price_for_customer_type = eot_price_for(customer_type))
+        (eot_price_for_customer_type * vat_ratio).round(2)
+      end
     end
 
     def ensure_name
