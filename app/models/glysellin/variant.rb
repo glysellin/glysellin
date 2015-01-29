@@ -32,8 +32,7 @@ module Glysellin
     # validate :check_properties
     before_validation :check_prices
     before_validation :ensure_name
-
-    validate :generate_barcode, on: :create, unless: Proc.new { |variant| variant.sku.present? }
+    
     # validates_numericality_of :eot_price, :price
     validates :name, presence: true
 
@@ -66,7 +65,9 @@ module Glysellin
     def price_for(customer_type)
       return eot_price unless customer_type.present?
 
-      (eot_price_for(customer_type) * vat_ratio).round(2)
+      if (eot_price_for_customer_type = eot_price_for(customer_type))
+        (eot_price_for_customer_type * vat_ratio).round(2)
+      end
     end
 
     def ensure_name
@@ -124,18 +125,6 @@ module Glysellin
           existing_stock = stocks.find { |stock| stock.store_id == store.id }
           hash[store] = existing_stock || stocks.build(store: store)
         end
-    end
-
-    def generate_barcode
-      barcode = Glysellin.barcode_class_name.constantize.new(self)
-
-      if barcode.valid?
-        self.sku = barcode.generate
-      else
-        for message in barcode.errors.full_messages
-          errors.add :sku, message
-        end
-      end
     end
 
     def eot_changed_alone?
