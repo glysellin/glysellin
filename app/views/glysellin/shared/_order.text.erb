@@ -41,7 +41,7 @@ Sous Total TTC : <%= number_to_currency(order.subtotal) %>
 <% end %>
 <%- if order.adjustments.length > 0 -%>
 <% order.adjustments.each do |adjustment| -%>
-<%= adjustment.name %> : <%= number_to_currency(adjustment.value) %>
+<%= adjustment.name %> : <%= number_to_currency(adjustment.price) %>
 <%- end -%>
 <%- end -%>
 Total TTC : <%= number_to_currency(order.total_price) %>
@@ -53,4 +53,3 @@ Paiement :
 Mode de paiement : <%= order.payment_method.name %>
 Statut : <%= t("glysellin.labels.payments.statuses.#{ order.payment.status }") %>
 Date : <%= order.payment.last_payment_action_on %>
-
