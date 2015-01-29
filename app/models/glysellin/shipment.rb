@@ -5,6 +5,8 @@ module Glysellin
     belongs_to :shippable, polymorphic: true, autosave: true
     belongs_to :shipping_method, class_name: 'Glysellin::ShippingMethod'
 
+    delegate :name, to: :shipping_method, allow_nil: true
+
     state_machine initial: :pending do
       event :ship do
         transition :pending => :shipped
