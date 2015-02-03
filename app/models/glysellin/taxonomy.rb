@@ -4,6 +4,9 @@ module Glysellin
 
     include Glysellin::VariantCacheable
 
+    extend FriendlyId
+    friendly_id :name, use: [:slugged, :history, :finders]
+
     scope :roots, -> { where(parent_id: nil) }
     scope :selectable, -> { where(children_count: 0) }
     scope :ordered, -> do
@@ -93,6 +96,12 @@ module Glysellin
 
     def full_name
       path.join(" > ")
+    end
+    
+    private
+
+    def should_generate_new_friendly_id?
+      slug.blank? || name_changed?
     end
   end
 end
