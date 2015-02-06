@@ -19,5 +19,12 @@ module Glysellin
       end
     end
 
+    config.to_prepare do
+      path = Rails.root.join('lib', 'decorators', 'glysellin', '**', '*.rb')
+
+      Dir[path].each do |file|
+        load file
+      end
+    end
   end
 end
