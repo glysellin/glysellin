@@ -39,8 +39,8 @@ module Glysellin
     end
 
     def set_prices_cache_columns
-      update_column :total_price_cache, total_price.to_s.gsub('.', ',')
-      update_column :total_eot_price_cache, total_eot_price.to_s.gsub('.', ',')
+      update_column :total_price_cache, total_price.round(2)
+      update_column :total_eot_price_cache, total_eot_price.round(2)
     end
 
     def group_line_items_and_sum_quantities!
