@@ -31,9 +31,9 @@ module Glysellin
 
     has_many :variant_images, through: :variants, source: :images
 
-    validates :variants, length: {
-      minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short")
-    }
+    # validates :variants, length: {
+    #   minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short")
+    # }
 
     # before_validation :check_prices
 
