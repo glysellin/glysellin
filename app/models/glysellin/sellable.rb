@@ -22,8 +22,8 @@ module Glysellin
     belongs_to :brand, class_name: "Glysellin::Brand", inverse_of: :sellables,
                counter_cache: true
 
-    validates_presence_of :name, :vat_rate, :eot_price, :price, :taxonomy_id
-    validates_numericality_of :vat_rate, :eot_price, :price
+    validates_presence_of :name, :vat_rate, :taxonomy_id
+    validates_numericality_of :vat_rate
 
     has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable,
              dependent: :destroy
@@ -35,7 +35,7 @@ module Glysellin
       minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short")
     }
 
-    before_validation :check_prices
+    # before_validation :check_prices
 
     # Published sellables are the ones that have at least one variant
     # published.
@@ -51,15 +51,15 @@ module Glysellin
       variants.where(published: true)
     end
 
-    def check_prices
-      return unless price.present? && eot_price.present?
-      # If we have to fill one of the prices when changed
-      if eot_changed_alone?
-        self.price = (eot_price * vat_ratio).round(2)
-      elsif price_changed_alone?
-        self.eot_price = (price / vat_ratio).round(2)
-      end
-    end
+    # def check_prices
+    #   return unless price.present? && eot_price.present?
+    #   # If we have to fill one of the prices when changed
+    #   if eot_changed_alone?
+    #     self.price = (eot_price * vat_ratio).round(2)
+    #   elsif price_changed_alone?
+    #     self.eot_price = (price / vat_ratio).round(2)
+    #   end
+    # end
 
     def eot_changed_alone?
       eot_changed_alone = eot_price_changed? && !price_changed?
@@ -79,7 +79,7 @@ module Glysellin
     def vat_ratio
       1 + vat_rate / 100
     end
-    
+
     private
 
     def should_generate_new_friendly_id?
