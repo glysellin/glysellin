@@ -29,6 +29,13 @@ module Glysellin
           shipping_address_attributes: address_params
         )
 
+        assign_customer_names_params!(cart_params)
+        assign_user_email_params!(cart_params)
+
+        cart_params
+      end
+
+      def assign_customer_names_params!(cart_params)
         if cart_params[:customer_attributes] &&
           cart_params[:billing_address_attributes]
 
@@ -37,8 +44,15 @@ module Glysellin
               cart_params[:billing_address_attributes][attribute]
           end
         end
+      end
 
-        cart_params
+      def assign_user_email_params!(cart_params)
+        if (customer_attributes = cart_params[:customer_attributes] ) &&
+           (email = customer_attributes[:email]) &&
+           (user_attributes = customer_attributes[:user_attributes])
+
+          user_attributes[:email] = email
+        end
       end
 
       def address_params

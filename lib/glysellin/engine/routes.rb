@@ -28,11 +28,13 @@ module ActionDispatch::Routing
           resource :discount_code, controller: 'glysellin/cart_steps/discount_codes', only: [:update]
           resource :addresses, controller: 'glysellin/cart_steps/addresses', only: [:update]
           resource :shipping_method, controller: 'glysellin/cart_steps/shipping_method', only: [:update]
-          resource :payment_method, controller: 'glysellin/cart_steps/payment_method', only: [:update]
+          resource :order_creation, controller: 'glysellin/cart_steps/order_creation', only: [:update]
           resource :state, controller: 'glysellin/cart_steps/state', only: [:show] do
             get ':state', action: 'show', as: 'set'
           end
         end
+
+        resource :order, controller: 'glysellin/order', only: [:show]
 
         scope module: 'glysellin' do
           namespace :api do

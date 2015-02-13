@@ -1,6 +1,5 @@
 module Glysellin
   class Order < AbstractOrder
-    has_one :cart
     has_one :invoice, dependent: :destroy
 
     has_many :payments, -> {
@@ -70,7 +69,7 @@ module Glysellin
     end
 
     def payment_method
-      payment.type rescue nil
+      payment && payment.payment_method
     end
 
     def self.export(format = :xls)

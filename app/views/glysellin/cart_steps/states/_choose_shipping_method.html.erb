@@ -1,16 +1,27 @@
-<h2><%= t('glysellin.labels.forms.choose_shipping_method') %></h2>
+<%= render partial: "glysellin/cart/navigation", locals: { cart: current_cart } %>
 
-<%= simple_form_for cart, as: :cart, url: cart_shipping_method_path, method: "put" do |f| %>
-  <%= f.fields_for :shipment, (f.object.shipment || f.object.build_shipment) do |fs| %>
-    <%= fs.input :shipping_method_id do %>
-      <% @shipping_methods.each do |shipping_method| %>
-        <label class="radio">
-          <%= fs.radio_button :shipping_method_id, shipping_method.id %>
-          <%= shipping_method.name %>
-        </label>
+<div class="row">
+  <div class="col-md-8">
+    <h2><%= t('glysellin.labels.forms.choose_shipping_method') %></h2>
+
+    <%= simple_form_for cart, as: :cart, url: cart_shipping_method_path, method: "put" do |f| %>
+      <%= f.fields_for :shipment, (f.object.shipment || f.object.build_shipment) do |fs| %>
+        <%= fs.input :shipping_method_id do %>
+          <% @shipping_methods.each do |shipping_method| %>
+            <label class="radio">
+              <%= fs.radio_button :shipping_method_id, shipping_method.id %>
+              <%= shipping_method.name %>
+            </label>
+          <% end %>
+        <% end %>
       <% end %>
-    <% end %>
-  <% end %>
 
-  <%= f.button :button, t('glysellin.labels.forms.confirm_shipping_method'), type: "submit" %>
-<% end %>
+      <%= f.button :button, t('glysellin.labels.forms.confirm_shipping_method'), type: "submit" %>
+      <%= link_to t("glysellin.labels.cart.cancel"), cart_path, method: "delete" %>
+    <% end %>
+  </div>
+
+  <div class="col-md-4">
+    <%= render partial: "glysellin/cart/recap", locals: { cart: current_cart } %>
+  </div>
+</div>

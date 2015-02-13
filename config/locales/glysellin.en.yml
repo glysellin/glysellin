@@ -13,7 +13,7 @@ en:
         state_transitions:
           addresses: "Errors were found in the form you submitted, please review its fields before it can be saved"
           choose_shipping_method: "Please choose a shipping method"
-          choose_payment_method: "Please choose a payment method"
+          recap: "Please choose a payment method"
     notices:
       cart:
         confirm_line_item_deletion: |
@@ -25,7 +25,7 @@ en:
         customer_details: "Your account"
         fill_in_your_address: "Fill in your address"
         confirm_addresses: "Confirm your address"
-        choose_payment_method: "Choose your payment method"
+        recap: "Choose your payment method"
         confirm_payment_method: "Confirm payment method"
         choose_shipping_method: "Choose your shipping method"
         confirm_shipping_method: "Confirm shipping method"
@@ -104,7 +104,7 @@ en:
         filled: "Cart"
         addresses: "Your informations"
         choose_shipping_method: "Shipping method"
-        choose_payment_method: "Payment method"
+        recap: "Payment method"
         ready: "Payment"
     mailer:
       admin:

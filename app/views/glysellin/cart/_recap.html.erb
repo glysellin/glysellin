@@ -13,4 +13,8 @@
   <% if current_cart.state_index > current_cart.available_states.index("addresses") %>
     <%= render partial: "glysellin/cart_steps/recap/addresses", locals: { cart: cart } %>
   <% end %>
+
+  <% if current_cart.state_index > current_cart.available_states.index("choose_shipping_method") %>
+    <%= render partial: "glysellin/cart_steps/recap/shipment", locals: { cart: cart } %>
+  <% end %>
 </div>

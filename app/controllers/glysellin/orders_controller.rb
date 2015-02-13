@@ -1,7 +1,6 @@
 module Glysellin
   class OrdersController < ApplicationController
     protect_from_forgery :except => :gateway_response
-
     def index
       @orders = Order.from_customer(current_user)
     end

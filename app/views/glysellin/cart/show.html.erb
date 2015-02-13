@@ -1,13 +1,2 @@
-<%= render partial: "glysellin/cart/navigation", locals: { cart: current_cart } %>
-
-<% ready = current_cart.state == "ready" %>
-
-<% if current_cart.state_index > 0 && !ready %>
-  <%= render partial: "glysellin/cart/recap", locals: { cart: current_cart } %>
-<% end %>
-
 <%= render partial: "glysellin/cart_steps/states/#{ current_cart.state }", locals: { cart: current_cart } %>
 
-<% if current_cart.state_index > 0 && !ready  %>
-  <%= link_to t("glysellin.labels.cart.cancel"), cart_path, method: "delete" %>
-<% end %>

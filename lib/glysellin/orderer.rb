@@ -18,13 +18,13 @@ module Glysellin
       shipping_address && shipping_address.id.present?
     end
 
-    def shipping_address force_reload = false
+    def shipping_address(force_reload = false)
       use_another_address_for_shipping ? super : billing_address
     end
 
     private
 
-    def shipping_address_blank_or_not_needed attributes
+    def shipping_address_blank_or_not_needed(attributes)
       attributes.values.all?(&:blank?) || !use_another_address_for_shipping
     end
   end

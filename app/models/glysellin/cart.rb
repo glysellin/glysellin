@@ -30,26 +30,26 @@ module Glysellin
       # When shipping method is chosen
       #
       event :shipping_method_chosen do
-        transition all => :choose_payment_method
+        transition all => :recap
       end
 
       # When payment method is chosen
       #
-      event :payment_method_chosen do
+      event :create_order do
         transition all => :ready
       end
 
       # State validations
-      state :line_items_added, :addresses, :choose_shipping_method, :choose_payment_method, :ready do
+      state :line_items_added, :addresses, :choose_shipping_method, :recap, :ready do
         validates :line_items, presence: true
       end
 
-      state :choose_shipping_method, :choose_payment_method, :ready do
+      state :choose_shipping_method, :recap, :ready do
         validates :customer, :billing_address, presence: true
         validates :shipping_address, presence: true, if: :use_another_address_for_shipping
       end
 
-      state :choose_payment_method, :ready do
+      state :recap, :ready do
         validates :shipment, presence: true
       end
 
@@ -57,7 +57,7 @@ module Glysellin
         validates :payments, presence: true
       end
 
-      before_transition any => :ready, do: :generate_order!
+      after_transition any => :ready, do: :generate_order!
 
       before_transition do |cart, transition|
         from, to = transition.from_name, transition.to_name
@@ -69,8 +69,7 @@ module Glysellin
     end
 
     belongs_to :store
-
-    belongs_to :order
+    belongs_to :order, autosave: true
 
     has_many :line_items, as: :container
     accepts_nested_attributes_for :line_items, allow_destroy: true,
@@ -112,7 +111,7 @@ module Glysellin
     end
 
     def available_states
-      %w(filled addresses choose_shipping_method choose_payment_method ready)
+      %w(filled addresses choose_shipping_method recap ready)
     end
 
     def available_events
@@ -126,12 +125,12 @@ module Glysellin
       available_states.index(state) || -1
     end
 
-    def remove_line_item id
+    def remove_line_item(id)
       line_items.destroy(line_item(id))
       reset! if empty?
     end
 
-    def line_item id
+    def line_item(id)
       line_items.find { |item| item.id == id.to_i }
     end
 
@@ -207,9 +206,12 @@ module Glysellin
       order.shipment = shipment
       order.payments = payments
 
+      order.save
+
       billing_address(true)
       shipping_address(true)
       shipment(true)
+      payments(true)
     end
 
     def cancel_order!

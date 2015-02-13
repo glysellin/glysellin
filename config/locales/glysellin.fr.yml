@@ -22,11 +22,13 @@ fr:
           Désolé mais nous ne pouvons pas envoyer votre commande vers
           %{country} avec %{method}, merci de choisir un autre mode de livraison
         state_transitions:
+          filled: |
+            Une erreur est survenue pendant la soumission de votre panier
           addresses: |
             Il y a des erreurs dans les informations soumises, merci de vérifier
             tous les champs
           choose_shipping_method: "Merci de choisir un mode de livraison"
-          choose_payment_method: "Merci de choisir un mode de paiement"
+          recap: "Merci de choisir un mode de paiement"
       variant:
         multiple_properties_with_same_type: |
           Il y a plusieurs types de propriété identiques pour cette même
@@ -44,9 +46,10 @@ fr:
         customer_details: "Votre compte"
         fill_in_your_address: "Merci de renseigner votre adresse"
         confirm_addresses: "Confirmer votre adresse"
-        choose_payment_method: "Merci de sélectionner un moyen de paiement"
-        confirm_payment_method: "Confirmer mon moyen de paiement"
-        choose_shipping_method: "Merci de sélectionner un mode de livraison"
+        recap: "Merci de vérifier les informations de votre commande ci-dessous et de procéder à sa validation"
+        create_order: "Valider mon panier et lancer ma commande"
+        choose_shipping_method: "Merci de sélectionner le mode de livraison que vous souhaitez pour votre commande"
+        choose_payment_method: "Merci de sélectionner votre mode de paiement"
         confirm_shipping_method: "Confirmer mon mode de livraison"
       customer:
         sign_in: "Se connecter"
@@ -138,7 +141,7 @@ fr:
         filled: "Panier"
         addresses: "Vos informations"
         choose_shipping_method: "Choix du mode de livraison"
-        choose_payment_method: "Choix du mode de paiement"
+        recap: "Choix du mode de paiement"
         ready: "Paiement en attente"
     mailer:
       admin:

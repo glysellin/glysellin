@@ -20,13 +20,14 @@ module Glysellin
     end
 
     # Helper method to set cookie value
-    def update_cart_in_session options = {}
+    def update_cart_in_session
       if current_cart.errors.any?
-        flash[:error] =
-          t("glysellin.errors.cart.state_transitions.#{ current_cart.state }")
+        flash[:error] = t(
+          "glysellin.errors.cart.state_transitions.#{ current_cart.state }"
+        )
       end
 
-      session["glysellin.cart"] = current_cart.id
+      session["glysellin.cart"] = current_cart.id if current_cart
     end
 
     def totals_hash

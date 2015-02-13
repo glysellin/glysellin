@@ -51,5 +51,5 @@ Paiement :
 ------------------------------
 
 Mode de paiement : <%= order.payment_method.name %>
-Statut : <%= t("glysellin.labels.payments.statuses.#{ order.payment.status }") %>
-Date : <%= order.payment.last_payment_action_on %>
+Statut : <%= t("glysellin.labels.payments.statuses.#{ order.payment.state }") %>
+Date : <%= order.payment.received_on %>

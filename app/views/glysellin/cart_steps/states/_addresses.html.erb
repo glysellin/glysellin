@@ -1,25 +1,34 @@
-<%= simple_form_for cart, as: :cart, url: cart_addresses_path, method: "put" do |f| %>
-  <h2><%= t('glysellin.labels.forms.customer_details') %></h2>
+<%= render partial: "glysellin/cart/navigation", locals: { cart: current_cart } %>
 
-  <%= f.fields_for :customer, (f.object.customer || (current_user && current_user.customer) || f.object.build_customer), include_id: !!f.object.customer do |fc| %>
-    <% new_record = !fc.object.id %>
+<div class="row">
+  <div class="col-md-8">
+    <h2><%= t('glysellin.labels.forms.customer_details') %></h2>
+    <%= simple_form_for cart, as: :cart, url: cart_addresses_path, method: "put" do |f| %>
+      <%= f.fields_for :customer, (f.object.customer || (current_user && current_user.customer) || f.object.build_customer), include_id: !!f.object.customer do |fc| %>
+        <% new_record = !fc.object.id %>
 
-    <%= fc.input :email, input_html: { disabled: current_user.present?, value: (fc.object.email.presence || (current_user && current_user.email) || nil) } %>
+        <%= fc.input :email, input_html: { disabled: current_user.present?, value: (fc.object.email.presence || (current_user && current_user.email) || nil) } %>
 
-    <% if !current_user %>
-      <%= fc.fields_for :user, (fc.object.user || fc.object.build_user) do |fu| %>
-        <%= fu.input :password %>
-        <%= fu.input :password_confirmation %>
+        <% if !current_user %>
+          <%= fc.fields_for :user, (fc.object.user || fc.object.build_user) do |fu| %>
+            <%= fu.input :password %>
+            <%= fu.input :password_confirmation %>
+          <% end %>
+
+          <%= link_to new_user_session_path do %>
+            <%= t('glysellin.labels.customer.sign_in') %>
+          <% end %>
+        <% end %>
       <% end %>
 
-      <%= link_to new_user_session_path do %>
-        <%= t('glysellin.labels.customer.sign_in') %>
-      <% end %>
+      <h2><%= t('glysellin.labels.forms.fill_in_your_address') %></h2>
+      <%= addresses_fields_for f, f.object.customer || current_user.customer %>
+
+      <%= f.button :submit, t('glysellin.labels.forms.confirm_addresses') %>
+      <%= link_to t("glysellin.labels.cart.cancel"), cart_path, method: "delete" %>
     <% end %>
-  <% end %>
-
-  <h2><%= t('glysellin.labels.forms.fill_in_your_address') %></h2>
-  <%= addresses_fields_for f, f.object.customer || current_user.customer %>
-
-  <%= f.button :submit, t('glysellin.labels.forms.confirm_addresses') %>
-<% end %>
+  </div>
+  <div class="col-md-4">
+    <%= render partial: "glysellin/cart/recap", locals: { cart: current_cart } %>
+  </div>
+</div>
