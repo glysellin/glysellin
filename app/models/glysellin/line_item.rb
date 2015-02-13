@@ -55,31 +55,33 @@ module Glysellin
     end
 
     def price
-      (eot_price * (1 + vat_rate_division)).round
+      if eot_price && vat_rate_division
+        (eot_price * (1 + vat_rate_division)).round
+      end
     end
 
     def vat_rate_division
-      (vat_rate / 100.0)
+      (vat_rate / 100.0) if vat_rate
     end
 
     def eot_subtotal
-      eot_price * quantity
+      eot_price * quantity if eot_price && quantity
     end
 
     def subtotal
-      price * quantity
+      price * quantity if price && quantity
     end
 
     def total_eot_price
-      (eot_subtotal + discount_price).round 2
+      (eot_subtotal + discount_price).round 2 if eot_subtotal && discount_price
     end
 
     def total_price
-      (subtotal + discount_price).round 2
+      (subtotal + discount_price).round 2 if subtotal && discount_price
     end
 
     def total_vat
-      total_eot_price * vat_rate_division
+      total_eot_price * vat_rate_division if total_eot_price && vat_rate_division
     end
 
     def discountable_amount
