@@ -76,7 +76,7 @@ module Glysellin
     end
 
     def check_prices
-      return unless price.present? && eot_price.present?
+      return unless price.present? || eot_price.present?
       # If we have to fill one of the prices when changed
       if eot_changed_alone?
         self.price = (eot_price * vat_ratio).round(2)
