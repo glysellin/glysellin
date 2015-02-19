@@ -54,10 +54,6 @@ module Glysellin
       end
     end
 
-    def price
-      (eot_price * (1 + vat_rate_division)).round
-    end
-
     def vat_rate_division
       (vat_rate / 100.0)
     end
