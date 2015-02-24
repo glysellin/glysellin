@@ -12,7 +12,7 @@ module Glysellin
       end
 
       def render_request_button(options = {})
-        request = CicPayment.new.request(montant: @order.total_price*100, reference: @order.id)
+        request = CicPayment.new.request(montant: @order.total_price, reference: @order.id * (Rails.env.staging? ? rand(1000) : 1))
         { text: cic_payment_form(request, button_text: 'Procéder au paiement', button_class: 'btn btn-success btn-large').html_safe }
       end
 
@@ -28,15 +28,15 @@ module Glysellin
 
         if Rails.env.production?
           if response[:success] || response["code-retour"].downcase == "annulation"
-              render text: "version=2\ncdr=0\n"
+            render text: "version=2\ncdr=0\n"
           else
-              render text: "version=2\ncdr=1\n"
+            render text: "version=2\ncdr=1\n"
           end
         else
           if response[:success]
-              flash[:notice] = "[DEV-MODE] Merci pour votre achat."
+            flash[:notice] = "[DEV-MODE] Merci pour votre achat."
           else
-              flash[:error] = "[DEV-MODE] Erreur survenue."
+            flash[:error] = "[DEV-MODE] Erreur survenue."
           end
 
           redirect_to root_path
