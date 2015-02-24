@@ -12,7 +12,7 @@ module Glysellin
       end
 
       def render_request_button(options = {})
-        request = CicPayment.new.request(montant: @order.total_price*100, reference: @order.id)
+        request = CicPayment.new.request(montant: @order.total_price, reference: @order.id)
         { text: cic_payment_form(request, button_text: 'Procéder au paiement', button_class: 'btn btn-success btn-large').html_safe }
       end
 
