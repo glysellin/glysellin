@@ -196,8 +196,7 @@ module Glysellin
     def generate_order!
       build_order unless order
 
-      parcel = (order.parcels.first || order.parcels.build(name: 'Default'))
-      parcel.line_items = line_items
+      order.line_items = line_items
 
       order.customer = customer
       order.use_another_address_for_shipping = use_another_address_for_shipping
@@ -207,13 +206,14 @@ module Glysellin
       order.shipment = shipment
       order.payments = payments
 
+      line_items(true)
       billing_address(true)
       shipping_address(true)
       shipment(true)
     end
 
     def cancel_order!
-      self.line_items = order.parcels.first.line_items
+      self.line_items = order.line_items
 
       self.billing_address = order.billing_address
       self.shipping_address = order.shipping_address
@@ -221,6 +221,7 @@ module Glysellin
       self.shipment = order.shipment
       self.payments = order.payments
 
+      order.line_items(true)
       order.billing_address(true)
       order.shipping_address(true)
       order.shipment(true)

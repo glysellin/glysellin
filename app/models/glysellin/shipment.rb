@@ -5,6 +5,11 @@ module Glysellin
     belongs_to :shippable, polymorphic: true, autosave: true
     belongs_to :shipping_method, class_name: 'Glysellin::ShippingMethod'
 
+    has_many :parcels, class_name: 'Glysellin::Parcel', as: :sendable,
+                       dependent: :destroy
+    has_many :parcel_line_items, through: :parcels
+    has_many :line_items, through: :parcels
+
     state_machine initial: :pending do
       event :ship do
         transition :pending => :shipped

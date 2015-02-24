@@ -43,20 +43,6 @@ module Glysellin
       update_column :total_eot_price_cache, total_eot_price.round(2)
     end
 
-    def group_line_items_and_sum_quantities!
-      parcels.each do |parcel|
-        sums = parcel.line_items.group(:sku).count.to_a
-
-        sums.each do |(key, sum)|
-          records = parcel.line_items.where(sku: key).all
-          next if records.size == 1
-
-          records[0].update! quantity: sum
-          records[1..-1].each &:destroy
-        end
-      end
-    end
-
     def process_payments
       payments_manager.save
     end

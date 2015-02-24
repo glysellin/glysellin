@@ -37,7 +37,7 @@ FactoryGirl.define do
     billing_address { create(:address) }
 
     before(:create) do |abstract_order, evaluator|
-      abstract_order.parcels << create(:parcel)
+      abstract_order.line_items << create(:line_item)
     end
   end
 
@@ -69,10 +69,6 @@ FactoryGirl.define do
 
   factory :parcel, class: Glysellin::Parcel do
     sequence(:name) { |n| "Parcel #{ n }" }
-
-    before(:create) do |parcel, evaluator|
-      parcel.line_items << create(:line_item)
-    end
   end
 
   factory :order, class: Glysellin::Order do

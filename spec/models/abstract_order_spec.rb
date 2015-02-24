@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Glysellin::AbstractOrder do
   it { should validate_presence_of(:customer) }
 
-  it { should have_many(:parcels) }
   it { should have_many(:line_items) }
   it { should have_many(:discounts) }
   it { should have_one(:shipment) }
@@ -11,7 +10,7 @@ describe Glysellin::AbstractOrder do
   it { should belong_to(:customer) }
   it { should belong_to(:store) }
 
-  it { should accept_nested_attributes_for(:parcels) }
+  it { should accept_nested_attributes_for(:line_items) }
   it { should accept_nested_attributes_for(:shipment) }
   it { should accept_nested_attributes_for(:discounts) }
 
