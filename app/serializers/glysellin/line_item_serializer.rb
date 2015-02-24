@@ -7,9 +7,9 @@ module Glysellin
 
     has_one :discount, include: true
     has_one :variant, include: true
-    has_one :parcel
+    has_one :order
 
-    def parcel
+    def order
       object.container
     end
   end

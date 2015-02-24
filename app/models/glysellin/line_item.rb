@@ -9,17 +9,17 @@ module Glysellin
     accepts_nested_attributes_for :discount, allow_destroy: true,
       reject_if: :all_blank
 
+    has_many :parcel_line_items, inverse_of: :line_items, dependent: :destroy
+    has_many :parcels, through: :parcel_line_items
+
     validates :vat_rate, :eot_price, :price, :quantity, presence: true
 
     scope :join_orders, -> {
       joins(
-        'INNER JOIN glysellin_parcels ' +
-          'ON glysellin_parcels.id = glysellin_line_items.container_id ' +
         'INNER JOIN glysellin_orders ' +
-          'ON glysellin_orders.id = glysellin_parcels.sendable_id'
+          'ON glysellin_orders.id = glysellin_line_items.container_id'
       ).where(
-        glysellin_line_items: { container_type: 'Glysellin::Parcel' },
-        glysellin_parcels: { sendable_type: 'Glysellin::Order'}
+        glysellin_line_items: { container_type: 'Glysellin::Order' }
       )
     }
 

@@ -4,10 +4,9 @@ module Glysellin
 
     belongs_to :sendable, polymorphic: true, touch: true
 
-    has_many :line_items, as: :container, inverse_of: :container, dependent: :destroy
-    accepts_nested_attributes_for :line_items, allow_destroy: true,
-      reject_if: :all_blank
+    has_many :parcel_line_items, inverse_of: :parcel, dependent: :destroy
+    has_many :line_items, through: :parcel_line_items
 
-    validates_presence_of :name, :line_items
+    validates :name, :parcel_line_items, presence: true
   end
 end

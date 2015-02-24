@@ -11,6 +11,6 @@ module Glysellin
     has_many :discounts
     has_one :shipment
     has_many :payments
-    has_many :parcels
+    has_many :line_items
   end
 end

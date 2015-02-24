@@ -7,11 +7,7 @@ module Glysellin
 
     attr_accessor :discount_code
 
-    has_many :parcels, as: :sendable, inverse_of: :sendable, dependent: :destroy
-    accepts_nested_attributes_for :parcels, allow_destroy: true,
-                                  reject_if: :all_blank
-
-    has_many :line_items, through: :parcels
+    has_many :line_items, class_name: 'Glysellin::LineItem', as: :container
     accepts_nested_attributes_for :line_items, allow_destroy: true,
                                   reject_if: :all_blank
 
@@ -24,7 +20,7 @@ module Glysellin
     accepts_nested_attributes_for :discounts, allow_destroy: true,
                                   reject_if: :all_blank
 
-    validates :customer, :billing_address, :parcels, presence: true
+    validates :customer, :billing_address, :line_items, presence: true
     validates :shipping_address, presence: true,
               if: :use_another_address_for_shipping
 
@@ -39,11 +35,6 @@ module Glysellin
     scope :from_customer, ->(customer_id) { where(customer_id: customer_id) }
     scope :active, -> { where.not(state: :canceled) }
     scope :unpaid, -> { where.not(payment_state: :paid) }
-
-    def line_items options = {}
-      cached = options.fetch(:cached, true)
-      cached ? parcels.map(&:line_items).flatten : super()
-    end
 
     def ensure_ref
       unless ref

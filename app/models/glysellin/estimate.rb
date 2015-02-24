@@ -35,13 +35,11 @@ module Glysellin
     def generate_order!
       build_order unless order
 
-      parcel = (order.parcels.first || order.parcels.build(name: 'Carton 1'))
-      parcel.line_items = line_items.map(&:dup)
-
       order.customer = customer
       order.use_another_address_for_shipping = use_another_address_for_shipping
       order.billing_address = billing_address.try(:dup)
       order.shipping_address = shipping_address.try(:dup)
+      order.line_items = line_items.map(&:dup)
       order.shipment = shipment.try(:dup)
 
       self.order = order
