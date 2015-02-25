@@ -9,7 +9,7 @@ module Glysellin
     accepts_nested_attributes_for :discount, allow_destroy: true,
       reject_if: :all_blank
 
-    has_many :parcel_line_items, inverse_of: :line_items, dependent: :destroy
+    has_many :parcel_line_items, inverse_of: :line_item, dependent: :destroy
     has_many :parcels, through: :parcel_line_items
 
     validates :vat_rate, :eot_price, :price, :quantity, presence: true
