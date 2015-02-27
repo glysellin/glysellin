@@ -6,5 +6,7 @@ module Glysellin
     belongs_to :line_item
 
     validates :parcel, :line_item, :quantity, presence: true
+
+    scope :ordered, -> { order('glysellin_parcel_line_items.line_item_id ASC') }
   end
 end

@@ -37,6 +37,8 @@ module Glysellin
       )
     }
 
+    scope :ordered, -> { order('glysellin_line_items.id ASC') }
+
     def autofill_from(variant, customer_type = nil)
       self.variant_id = variant.id
 

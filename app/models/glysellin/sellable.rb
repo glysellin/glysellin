@@ -8,6 +8,14 @@ module Glysellin
 
     cattr_accessor :sold_callback
 
+    has_many :variants, -> { ordered },
+                        class_name: "Glysellin::Variant",
+                        inverse_of: :sellable,
+                        dependent: :destroy
+    accepts_nested_attributes_for :variants, allow_destroy: true
+
+    has_many :variant_images, through: :variants, source: :images
+
     has_many :imageables, as: :imageable_owner
     accepts_nested_attributes_for :imageables, allow_destroy: true
 
@@ -21,12 +29,6 @@ module Glysellin
 
     validates_presence_of :name, :vat_rate, :eot_price, :price, :taxonomy_id
     validates_numericality_of :vat_rate, :eot_price, :price
-
-    has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable,
-             dependent: :destroy
-    accepts_nested_attributes_for :variants, allow_destroy: true
-
-    has_many :variant_images, through: :variants, source: :images
 
     validates :variants, length: {
       minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short")

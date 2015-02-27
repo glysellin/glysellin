@@ -38,6 +38,7 @@ module Glysellin
     # validates_numericality_of :eot_price, :price
     validates :name, presence: true
 
+    scope :ordered, -> { order('glysellin_variants.id ASC') }
     scope :published, -> { where(published: true) }
 
     delegate :vat_rate, :vat_ratio, :weight, to: :sellable
