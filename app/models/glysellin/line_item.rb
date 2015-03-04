@@ -58,7 +58,7 @@ module Glysellin
 
     def price
       if eot_price && vat_rate_division
-        (eot_price * (1 + vat_rate_division)).round
+        (eot_price * (1 + vat_rate_division)).round(2)
       end
     end
 
