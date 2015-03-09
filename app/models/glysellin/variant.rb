@@ -57,6 +57,14 @@ module Glysellin
       end
     end
 
+    def vat_rate_for(customer_type)
+      if (customer_types_variant = customer_types_variant_for(customer_type))
+        customer_types_variant.vat_rate
+      else
+        vat_rate
+      end
+    end
+
     def eot_price_for(customer_type)
       if (customer_types_variant = customer_types_variant_for(customer_type))
         customer_types_variant.eot_price

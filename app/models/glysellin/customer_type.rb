@@ -7,4 +7,10 @@ class Glysellin::CustomerType < ActiveRecord::Base
            class_name: 'Glysellin::CustomerTypesVariant'
 
   scope :ordered, -> { order('glysellin_customer_types.name ASC') }
+
+  validates :name, presence: true
+
+  def default_vat_rate
+    read_attribute(:default_vat_rate) || Glysellin.default_vat_rate
+  end
 end
