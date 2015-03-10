@@ -4,7 +4,8 @@ class Glysellin::CustomerType < ActiveRecord::Base
   has_many :customers, dependent: :nullify
 
   has_many :customer_types_variants, dependent: :destroy,
-           class_name: 'Glysellin::CustomerTypesVariant'
+           class_name: 'Glysellin::CustomerTypesVariant',
+           inverse_of: :customer_type
 
   scope :ordered, -> { order('glysellin_customer_types.name ASC') }
 
