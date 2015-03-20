@@ -1,7 +1,8 @@
 module Glysellin
   class PaymentMethod < ActiveRecord::Base
     self.table_name = 'glysellin_payment_methods'
-    has_many :payments, :foreign_key => 'type_id'
+    # commenting this, as not needed and raises error with rails_admin
+    # has_many :payments, :foreign_key => 'type_id'
 
     scope :ordered, -> { order("name ASC") }
 
