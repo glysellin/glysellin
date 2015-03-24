@@ -13,6 +13,6 @@ module Glysellin
     has_many :sellables, through: :variants
     belongs_to :property_type, class_name: 'Glysellin::PropertyType'
 
-    validates :value, :barcode_ref, presence: true
+    validates :value, presence: true
   end
 end
