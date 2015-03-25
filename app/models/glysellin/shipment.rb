@@ -52,7 +52,7 @@ module Glysellin
     end
 
     def eot_price
-      read_attribute(:price) || 0
+      read_attribute(:eot_price) || 0
     end
 
     def price
