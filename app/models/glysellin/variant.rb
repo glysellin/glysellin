@@ -61,24 +61,30 @@ module Glysellin
 
     def vat_rate_for(customer_type)
       if (customer_types_variant = customer_types_variant_for(customer_type))
-        customer_types_variant.vat_rate
-      else
-        vat_rate
+        if (existing_rate = customer_types_variant.vat_rate)
+          return existing_rate
+        end
       end
+
+      vat_rate
     end
 
     def eot_price_for(customer_type)
       if (customer_types_variant = customer_types_variant_for(customer_type))
-        customer_types_variant.eot_price
-      else
-        eot_price
+        if (existing_price = customer_types_variant.eot_price)
+          return existing_price
+        end
       end
+
+      eot_price
     end
 
     def price_for(customer_type)
-      return eot_price unless customer_type.present?
+      return price unless customer_type.present?
 
       if (eot_price_for_customer_type = eot_price_for(customer_type))
+        vat_ratio =  1 + vat_rate_for(customer_type) / 100
+
         (eot_price_for_customer_type * vat_ratio).round(2)
       end
     end
