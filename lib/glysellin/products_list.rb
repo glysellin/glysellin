@@ -37,11 +37,11 @@ module Glysellin
     end
 
     def discounts_eot_total
-      discounts.map(&:eot_price).reduce(&:+) || 0
+      processed_discounts.map(&:eot_price).reduce(&:+) || 0
     end
 
     def discounts_total
-      discounts.map(&:price).reduce(&:+) || 0
+      processed_discounts.map(&:price).reduce(&:+) || 0
     end
 
     def discounts_total_vat
@@ -54,7 +54,7 @@ module Glysellin
 
     def adjustments
       adjustments  = shipment ? [shipment] : []
-      adjustments += discounts.to_a
+      adjustments += processed_discounts.to_a
     end
 
     def adjustments_total
@@ -79,6 +79,16 @@ module Glysellin
 
     def total_eot_price_before_discount
       eot_subtotal + shipment.eot_price
+    end
+
+    def processed_discounts
+      discountable_amount = self.discountable_amount
+
+      discounts.map do |discount|
+        discount.discountable_amount = discountable_amount
+        discountable_amount += discount.price
+        discount
+      end
     end
   end
 end

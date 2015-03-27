@@ -8,14 +8,29 @@ module Glysellin
     validates_presence_of :value, :discount_type_id
 
     def eot_price
-      price - (price * discountable.vat_rate)
+      @eot_price ||= price - (price * discountable.vat_rate)
     end
 
     def price
-      calculator.calculate
+      @price ||= calculator.calculate
     end
 
-    def self.build_from discount_code
+    def discountable_amount
+      @discountable_amount ||= discountable.discountable_amount
+    end
+
+    def discountable_amount=(amount)
+      @discountable_amount = amount
+
+      # Force refreshing dynamic values
+      @eot_price = @price = @eot_discountable_amount = nil
+    end
+
+    def eot_discountable_amount
+      @eot_discountable_amount ||= discountable_amount - (discountable_amount * discountable.vat_rate)
+    end
+
+    def self.build_from(discount_code)
       new.tap do |discount|
         discount.discount_type = discount_code.discount_type
         discount.value = discount_code.value
@@ -28,7 +43,7 @@ module Glysellin
     def calculator
       @calculator ||= Glysellin.discount_type_calculators[
         discount_type.identifier
-      ].new(discountable.discountable_amount, value)
+      ].new(discountable_amount, value)
     end
   end
 end
