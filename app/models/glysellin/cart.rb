@@ -178,7 +178,7 @@ module Glysellin
     end
 
     def discount_code_valid
-      if (code = DiscountCode.from_code(discount_code))
+      if (code = DiscountCode.from_code(discount_code)).present?
         if code.applicable_for?(total_price)
           discount = Discount.build_from(code)
           self.discounts = [discount]
