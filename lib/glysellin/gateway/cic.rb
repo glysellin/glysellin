@@ -43,6 +43,9 @@ module Glysellin
         end
       end
 
+      def parse_order_id hash
+      end
+
       # The response returned within "render" method in the OrdersController#gateway_response method
       def response
         { nothing: true }

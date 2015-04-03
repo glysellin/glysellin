@@ -25,7 +25,7 @@ module Glysellin
       gateway = if params[:id]
         PaymentMethod.gateway_from_order_ref(params[:id])
       else
-        PaymentMethod.gateway_from_raw_post(request.raw_post, params[:gateway])
+        PaymentMethod.gateway_from_raw_post(params[:gateway], request.raw_post)
       end
       # Process payment
       if gateway.process_payment! request.raw_post
