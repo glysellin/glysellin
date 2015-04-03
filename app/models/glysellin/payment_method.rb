@@ -18,7 +18,7 @@ module Glysellin
       end
 
       def gateway_for order
-        Glysellin.gateways[order.payment_method.slug].new(order)
+        Glysellin.gateways[order.payment_method.identifier].new(order)
       end
     end
 

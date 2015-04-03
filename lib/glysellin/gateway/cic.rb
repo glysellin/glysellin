@@ -17,38 +17,29 @@ module Glysellin
       end
 
       def process_payment! post_data
-        response = CicPayment.new.response post_data
+        response = CicPayment.new.response eval(post_data)
+        order = Glysellin::Order.find(response['reference'].to_i)
 
-        if response[:success]
-          order = Order.find(response['reference'].to_i)
-          order.paid!
+        if Rails.env.development?
+          order.payments.last.update! amount: order.total_price
+          order.payments.last.pay!
           order.save!
-        end
-
-        if Rails.env.production?
-          if response[:success] || response["code-retour"].downcase == "annulation"
-            render text: "version=2\ncdr=0\n"
-          else
-            render text: "version=2\ncdr=1\n"
-          end
         else
-          if response[:success]
-            flash[:notice] = "[DEV-MODE] Merci pour votre achat."
-          else
-            flash[:error] = "[DEV-MODE] Erreur survenue."
+          unless response["code-retour"].downcase == "annulation"
+            order.payments.last.update! amount: order.total_price
+            order.payments.last.pay!
+            order.save!
           end
-
-          redirect_to root_path
         end
       end
 
       class << self
-        def parse_order_id response
-          Order.find(response['reference'].to_i)
+        def parse_order_id raw_post
+          response = CicPayment.new.response eval(raw_post)
+          Glysellin::Order.find(response['reference'].to_i)
         end
       end
 
-      # The response returned within "render" method in the OrdersController#gateway_response method
       def response
         { nothing: true }
       end
@@ -56,12 +47,10 @@ module Glysellin
       private
 
       def cic_payment_form(payment, options = {})
-
         options[:button_text] ||= 'Payer'
         options[:button_class] ||= ''
 
         html = "<form name='cic_payment_form' action='#{payment.target_url}' method='post'>\n"
-
         html << "  <input type='hidden' name='version'           id='version'        value='#{payment.version}' />\n"
         html << "  <input type='hidden' name='TPE'               id='TPE'            value='#{payment.tpe}' />\n"
         html << "  <input type='hidden' name='date'              id='date'           value='#{payment.date}' />\n"
@@ -75,12 +64,10 @@ module Glysellin
         html << "  <input type='hidden' name='societe'           id='societe'        value='#{payment.societe}' />\n"
         html << "  <input type='hidden' name='texte-libre'       id='texte-libre'    value='#{payment.texte_libre}' />\n"
         html << "  <input type='hidden' name='mail'              id='mail'           value='#{payment.mail}' />\n"
-
         html << "  <input type='submit' name='submit_cic_payment_form' value='#{options[:button_text]}' class='#{options[:button_class]}' />\n"
         html << "</form>\n"
 
         html.respond_to?(:html_safe) ? html.html_safe : html
-
       end
     end
   end
