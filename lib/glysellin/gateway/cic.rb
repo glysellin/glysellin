@@ -18,7 +18,7 @@ module Glysellin
 
       def process_payment! post_data
         response = CicPayment.new.response Rack::Utils.parse_nested_query(post_data)
-        order = Glysellin::Order.find(response['reference'].to_i)
+        order = Glysellin::Order.find(response['texte-libre'].to_i)
 
         if Rails.env.development?
           order.payments.last.update! amount: order.total_price
@@ -36,7 +36,7 @@ module Glysellin
       class << self
         def parse_order_id raw_post
           response = CicPayment.new.response Rack::Utils.parse_nested_query(raw_post)
-          Glysellin::Order.find(response['reference'].to_i)
+          Glysellin::Order.find(response['texte-libre'].to_i)
         end
       end
 
@@ -55,14 +55,14 @@ module Glysellin
         html << "  <input type='hidden' name='TPE'               id='TPE'            value='#{payment.tpe}' />\n"
         html << "  <input type='hidden' name='date'              id='date'           value='#{payment.date}' />\n"
         html << "  <input type='hidden' name='montant'           id='montant'        value='#{payment.montant}' />\n"
-        html << "  <input type='hidden' name='reference'         id='reference'      value='#{order.id}' />\n"
+        html << "  <input type='hidden' name='reference'         id='reference'      value='#{payment.reference}' />\n"
         html << "  <input type='hidden' name='MAC'               id='MAC'            value='#{payment.hmac_token}' />\n"
         html << "  <input type='hidden' name='url_retour'        id='url_retour'     value='#{payment.url_retour}' />\n"
         html << "  <input type='hidden' name='url_retour_ok'     id='url_retour_ok'  value='#{payment.url_retour_ok}' />\n"
         html << "  <input type='hidden' name='url_retour_err'    id='url_retour_err' value='#{payment.url_retour_err}' />\n"
         html << "  <input type='hidden' name='lgue'              id='lgue'           value='#{payment.lgue}' />\n"
         html << "  <input type='hidden' name='societe'           id='societe'        value='#{payment.societe}' />\n"
-        html << "  <input type='hidden' name='texte-libre'       id='texte-libre'    value='#{payment.texte_libre}' />\n"
+        html << "  <input type='hidden' name='texte-libre'       id='texte-libre'    value='#{order.id}' />\n"
         html << "  <input type='hidden' name='mail'              id='mail'           value='#{payment.mail}' />\n"
         html << "  <input type='submit' name='submit_cic_payment_form' value='#{options[:button_text]}' class='#{options[:button_class]}' />\n"
         html << "</form>\n"
