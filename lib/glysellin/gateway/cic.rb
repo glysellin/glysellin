@@ -55,7 +55,7 @@ module Glysellin
         html << "  <input type='hidden' name='TPE'               id='TPE'            value='#{payment.tpe}' />\n"
         html << "  <input type='hidden' name='date'              id='date'           value='#{payment.date}' />\n"
         html << "  <input type='hidden' name='montant'           id='montant'        value='#{payment.montant}' />\n"
-        html << "  <input type='hidden' name='reference'         id='reference'      value='#{payment.reference}' />\n"
+        html << "  <input type='hidden' name='reference'         id='reference'      value='#{order.id}' />\n"
         html << "  <input type='hidden' name='MAC'               id='MAC'            value='#{payment.hmac_token}' />\n"
         html << "  <input type='hidden' name='url_retour'        id='url_retour'     value='#{payment.url_retour}' />\n"
         html << "  <input type='hidden' name='url_retour_ok'     id='url_retour_ok'  value='#{payment.url_retour_ok}' />\n"
