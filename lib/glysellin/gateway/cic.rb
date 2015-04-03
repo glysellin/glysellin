@@ -17,7 +17,6 @@ module Glysellin
       end
 
       def process_payment! post_data
-        raise true
         response = CicPayment.new.response post_data
 
         if response[:success]
@@ -44,7 +43,8 @@ module Glysellin
       end
 
       class << self
-        def parse_order_id hash
+        def parse_order_id response
+          Order.find(response['reference'].to_i)
         end
       end
 
