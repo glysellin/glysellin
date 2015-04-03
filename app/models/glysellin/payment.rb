@@ -3,7 +3,7 @@ module Glysellin
     self.table_name = 'glysellin_payments'
 
     belongs_to :payable, polymorphic: true, inverse_of: :payments
-    belongs_to :payment_method, class_name: 'PaymentMethod', inverse_of: :payments
+    belongs_to :payment_method, class_name: 'PaymentMethod'
 
     validates :payable, presence: true
 
