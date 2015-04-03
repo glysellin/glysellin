@@ -18,7 +18,7 @@ module Glysellin
 
       def process_payment! post_data
         response = CicPayment.new.response Rack::Utils.parse_nested_query(post_data)
-        order = Glysellin::Order.find(response['texte-libre'].to_i)
+        order = Glysellin::Order.find(response['reference'].to_i)
 
         if Rails.env.development?
           order.payments.last.update! amount: order.total_price
@@ -36,7 +36,7 @@ module Glysellin
       class << self
         def parse_order_id raw_post
           response = CicPayment.new.response Rack::Utils.parse_nested_query(raw_post)
-          Glysellin::Order.find(response['texte-libre'].to_i)
+          Glysellin::Order.find(response['reference'].to_i)
         end
       end
 
