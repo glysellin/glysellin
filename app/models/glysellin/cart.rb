@@ -63,7 +63,9 @@ module Glysellin
         from, to = transition.from_name, transition.to_name
 
         if from != to && from == :ready
-          cart.cancel_order!
+          if cart.order.present?
+            cart.cancel_order!
+          end
         end
       end
     end
