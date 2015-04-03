@@ -3,13 +3,15 @@ module Glysellin
     class ProductsController < CartController
       def create
         @line_item = current_cart.line_items.build(line_item_params)
+        @variant = Glysellin::Variant.where(id: line_item_params[:variant_id]).first
 
-        if (variant = Glysellin::Variant.where(id: line_item_params[:variant_id]).first)
-          @line_item.autofill_from(variant)
+        if @variant.present?
+          @line_item.autofill_from(@variant)
+          current_cart.line_items_added!
+          render_cart_partial
+        else
+          render json: { error: 'choose_variant' }, status: 404
         end
-
-        current_cart.line_items_added!
-        render_cart_partial
       end
 
       def update

@@ -95,6 +95,7 @@ module Glysellin
                                   reject_if: :all_blank
     attr_accessor :discount_code
 
+    validate :line_items_variants_presence
     validate :line_items_variants_published
     validate :line_items_in_stock
     validate :line_items_stocks_available
@@ -134,8 +135,17 @@ module Glysellin
       line_items.find { |item| item.id == id.to_i }
     end
 
+    def line_items_variants_presence
+      line_items.each do |line_item|
+        if line_item.variant.blank?
+          add_error(:line_items, :choose_variant, item: line_item.id.to_s)
+        end
+      end
+    end
+
     def line_items_variants_published
       line_items.each do |line_item|
+        next unless line_item.variant.present?
         unless line_item.variant.published
           line_item.mark_for_destruction!
           add_error(:line_items, :not_for_sale, item: line_item.name)
@@ -145,6 +155,7 @@ module Glysellin
 
     def line_items_in_stock
       line_items.each do |line_item|
+        next unless line_item.variant.present?
         unless store.in_stock?(line_item.variant)
           line_item.mark_for_destruction!
           add_error(:line_items, :out_of_stock, item: line_item.name)
@@ -154,6 +165,7 @@ module Glysellin
 
     def line_items_stocks_available
       line_items.each do |line_item|
+        next unless line_item.variant.present?
         unless store.available?(line_item.variant, line_item.quantity)
           available = store.available_quantity_for(line_item.variant)
 

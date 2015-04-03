@@ -10,6 +10,19 @@ class GlysellinCart
   bindAll: ->
     @add_to_cart_forms.on 'ajax:success', (e, resp) =>
       @update(resp)
+      @showError false
+
+    @add_to_cart_forms.on 'ajax:error', (e, resp) =>
+      if resp.responseJSON.error is 'choose_variant'
+        @showError true
+
+  showError: (b) =>
+    if b
+      @add_to_cart_forms.find('.submit-container').addClass('has-error')
+      $('[data-choose-variant-text]').removeClass('hidden')
+    else
+      @add_to_cart_forms.find('.submit-container').removeClass('has-error')
+      $('[data-choose-variant-text]').addClass('hidden')
 
   update: (markup) ->
     $markup = $(markup)
@@ -22,7 +35,7 @@ class GlysellinCart
       if @options.handleAddedToCartModal
         @options.handleAddedToCartModal($modal)
       else
-        $modal.prependTo('body') 
+        $modal.prependTo('body')
         if ($default_modal = $modal.filter("[data-warning]"))
           @handleDefaultModal($default_modal)
 
