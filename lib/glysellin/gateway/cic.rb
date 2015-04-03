@@ -12,7 +12,7 @@ module Glysellin
       end
 
       def render_request_button(options = {})
-        request = CicPayment.new.request(montant: @order.total_price, reference: @order.id * (Rails.env.staging? ? rand(1000) : 1))
+        request = CicPayment.new.request montant: @order.total_price, reference: @order.id
         { text: cic_payment_form(request, button_text: 'Procéder au paiement', button_class: 'btn btn-success btn-large').html_safe }
       end
 
@@ -62,7 +62,7 @@ module Glysellin
         html << "  <input type='hidden' name='url_retour_err'    id='url_retour_err' value='#{payment.url_retour_err}' />\n"
         html << "  <input type='hidden' name='lgue'              id='lgue'           value='#{payment.lgue}' />\n"
         html << "  <input type='hidden' name='societe'           id='societe'        value='#{payment.societe}' />\n"
-        html << "  <input type='hidden' name='texte-libre'       id='texte-libre'    value='#{order.id}' />\n"
+        html << "  <input type='hidden' name='texte-libre'       id='texte-libre'    value='#{payment.texte_libre}' />\n"
         html << "  <input type='hidden' name='mail'              id='mail'           value='#{payment.mail}' />\n"
         html << "  <input type='submit' name='submit_cic_payment_form' value='#{options[:button_text]}' class='#{options[:button_class]}' />\n"
         html << "</form>\n"
