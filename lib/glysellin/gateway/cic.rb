@@ -24,12 +24,18 @@ module Glysellin
           order.payments.last.update! amount: order.total_price
           order.payments.last.pay!
           order.save!
-        else
+        end
+
+        if Rails.env.staging?
           unless response["code-retour"].downcase == "annulation"
             order.payments.last.update! amount: order.total_price
             order.payments.last.pay!
             order.save!
           end
+        end
+
+        if Rails.env.production?
+          raise "PLEASE IMPLEMENT THIS CASE [CIC.RB]"
         end
       end
 
