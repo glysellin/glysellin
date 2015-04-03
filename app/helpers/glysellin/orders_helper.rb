@@ -17,7 +17,7 @@ module Glysellin
         next if form.object.send(addr)
 
         if record && (address = record.send("#{ addr }"))
-          form.object.send(:"#{ addr }=", address)
+          form.object.send(:"#{ addr }=", address.dup)
         else
           form.object.send(:"build_#{ addr }")
         end
