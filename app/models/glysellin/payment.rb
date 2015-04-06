@@ -7,8 +7,6 @@ module Glysellin
 
     validates :payable, presence: true
 
-    before_save :update_payable
-
     state_machine :state, initial: :pending, use_transactions: false do
       event :pay do
         transition all => :paid
@@ -52,12 +50,6 @@ module Glysellin
 
     def by_check?
       type.slug == 'check'
-    end
-
-    private
-
-    def update_payable
-      payable.save if amount_changed?
     end
   end
 end
