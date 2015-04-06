@@ -66,11 +66,11 @@ module Glysellin
     end
 
     def total_price
-      subtotal + adjustments_total
+      (subtotal + adjustments_total).round(2)
     end
 
     def total_eot_price
-      eot_subtotal + eot_adjustments_total
+      (eot_subtotal + eot_adjustments_total).round(2)
     end
 
     def total_price_before_discount
