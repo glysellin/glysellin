@@ -102,7 +102,7 @@ module Glysellin
     validate :discount_code_valid, if: Proc.new { |cart| discount_code.present? }
 
     def self.fetch_or_initialize options
-      where(id: options[:id]).first_or_initialize do |cart|
+      where(id: options[:id]).first_or_create! do |cart|
         cart.store = options[:store]
       end
     end
@@ -178,7 +178,7 @@ module Glysellin
     end
 
     def discount_code_valid
-      if (code = DiscountCode.from_code(discount_code))
+      if (code = DiscountCode.from_code(discount_code).first).present?
         if code.applicable_for?(total_price)
           discount = Discount.build_from(code)
           self.discounts = [discount]
