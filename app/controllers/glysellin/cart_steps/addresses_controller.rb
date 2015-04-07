@@ -22,7 +22,7 @@ module Glysellin
           :use_another_address_for_shipping,
           customer_attributes: [
             :id, :email, user_attributes: [
-              :id, :password, :password_confirmation
+              :id, :email, :password, :password_confirmation
             ]
           ],
           billing_address_attributes: address_params,
