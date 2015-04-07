@@ -42,7 +42,7 @@ module Glysellin
       end
 
       def response
-        "version=2\ncdr=0\n"
+        { text: "version=2\ncdr=0\n" }
       end
 
       class << self
