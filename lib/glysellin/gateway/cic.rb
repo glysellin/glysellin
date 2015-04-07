@@ -27,16 +27,22 @@ module Glysellin
         end
 
         if Rails.env.staging?
-          unless response["code-retour"].downcase == "annulation"
+          order.payments.last.update! amount: order.total_price
+          order.payments.last.pay!
+          order.save!
+        end
+
+        if Rails.env.production?
+          if response[:success] || (response["code-retour"].downcase == "annulation")
             order.payments.last.update! amount: order.total_price
             order.payments.last.pay!
             order.save!
           end
         end
+      end
 
-        if Rails.env.production?
-          raise "PLEASE IMPLEMENT THIS CASE [CIC.RB]"
-        end
+      def response
+        "version=2\ncdr=0\n"
       end
 
       class << self
@@ -44,10 +50,6 @@ module Glysellin
           response = CicPayment.new.response Rack::Utils.parse_nested_query(raw_post)
           Glysellin::Order.find(response['reference'].to_i)
         end
-      end
-
-      def response
-        { nothing: true }
       end
 
       private
