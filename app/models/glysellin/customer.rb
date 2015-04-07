@@ -16,6 +16,12 @@ module Glysellin
     belongs_to :user, class_name: 'User', inverse_of: :customer
     accepts_nested_attributes_for :user, reject_if: :all_blank
 
+    def update_from_cart! cart
+      update! email: user.email
+      update! billing_address: cart.billing_address.dup
+      update! shipping_address: cart.shipping_address.dup
+    end
+
     def name
       [full_name, company_name].map(&:presence).compact.join(' - ')
     end

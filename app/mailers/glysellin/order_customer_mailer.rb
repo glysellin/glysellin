@@ -3,14 +3,17 @@ class Glysellin::OrderCustomerMailer < ActionMailer::Base
 
   def send_order_created_email(order)
     @order = order
+    @email = @order.customer.email || @order.customer.user.email
+
     mail(
-      to: @order.customer.email,
+      to: @email,
       subject: Glysellin.mailer_subjects.call[:customer][:send_order_created_email]
     )
   end
 
   def send_order_paid_email(order)
     @order = order
+    @email = @order.customer.email || @order.customer.user.email
 
     if Glysellin.order_paid_email_attachments
       Glysellin.order_paid_email_attachments.call(order).each do |attachment|
@@ -19,18 +22,19 @@ class Glysellin::OrderCustomerMailer < ActionMailer::Base
     end
 
     mail(
-      to: @order.customer.email,
+      to: @email,
       subject: Glysellin.mailer_subjects.call[:customer][:send_order_paid_email]
     )
   end
 
   def send_order_shipped_email(order)
     @order = order
+    @email = @order.customer.email || @order.customer.user.email
 
     return unless order.email.presence
 
     mail(
-      to: @order.customer.email,
+      to: @email,
       subject: Glysellin.mailer_subjects.call[:customer][:send_order_shipped_email]
     )
   end

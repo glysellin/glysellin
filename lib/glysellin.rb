@@ -43,6 +43,9 @@ module Glysellin
   mattr_accessor :user_class_name
   @@user_class_name = 'User'
 
+  mattr_accessor :sign_in_after_user_selection
+  @@sign_in_after_user_selection = false
+
   # Defines if SKU must be automatically set on product save
   mattr_accessor :autoset_sku
   @@autoset_sku = true
