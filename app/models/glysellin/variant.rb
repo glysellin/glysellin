@@ -34,7 +34,6 @@ module Glysellin
     # validate :check_properties
     before_validation :check_prices
     before_validation :ensure_name
-    before_validation :refresh_long_name
 
     validate :generate_barcode, on: :create, unless: Proc.new { |variant| variant.sku.present? }
     # validates_numericality_of :eot_price, :price
@@ -121,18 +120,6 @@ module Glysellin
       end
     end
 
-    def refresh_long_name
-      taxonomy_parts = sellable.taxonomy.path[1..-1].map(&:name).flatten
-
-      properties = variant_properties.map(&:property)
-      properties_parts = if properties.length > 0
-        properties.map(&:value).join(', ').presence
-      end
-
-      parts = [*taxonomy_parts, sellable.name, properties_parts]
-      self.long_name = parts.compact.join(' - ')
-    end
-
     def properties_hash
       @properties_hash ||= begin
         properties = Glysellin::Property
@@ -152,7 +139,7 @@ module Glysellin
 
     def stocks_for_all_stores
       @stocks_for_all_stores ||=
-        Glysellin::Store.all.each_with_object({}) do |store, hash|
+        all_stores.each_with_object({}) do |store, hash|
           existing_stock = stocks.find { |stock| stock.store_id == store.id }
           hash[store] = existing_stock || stocks.build(store: store)
         end
@@ -187,6 +174,12 @@ module Glysellin
 
     def vat_ratio
       1 + vat_rate / 100
+    end
+
+    private
+
+    def all_stores
+      RequestStore.store[:all_stores] ||= Glysellin::Store.all
     end
   end
 end

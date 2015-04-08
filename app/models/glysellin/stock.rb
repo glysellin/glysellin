@@ -14,4 +14,12 @@ class Glysellin::Stock < ActiveRecord::Base
   def threshold
     read_attribute(:threshold) || Glysellin.default_stock_alert_threshold
   end
+
+  def withdraw(quantity)
+    self.count -= quantity
+  end
+
+  def deposit(quantity)
+    self.count += quantity
+  end
 end

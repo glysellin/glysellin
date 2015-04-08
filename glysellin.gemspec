@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'devise'
   s.add_dependency 'active_model_serializers', '~> 0.8.0'
   s.add_dependency 'acts-as-taggable-on'
+  s.add_dependency 'request_store'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails', '~> 3.0.0.beta'

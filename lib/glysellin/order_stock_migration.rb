@@ -38,13 +38,13 @@ module Glysellin
     end
 
     def increment!
-      stock.save! if stock.new_record?
-      stock.increment!(:count, line_item.quantity)
+      stock.deposit(line_item.quantity)
+      stock.save!
     end
 
     def decrement!
-      stock.save! if stock.new_record?
-      stock.decrement!(:count, line_item.quantity)
+      stock.withdraw(line_item.quantity)
+      stock.save!
     end
 
     private
