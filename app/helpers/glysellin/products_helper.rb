@@ -14,7 +14,7 @@ module Glysellin
             " (#{ t('glysellin.labels.sellables.out_of_stock') })"
         end
 
-        all_variants << ["#{name} (#{number_to_currency(variant.price)})", variant.id]
+        all_variants << ["#{name} (#{number_to_currency(variant.price)})", variant.id, { data: { price: number_to_currency(variant.price) } }]
       end
 
       options_for_select(all_variants, disabled: disabled_variants)
