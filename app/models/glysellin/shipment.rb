@@ -9,7 +9,9 @@ module Glysellin
                        dependent: :destroy
     has_many :parcel_line_items, through: :parcels
     has_many :line_items, through: :parcels
-
+    
+    delegate :name, to: :shipping_method, allow_nil: true
+    
     state_machine initial: :pending do
       event :ship do
         transition :pending => :shipped
