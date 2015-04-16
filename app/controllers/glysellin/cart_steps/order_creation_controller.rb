@@ -7,7 +7,7 @@ module Glysellin
           OrderCustomerMailer.send_order_created_email(current_cart.order).deliver
 
           session['glysellin.order'] = current_cart.order.id
-          current_cart.destroy
+          current_cart.reload.destroy
 
           redirect_to order_path
         else
