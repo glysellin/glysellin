@@ -210,20 +210,24 @@ module Glysellin
       build_order unless order
 
       order.line_items = line_items
-
       order.customer = customer
       order.use_another_address_for_shipping = use_another_address_for_shipping
+      
       order.billing_address = billing_address
       order.shipping_address = shipping_address
 
       order.shipment = shipment
       order.payments = payments
+      order.discounts = discounts
 
       line_items(true)
       billing_address(true)
       shipping_address(true)
       shipment(true)
       payments(true)
+      discounts(true)
+      
+      order.save!
     end
 
     def cancel_order!
