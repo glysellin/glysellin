@@ -12,7 +12,7 @@ module Glysellin
 
     has_many :parcel_line_items, -> { ordered }, through: :parcels
     has_many :line_items, -> { ordered }, through: :parcels
-  
+
     delegate :name, to: :shipping_method, allow_nil: true
 
     state_machine initial: :pending do
@@ -24,13 +24,13 @@ module Glysellin
         transition :shipped => :pending
       end
 
-      state :pending do
-        before_save :ship, if: :sent_on
-      end
+      # state :pending do
+      #   before_save :ship, if: :sent_on
+      # end
 
-      state :shipped do
-        before_save :cancel, unless: :sent_on
-      end
+      # state :shipped do
+      #   before_save :cancel, unless: :sent_on
+      # end
 
       before_transition on: :cancel, do: :reset_shipment
       before_transition on: :ship do |base, transition|
