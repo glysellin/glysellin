@@ -35,7 +35,8 @@ module Glysellin
         current_cart.update_attributes(cart_params)
         current_cart.customer = current_user.customer if user_signed_in?
         current_cart.validated! if current_cart.valid?
-        redirect_to cart_path
+        
+        render action: :show, controller: :carts
       end
 
       private
