@@ -12,6 +12,8 @@ module Glysellin
 
     has_many :parcel_line_items, -> { ordered }, through: :parcels
     has_many :line_items, -> { ordered }, through: :parcels
+  
+    delegate :name, to: :shipping_method, allow_nil: true
 
     state_machine initial: :pending do
       event :ship do
