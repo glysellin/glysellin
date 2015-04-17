@@ -111,15 +111,6 @@ module Glysellin
       read_attribute(:eot_price) || (sellable && sellable.eot_price)
     end
 
-    def custom_name
-      if variant_properties.any?
-        properties_names = variant_properties.map(&:property).flatten.map(&:value).join(', ')
-        [sellable.name, properties_names].join(' — ')
-      else
-        [sellable.name, name].join(' — ')
-      end
-    end
-
     def properties_hash
       @properties_hash ||= begin
         properties = Glysellin::Property
