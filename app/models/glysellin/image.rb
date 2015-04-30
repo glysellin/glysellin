@@ -2,7 +2,7 @@ module Glysellin
   class Image < ActiveRecord::Base
     self.table_name = 'glysellin_images'
 
-    belongs_to :imageable, dependent: :destroy
+    belongs_to :imageable, polymorphic: true
     has_attached_file :file, styles: Glysellin.product_images_styles
 
     validates_attachment :file, content_type: {
