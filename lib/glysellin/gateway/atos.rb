@@ -45,12 +45,16 @@ module Glysellin
         def parse_atos_resp(data)
           # Prepare arguments
           exec_chain = "message=#{ data } pathfile=#{ pathfile_path }"
-          bin_path = "#{ bin_path }/response"
+          response_bin_path = "#{ bin_path }/response"
 
           # Call response program to get exclamation point separated payment response details
-          resp = `#{ bin_path } #{ exec_chain }`.split('!')
+          resp = `#{ response_bin_path } #{ exec_chain }`
 
-          log "Reponse de atos : #{ resp } / Order id : #{ resp[32] }"
+          log "Unparsed ATOS response : #{ resp }"
+
+          resp = resp.split('!')
+
+          log "Parsed ATOS response : #{ resp } / Order id : #{ resp[32] }"
 
           resp
         end
@@ -71,10 +75,10 @@ module Glysellin
           "#{ key }=#{ value }" if value
         end.compact.join(' ')
 
-        bin_path = "#{ bin_path }/request"
+        request_bin_path = "#{ bin_path }/request"
 
         begin
-          data = `#{ bin_path } #{ exec_chain }`
+          data = `#{ request_bin_path } #{ exec_chain }`
           results = data.presence ? data.split('!') : []
 
         # If OS didn't want to exec program, useful in development
@@ -84,7 +88,7 @@ module Glysellin
 
         if results.length == 0
           result = [
-            '<div style="color:red">', bin_path, exec_chain, '</div>'
+            '<div style="color:red">', request_bin_path, exec_chain, '</div>'
           ].join(' ')
         # If exit code is 0, render payment buttons
         elsif results[1].to_i >= 0
