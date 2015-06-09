@@ -111,7 +111,7 @@ module Glysellin
         result
       end
 
-      def valid_response?(post_data)
+      def successful_payment?(post_data)
         results = self.class.parse_atos_resp(
           Rack::Utils.parse_nested_query(post_data)['DATA']
         )
