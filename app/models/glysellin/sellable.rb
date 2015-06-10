@@ -1,10 +1,11 @@
-require 'friendly_id'
-
 module Glysellin
   class Sellable < ActiveRecord::Base
     self.table_name = 'glysellin_sellables'
 
     include Glysellin::VariantCacheable
+
+    extend FriendlyId
+    friendly_id :slug_candidates, use: :slugged
 
     cattr_accessor :sold_callback
 
@@ -35,6 +36,8 @@ module Glysellin
     }
 
     before_validation :check_prices
+
+    delegate :path_string, to: :taxonomy, prefix: true, allow_nil: true
 
     # Published sellables are the ones that have at least one variant
     # published.
@@ -77,6 +80,15 @@ module Glysellin
 
     def vat_ratio
       1 + vat_rate / 100
+    end
+
+    private
+
+    def slug_candidates
+      [
+        :name,
+        [:name, :taxonomy_path_string]
+      ]
     end
   end
 end

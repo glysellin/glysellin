@@ -1,5 +1,3 @@
-require 'friendly_id'
-
 module Glysellin
   class Variant < ActiveRecord::Base
     self.table_name = 'glysellin_variants'
