@@ -2,6 +2,9 @@ module Glysellin
   class Taxonomy < ActiveRecord::Base
     self.table_name = 'glysellin_taxonomies'
 
+    extend FriendlyId
+    friendly_id :slug_candidates, use: :slugged
+
     include Glysellin::VariantCacheable
 
     scope :roots, -> { where(parent_id: nil) }
@@ -93,6 +96,15 @@ module Glysellin
 
     def full_name
       path.join(" > ")
+    end
+
+    private
+
+    def slug_candidates
+      [
+        :name,
+        :path_string
+      ]
     end
   end
 end
