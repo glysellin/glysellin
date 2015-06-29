@@ -171,3 +171,50 @@ fr:
           sent: 'Envoyé'
           accepted: "Accepté"
           canceled: "Annulé"
+
+  activerecord:
+    models:
+      glysellin/sellable:
+        one: "Produit"
+        other: "Produits"
+      glysellin/variant:
+        one: "Déclinaison de produit"
+        other: "Déclinaisons de produit"
+      glysellin/image:
+        one: "Image"
+        other: "Images"
+      glysellin/variant_property:
+        one: "Propriété de produit"
+        other: "Propriétés de produit"
+      glysellin/property:
+        one: "Propriété"
+        other: "Propriétés"
+      glysellin/property_type:
+        one: "Type de propriété"
+        other: "Types de propriété"
+      glysellin/taxonomy:
+        one: "Catégorie de produit"
+        other: "Catégories de produit"
+    attributes:
+      glysellin/sellable:
+        name: "Nom"
+        description: "Description"
+        taxonomy: "Catégorie"
+        brand: "Fabricant"
+        eot_price: "Prix HT"
+        price: "Prix TTC"
+        vat_rate: "Taux de TVA"
+        variants: "Déclinaisons"
+        images: "Images"
+      glysellin/variant:
+        published: "Publiée ?"
+        sku: "SKU"
+        name: "Nom"
+        price: "Prix TTC"
+        eot_price: "Prix HT"
+        variant_properties: "Propriétés"
+      glysellin/image:
+        file: "Fichier image"
+      glysellin/taxonomy:
+        name: "Nom"
+        description: "Description"
