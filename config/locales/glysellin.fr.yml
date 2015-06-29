@@ -205,6 +205,7 @@ fr:
         price: "Prix TTC"
         vat_rate: "Taux de TVA"
         variants: "Déclinaisons"
+        variants_count: "Nombre de déclinaisons"
         images: "Images"
       glysellin/variant:
         published: "Publiée ?"

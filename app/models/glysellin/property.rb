@@ -12,5 +12,9 @@ module Glysellin
     belongs_to :property_type, class_name: 'Glysellin::PropertyType'
 
     validates :value, presence: true
+
+    def name
+      [property_type.try(:name).presence, value.presence].compact.join(' - ')
+    end
   end
 end

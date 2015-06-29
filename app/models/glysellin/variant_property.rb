@@ -4,5 +4,9 @@ module Glysellin
 
     belongs_to :variant, class_name: "Glysellin::Variant"
     belongs_to :property, class_name: "Glysellin::Property"
+
+    def name
+      property.try(:name)
+    end
   end
 end
