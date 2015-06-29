@@ -2,8 +2,6 @@ module Glysellin
   class Taxonomy < ActiveRecord::Base
     self.table_name = 'glysellin_taxonomies'
 
-    include Glysellin::VariantCacheable
-
     extend FriendlyId
     friendly_id :name, use: [:slugged, :history, :finders]
 
@@ -97,7 +95,7 @@ module Glysellin
     def full_name
       path.join(" > ")
     end
-    
+
     private
 
     def should_generate_new_friendly_id?

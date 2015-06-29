@@ -2,8 +2,6 @@ module Glysellin
   class Property < ActiveRecord::Base
     self.table_name = 'glysellin_properties'
 
-    include Glysellin::VariantCacheable
-
     has_many :variant_properties, class_name: 'Glysellin::VariantProperty',
                                   dependent: :destroy, inverse_of: :variant
 

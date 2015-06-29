@@ -4,8 +4,6 @@ module Glysellin
   class Sellable < ActiveRecord::Base
     self.table_name = 'glysellin_sellables'
 
-    include Glysellin::VariantCacheable
-
     extend FriendlyId
     friendly_id :name, use: [:slugged, :history, :finders]
 
