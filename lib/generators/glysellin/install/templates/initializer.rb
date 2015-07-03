@@ -44,7 +44,7 @@ module Glysellin
     # config.multi_store = true
 
     # Set default VAT rate for products when it is not set in db
-    config.default_vat_rate = 19.6
+    config.default_vat_rate = 20
 
     # Default product weight for shipping rate calculation, expressed in kilograms
     # Defaults to 0. For 100g, use value : 0.1
