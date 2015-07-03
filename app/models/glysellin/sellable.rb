@@ -33,7 +33,7 @@ module Glysellin
     #   minimum: 1, too_short: I18n.t("glysellin.errors.variants.too_short")
     # }
 
-    # before_validation :check_prices
+    before_validation :check_prices
 
     # Published sellables are the ones that have at least one variant
     # published.
@@ -49,25 +49,30 @@ module Glysellin
       variants.where(published: true)
     end
 
-    # def check_prices
-    #   return unless price.present? && eot_price.present?
-    #   # If we have to fill one of the prices when changed
-    #   if eot_changed_alone?
-    #     self.price = (eot_price * vat_ratio).round(2)
-    #   elsif price_changed_alone?
-    #     self.eot_price = (price / vat_ratio).round(2)
-    #   end
-    # end
+    def check_prices
+      return if price.blank? && eot_price.blank?
+
+      puts "Check prices : #{ eot_changed_alone? } || #{ price_changed_alone?}"
+      # If we have to fill one of the prices when changed
+      if eot_changed_alone?
+        self.price = (eot_price * vat_ratio).round(2)
+      elsif price_changed_alone?
+        self.eot_price = (price / vat_ratio).round(2)
+      end
+    end
 
     def eot_changed_alone?
       eot_changed_alone = eot_price_changed? && !price_changed?
-      new_record_eot_alone = new_record? && eot_price && !price
+      eot_alone = eot_price && !price
 
-      eot_changed_alone || new_record_eot_alone
+      eot_changed_alone || eot_alone
     end
 
     def price_changed_alone?
-      price_changed? || (new_record? && price)
+      price_changed_alone = price_changed? && !eot_price_changed?
+      price_alone = price && !eot_price
+
+      price_changed_alone || price_alone
     end
 
     def vat_rate
