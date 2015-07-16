@@ -196,7 +196,7 @@ module Glysellin
 
     def calculate_shipment_price
       if shipment && shipment.shipping_method
-        shipment.price = shipment.shipping_method.carrier.calculate
+        shipment.price = shipment.shipping_method.carrier(self).calculate
         shipment.eot_price = shipment.price / (1 + (Glysellin.default_vat_rate / 100))
       end
     end
