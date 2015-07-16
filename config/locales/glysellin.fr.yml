@@ -13,7 +13,11 @@ fr:
           Désolé mais le produit %{item} n'est plus disponible
         item_out_of_stock: |
           Désolé mais le produit %{item} n'est plus en stock
+        out_of_stock: |
+          Désolé mais le produit %{item} n'est plus en stock
         not_enough_stock_for_item: |
+          Désolé mais il ne reste que %{stock} %{item} en stock
+        not_enough_stock: |
           Désolé mais il ne reste que %{stock} %{item} en stock
         invalid_discount_code: |
           Le code promotionnel saisi n'est pas valide ou votre commande n'est

@@ -148,7 +148,7 @@ module Glysellin
     def line_items_in_stock
       line_items.each do |line_item|
         unless store.in_stock?(line_item.variant)
-          line_item.mark_for_destruction!
+          line_item.mark_for_destruction
           add_error(:line_items, :out_of_stock, item: line_item.name)
         end
       end
