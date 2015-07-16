@@ -7,10 +7,6 @@ module Glysellin
 
       country_weight_table_file 'colissimo.csv'
 
-      def initialize order
-        @order = order
-      end
-
       def trackable?
         true
       end
