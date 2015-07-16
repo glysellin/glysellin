@@ -57,6 +57,7 @@ module Glysellin
         validates :payments, presence: true
       end
 
+      before_transition any => :shipping_method_chosen, do: :calculate_shipment_price
       before_transition any => :ready, do: :generate_order!
 
       before_transition do |cart, transition|
@@ -193,6 +194,13 @@ module Glysellin
       end
     end
 
+    def calculate_shipment_price
+      if shipment && shipment.shipping_method
+        shipment.price = shipment.shipping_method.carrier.calculate
+        shipment.eot_price = shipment.price / (1 + (Glysellin.default_vat_rate / 100))
+      end
+    end
+
     def generate_order!
       build_order unless order
 
@@ -213,7 +221,7 @@ module Glysellin
     end
 
     def cancel_order!
-      self.line_items = order.line_items
+      self.line_items = order.line_items + line_items
 
       self.billing_address = order.billing_address
       self.shipping_address = order.shipping_address
