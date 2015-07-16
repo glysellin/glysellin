@@ -98,7 +98,6 @@ module Glysellin
     attr_accessor :discount_code
 
     validate :line_items_variants_published
-    validate :line_items_in_stock
     validate :line_items_stocks_available
     validate :discount_code_valid, if: Proc.new { |cart| discount_code.present? }
 
@@ -145,26 +144,21 @@ module Glysellin
       end
     end
 
-    def line_items_in_stock
-      line_items.each do |line_item|
-        unless store.in_stock?(line_item.variant)
-          line_item.mark_for_destruction
-          add_error(:line_items, :out_of_stock, item: line_item.name)
-        end
-      end
-    end
-
     def line_items_stocks_available
       line_items.each do |line_item|
         unless store.available?(line_item.variant, line_item.quantity)
           available = store.available_quantity_for(line_item.variant)
 
-          add_error(
-            :line_items, :not_enough_stock,
-            item: line_item.variant.name, stock: available
-          )
+          if available == 0
+            line_item.mark_for_destruction
+            add_error(:line_items, :out_of_stock, item: line_item.name)
+          else
+            add_error(:line_items, :not_enough_stock, {
+              item: line_item.variant.name, stock: available
+            })
 
-          line_item.quantity = available
+            line_item.quantity = available
+          end
         end
       end
     end

@@ -22,7 +22,7 @@ class GlysellinCart
       if @options.handleAddedToCartModal
         @options.handleAddedToCartModal($modal)
       else
-        $modal.prependTo('body') 
+        $modal.prependTo('body')
         if ($default_modal = $modal.filter("[data-warning]"))
           @handleDefaultModal($default_modal)
 
