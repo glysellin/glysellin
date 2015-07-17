@@ -52,7 +52,6 @@ module Glysellin
     def check_prices
       return if price.blank? && eot_price.blank?
 
-      puts "Check prices : #{ eot_changed_alone? } || #{ price_changed_alone?}"
       # If we have to fill one of the prices when changed
       if eot_changed_alone?
         self.price = (eot_price * vat_ratio).round(2)
