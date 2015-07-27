@@ -36,6 +36,7 @@ module Glysellin
     validate :generate_barcode, on: :create, unless: Proc.new { |variant| variant.sku.present? }
     # validates_numericality_of :eot_price, :price
     validates :name, presence: true
+    validates :sku, uniqueness: true
 
     scope :ordered, -> { order('glysellin_variants.id ASC') }
     scope :published, -> { where(published: true) }
@@ -138,7 +139,11 @@ module Glysellin
       barcode = Glysellin.barcode_class_name.constantize.new(self)
 
       if barcode.valid?
-        self.sku = barcode.generate
+        while(Glysellin::Variant.exists?(sku: barcode.number))
+          barcode.generate
+        end
+
+        self.sku = barcode.number
       else
         for message in barcode.errors.full_messages
           errors.add :sku, message

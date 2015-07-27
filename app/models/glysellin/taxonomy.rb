@@ -8,25 +8,11 @@ module Glysellin
     include Glysellin::VariantCacheable
 
     scope :roots, -> { where(parent_id: nil) }
-    scope :selectable, -> { where(children_count: 0) }
-    scope :ordered, -> do
-      joins(
-        'INNER JOIN glysellin_taxonomies parent_taxonomy ' +
-        'ON glysellin_taxonomies.parent_id = parent_taxonomy.id ' +
-        'INNER JOIN glysellin_taxonomies grand_parent_taxonomy ' +
-        'ON parent_taxonomy.parent_id = grand_parent_taxonomy.id'
-       ).order(
-        'grand_parent_taxonomy.name DESC, parent_taxonomy.name ASC, ' +
-        'glysellin_taxonomies.name ASC'
-      )
-    end
+    scope :ordered, -> { order(name: :asc) }
 
     has_many :sellables, dependent: :nullify
     has_many :children, class_name: 'Glysellin::Taxonomy',
       foreign_key: 'parent_id', dependent: :destroy
-
-    has_many :taxonomies_store_clients
-    has_many :store_clients, through: :taxonomies_store_clients, class_name: 'Glysellin::StoreClient'
 
     belongs_to :parent, class_name: 'Glysellin::Taxonomy',
       counter_cache: :children_count
