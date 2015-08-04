@@ -1,0 +1,17 @@
+= render partial: "glysellin/cart/navigation", locals: { cart: current_cart }
+
+.row
+  .col-md-8
+    %h2= t('glysellin.labels.forms.choose_shipping_method')
+
+    = simple_form_for cart, as: :cart, url: cart_shipping_method_path, method: "put" do |form|
+      = form.fields_for :shipment, (form.object.shipment || form.object.build_shipment) do |shipment_fields|
+        = shipment_fields.collection_radio_buttons :shipping_method_id, @shipping_methods, :id, :name, item_wrapper_tag: :div, item_wrapper_class: 'checkbox' do |field|
+          = field.radio_button
+          = field.label
+
+      = form.button :button, t('glysellin.labels.forms.confirm_shipping_method'), type: "submit", class: 'btn btn-primary'
+      = link_to t("glysellin.labels.cart.cancel"), cart_path, method: "delete", class: 'btn btn-danger'
+
+  .col-md-4
+    = render partial: "glysellin/cart/recap", locals: { cart: current_cart }

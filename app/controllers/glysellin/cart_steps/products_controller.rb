@@ -2,16 +2,25 @@ module Glysellin
   module CartSteps
     class ProductsController < CartController
       def create
-        @line_item = current_cart.line_items.build(line_item_params)
-        @variant = Glysellin::Variant.where(id: line_item_params[:variant_id]).first
+        variant_id = line_item_params[:variant_id].to_i
 
-        if @variant.present?
-          @line_item.autofill_from(@variant)
-          current_cart.line_items_added!
-          render_cart_partial
+        # If a line item with the same variant already exists :
+        # Add the passed quantity to it
+        if (@line_item = current_cart.line_items.find { |li| li.variant_id == variant_id })
+          @line_item.quantity += line_item_params[:quantity].to_i
+          @line_item_added_to_cart = true
+        # Else create a new line item
         else
-          render json: { error: 'choose_variant' }, status: 404
+          @line_item = current_cart.line_items.build(line_item_params)
+          @line_item_added_to_cart = true
+
+          if (variant = Glysellin::Variant.find(variant_id))
+            @line_item.autofill_from(variant)
+          end
         end
+
+        current_cart.line_items_added!
+        render_cart_partial
       end
 
       def update
@@ -35,8 +44,8 @@ module Glysellin
         current_cart.update_attributes(cart_params)
         current_cart.customer = current_user.customer if user_signed_in?
         current_cart.validated! if current_cart.valid?
-        
-        render action: :show, controller: :carts
+
+        redirect_to cart_path
       end
 
       private

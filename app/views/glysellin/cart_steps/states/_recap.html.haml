@@ -1,0 +1,19 @@
+= render partial: "glysellin/cart/navigation", locals: { cart: current_cart }
+
+.row
+  .col-md-12
+    .cart-recap
+      %h2= t('glysellin.labels.forms.recap')
+      = render partial: "glysellin/cart/recap", locals: { cart: current_cart }
+
+    .cart-payment-method
+      %h2= t('glysellin.labels.forms.choose_payment_method')
+
+      = simple_form_for cart, as: :cart, url: cart_order_creation_path, method: "put" do |form|
+        = form.fields_for :payments, [(cart.payments.first || cart.payments.build)] do |payment_fields|
+          = payment_fields.collection_radio_buttons :payment_method_id, @payment_methods, :id, :name, item_wrapper_tag: :div, item_wrapper_class: 'checkbox' do |field|
+            = field.radio_button
+            = field.label
+
+        = form.button :submit, t('glysellin.labels.forms.create_order'), class: 'btn btn-primary'
+        = link_to t("glysellin.labels.cart.cancel"), cart_path, method: "delete", class: 'btn btn-danger'

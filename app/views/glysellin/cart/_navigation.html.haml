@@ -1,0 +1,12 @@
+%ul.nav.nav-pills.cart-navigation
+  - current_cart.available_states.each_with_index do |state, index|
+    - if index < current_cart.state_index
+      %li{ data: { state: state } }
+        = link_to t("glysellin.cart.states.#{ state }"), set_cart_state_path(state)
+    - else
+      - classes = []
+      - classes << 'active' if index == current_cart.state_index # Set active if curent state
+      - classes << 'disabled' if index > current_cart.state_index # Set as disabled if future step
+
+      %li{ class: classes.join(' '), data: { state: state } }
+        = link_to t("glysellin.cart.states.#{ state }"), 'javascript:void(0);'

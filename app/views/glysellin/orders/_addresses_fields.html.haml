@@ -1,0 +1,30 @@
+.addresses-fields-container
+  .billing-address-container
+    = form.fields_for :billing_address do |fsa|
+      = fsa.input :company_name
+      = fsa.input :vat_number
+      = fsa.input :first_name
+      = fsa.input :last_name
+      = fsa.input :address, as: :text
+      = fsa.input :address_details, as: :text
+      = fsa.input :zip
+      = fsa.input :city
+      = fsa.input :country
+      = fsa.input :tel
+      = fsa.input :fax
+
+  = form.input :use_another_address_for_shipping, as: 'boolean', wrapper_html: { id: "billing-address-controls" }, input_html: { data: { toggle: 'address' } }
+
+  .shipping-address-container
+    = form.fields_for :shipping_address do |fsa|
+      = fsa.input :company_name
+      = fsa.input :vat_number
+      = fsa.input :first_name
+      = fsa.input :last_name
+      = fsa.input :address, as: :text
+      = fsa.input :address_details, as: :text
+      = fsa.input :zip
+      = fsa.input :city
+      = fsa.input :country
+      = fsa.input :tel
+      = fsa.input :fax

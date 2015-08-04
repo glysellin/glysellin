@@ -7,36 +7,36 @@ module Glysellin
 
     state_machine initial: :init do
       event :reset do
-        transition all => :init
+        transition any => :init
       end
 
       event :line_items_added do
-        transition all => :filled
+        transition any => :filled
       end
 
       # When cart content is validated, including line_items list
       # and coupon codes
       #
       event :validated do
-        transition all => :addresses
+        transition any => :addresses
       end
 
       # When addresses are filled and validated
       #
       event :addresses_filled do
-        transition all => :choose_shipping_method
+        transition any => :choose_shipping_method
       end
 
       # When shipping method is chosen
       #
       event :shipping_method_chosen do
-        transition all => :recap
+        transition any => :recap
       end
 
       # When payment method is chosen
       #
       event :create_order do
-        transition all => :ready
+        transition any => :ready
       end
 
       # State validations
@@ -97,14 +97,12 @@ module Glysellin
                                   reject_if: :all_blank
     attr_accessor :discount_code
 
-    validate :line_items_variants_presence
-    validate :line_items_variants_published
-    validate :line_items_in_stock
-    validate :line_items_stocks_available
+    validate :line_items_valid
     validate :discount_code_valid, if: Proc.new { |cart| discount_code.present? }
 
     def self.fetch_or_initialize options
       where(id: options[:id]).first_or_create! do |cart|
+        cart.state = :init
         cart.store = options[:store]
       end
     end
@@ -137,46 +135,37 @@ module Glysellin
       line_items.find { |item| item.id == id.to_i }
     end
 
-    def line_items_variants_presence
+    def line_items_valid
       line_items.each do |line_item|
+        # Line item variant is not filled
         if line_item.variant.blank?
-          add_error(:line_items, :choose_variant, item: line_item.id.to_s)
+          next add_error(:line_items, :choose_variant, item: line_item.id.to_s)
         end
-      end
-    end
 
-    def line_items_variants_published
-      line_items.each do |line_item|
-        next unless line_item.variant.present?
+        # Handle unpublished variant
         unless line_item.variant.published
-          line_item.mark_for_destruction!
-          add_error(:line_items, :not_for_sale, item: line_item.name)
+          next add_error(:line_items, :not_for_sale, item: line_item.name)
         end
-      end
-    end
 
-    def line_items_in_stock
-      line_items.each do |line_item|
-        next unless line_item.variant.present?
-        unless store.in_stock?(line_item.variant)
-          line_item.mark_for_destruction!
+        # Line item has a published variant with enough stock, go ahead
+        if store.available?(line_item.variant, line_item.quantity)
+          next
+        end
+
+        available_quantity = store.available_quantity_for(line_item.variant)
+
+        # Item is completely out of stock
+        if available_quantity <= 0
+          line_item.mark_for_destruction
           add_error(:line_items, :out_of_stock, item: line_item.name)
-        end
-      end
-    end
 
-    def line_items_stocks_available
-      line_items.each do |line_item|
-        next unless line_item.variant.present?
-        unless store.available?(line_item.variant, line_item.quantity)
-          available = store.available_quantity_for(line_item.variant)
+        # Item has stock but not enough for what was added to the cart
+        else
+          add_error(:line_items, :not_enough_stock, {
+            item: line_item.variant.name, stock: available_quantity
+          })
 
-          add_error(
-            :line_items, :not_enough_stock,
-            item: line_item.variant.name, stock: available
-          )
-
-          line_item.quantity = available
+          line_item.quantity = available_quantity
         end
       end
     end
@@ -206,13 +195,20 @@ module Glysellin
       end
     end
 
+    def calculate_shipment_price
+      if shipment && shipment.shipping_method
+        shipment.price = shipment.shipping_method.carrier(self).calculate
+        shipment.eot_price = shipment.price / (1 + (Glysellin.default_vat_rate / 100))
+      end
+    end
+
     def generate_order!
       build_order unless order
 
       order.line_items = line_items
       order.customer = customer
       order.use_another_address_for_shipping = use_another_address_for_shipping
-      
+
       order.billing_address = billing_address
       order.shipping_address = shipping_address
 
@@ -226,7 +222,7 @@ module Glysellin
       shipment(true)
       payments(true)
       discounts(true)
-      
+
       order.save!
     end
 

@@ -9,9 +9,9 @@ fr:
         not_applicable: |
           n'est pas applicable au montant de votre panier ou est périmé
       cart:
-        item_not_for_sale: |
+        not_for_sale: |
           Désolé mais le produit %{item} n'est plus disponible
-        item_out_of_stock: |
+        out_of_stock: |
           Désolé mais le produit %{item} n'est plus en stock
         not_enough_stock_for_item: |
           Désolé mais il ne reste que %{stock} %{item} en stock
@@ -207,6 +207,7 @@ fr:
         variants: "Déclinaisons"
         variants_count: "Nombre de déclinaisons"
         images: "Images"
+
       glysellin/variant:
         published: "Publiée ?"
         sku: "SKU"
@@ -214,8 +215,33 @@ fr:
         price: "Prix TTC"
         eot_price: "Prix HT"
         variant_properties: "Propriétés"
+
       glysellin/image:
         file: "Fichier image"
+
       glysellin/taxonomy:
         name: "Nom"
         description: "Description"
+
+      glysellin/address:
+        company_name: "Société"
+        vat_number: "Numéro de TVA Intracommunautaire"
+        last_name: "Nom"
+        first_name: "Prénom"
+        address: "Adresse"
+        address_details: "Détails de l'adresse"
+        zip: "Code postal"
+        city: "Ville"
+        country: "Pays"
+        tel: "Tél."
+        fax: "Fax"
+
+      glysellin/cart:
+        discount_code: "Code de réduction"
+
+      glysellin/customer:
+        email: "Adresse e-mail"
+
+      user:
+        password: "Mot de passe"
+        password_confirmation: "Confirmation du mot de passe"

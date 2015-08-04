@@ -1,0 +1,9 @@
+= render partial: "glysellin/cart/navigation", locals: { cart: current_cart }
+
+.row
+  .col-md-12
+    %h2= t('glysellin.labels.cart.your_cart')
+
+    = render partial: 'glysellin/cart/products', locals: { :cart => current_cart, :editable => true }
+
+    = link_to t("glysellin.labels.cart.cancel"), cart_path, method: "delete", class: 'btn btn-danger'

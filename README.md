@@ -35,11 +35,40 @@ The install generator command :
 rails generate glysellin:install
 ```
 
+## Javascript plugins integration
+
+There are some javascript plugins that ease glysellin's order integration.
+
+You can add them by creating a specific file (`glysellin.coffee`) and
+choosing from those plugins :
+
+```coffeescript
+# Require the plugins
+#
+#= require glysellin/base
+
+# Use on('ready') if you don't use turbolinks or on('page:change') if you use it
+$(document).on 'page:change', ->
+  # Handles "Add to cart" button and "Added to cart" modal as a Bootstrap modal
+  $('.cart-container').glysellinCart
+    handleAddedToCartModal: ($modal) -> $modal.modal()
+
+  # Handle the "Choose another address for shipping" form switch
+  $('.addresses-fields-container').glysellinAddress()
+
+  # Allows updating the cart recap asynchornously when marked as "Editable"
+  $('.products-recap-form.editable').glysellinAsyncCart()
+```
 
 ## Using the Cart
 
-The shopping cart contents are stored in user's cookies, with the key `glysellin.cart`
+The shopping cart contents are stored in the Cart model and the cart id in the
+user's session. This allows for better code sharing between the cart and the
+order, but will leave some artifacts.
 
+The abandonned carts can be used as a metric, to contact back the users, or
+be cleaned with a custom rake task. This is up to you and not managed by
+Glysellin.
 
 ### Displaying the cart
 
@@ -52,17 +81,22 @@ To display the cart you must render it's partial in your layout :
 
 ### Filling the cart
 
-To fill the cart, you can use the pre-built helper to create a simple "Add to cart" form that asynchronously updates user's cart contents.
-You must pass the helper a `Glysellin::Sellable` instance in order to make it work :
+To fill the cart, you can use the pre-built helper to create a simple
+"Add to cart" form that asynchronously updates user's cart contents.
+
+You must pass the helper a `Glysellin::Sellable` instance :
 
 ```erb
 <%= add_to_cart_form(@sellable) %>
 ```
 
-
 ## Managing orders
 
-By default, being bound to Devise, Glysellin automatically generates anonymous users to bind orders to. You can choose to keep this behavior alone, or add real subscription in the ordering process or remove the default behavior to force users to create an account by switching off the default functionality in the initializer (default parameter is commented) :
+By default, being bound to Devise, Glysellin automatically generates anonymous
+users to bind orders to. You can choose to keep this behavior alone, or add
+real subscription in the ordering process or remove the default behavior to
+force users to create an account by switching off the default functionality
+in the initializer (default parameter is commented) :
 
 ```ruby
 # config/initializers/glysellin.rb
@@ -88,7 +122,6 @@ To be able to use it, you must configure your app to allow the `OrderObserver` t
 # Activate observers that should always be running.
 config.active_record.observers = :order_observer
 ```
-
 
 ## Gateway integration
 

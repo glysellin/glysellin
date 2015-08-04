@@ -32,7 +32,7 @@ module Glysellin
     # validate :check_properties
     before_validation :check_prices
     before_validation :ensure_name
-    
+
     # validates_numericality_of :eot_price, :price
     validates :name, presence: true
 
@@ -103,16 +103,10 @@ module Glysellin
     end
 
     def properties_hash
-      @properties_hash ||= begin
-        properties = Glysellin::Property
-          .includes(:property_type)
-          .where(id: variant_properties.map(&:property_id))
-
-        properties.reduce({}) do |hash, property|
-          hash[property.property_type.identifier] = property
-          hash
-        end
-      end
+      @properties_hash ||= variant_properties.each_with_object({}) do |variant_property, hash|
+        property = variant_property.property
+        hash[property.property_type.identifier] = property
+      end.with_indifferent_access
     end
 
     def description
@@ -144,6 +138,10 @@ module Glysellin
 
     def vat_ratio
       1 + vat_rate / 100
+    end
+
+    def image_url(style = :thumb)
+      images.first.try(:image_url, style)
     end
   end
 end

@@ -23,7 +23,7 @@ module Glysellin
 
       delegate :payments, to: :order
 
-      def initialize order
+      def initialize(order)
         @order = order
         self.class.state_machines.initialize_states(self)
       end

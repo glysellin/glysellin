@@ -1,0 +1,28 @@
+= render partial: "glysellin/cart/navigation", locals: { cart: current_cart }
+
+.row
+  .col-md-8
+    %h2= t('glysellin.labels.forms.customer_details')
+
+    = simple_form_for cart, as: :cart, url: cart_addresses_path, method: "put" do |form|
+      = form.fields_for :customer, (form.object.customer || (current_user && current_user.customer) || form.object.build_customer), include_id: !!form.object.customer do |customer_fields|
+        - new_record = !customer_fields.object.id
+
+        = customer_fields.input :email, input_html: { disabled: current_user.present?, value: (customer_fields.object.email.presence || (current_user && current_user.email) || nil) }
+
+        - unless current_user
+          = customer_fields.fields_for :user, (customer_fields.object.user || customer_fields.object.build_user) do |user_fields|
+            = user_fields.input :password
+            = user_fields.input :password_confirmation
+
+          = link_to new_user_session_path do
+            = t('glysellin.labels.customer.sign_in')
+
+      %h2= t('glysellin.labels.forms.fill_in_your_address')
+      = addresses_fields_for form, form.object.customer || current_user.customer
+
+      = form.button :submit, t('glysellin.labels.forms.confirm_addresses'), class: 'btn btn-primary'
+      = link_to t("glysellin.labels.cart.cancel"), cart_path, method: "delete", class: 'btn btn-danger'
+
+  .col-md-4
+    = render partial: "glysellin/cart/recap", locals: { cart: current_cart }

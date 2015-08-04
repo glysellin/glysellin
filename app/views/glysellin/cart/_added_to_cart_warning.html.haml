@@ -1,0 +1,21 @@
+.modal.fade.added-to-cart-warning{ data: { warning: true } }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{ "aria-label" => "Close", "data-dismiss" => "modal", :type => "button" }
+          %span{ "aria-hidden" => "true" } ×
+        %h4.modal-title= t('glysellin.labels.cart.added_to_cart')
+      .modal-body
+        %p
+          %strong= "#{ @line_item.quantity }×"
+          = @line_item.name
+          = number_to_currency(@line_item.price)
+          %strong{ style: "float:right;" }= number_to_currency(@line_item.total_price)
+
+      .modal-footer
+        %button.btn.btn-default{ "data-dismiss" => "modal", :type => "button" }
+          = t('glysellin.labels.cart.continue_shopping')
+
+        = link_to cart_path, class: 'btn btn-primary' do
+          = t('glysellin.labels.cart.create_order_form')
+

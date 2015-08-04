@@ -1,0 +1,93 @@
+- unless defined?(editable) then editable = false end
+
+= simple_form_for cart, as: :cart, url: validate_cart_products_path, method: 'put', html: { class: "products-recap-form#{ ' editable' if editable }", data: { cart: { url: cart_path } } } do |form|
+  %table#order_recap_table.table.table-bordered.table-striped
+    %thead
+      %tr
+        %th= t('glysellin.labels.order.name')
+        %th= t('glysellin.labels.order.unit_price')
+        %th= t('glysellin.labels.order.quantity')
+        %th= t('glysellin.labels.order.eot_price')
+        %th= t('glysellin.labels.order.price')
+        - if editable
+          %th
+
+    %tbody
+      - cart.line_items.each do |line_item|
+        %tr
+          %td
+            = line_item.name
+          %td
+            = number_to_currency(line_item.price)
+          %td
+            - if editable
+              = form.fields_for :line_items, line_item do |fli|
+                = fli.number_field :quantity, value: line_item.quantity, class: 'quantity-input', data: { id: line_item.id }
+            - else
+              = line_item.quantity
+          %td.product-eot-price
+            = number_to_currency(line_item.total_eot_price)
+          %td.product-price
+            = number_to_currency(line_item.total_price)
+          - if editable
+            %td
+              = link_to cart_product_path(line_item.id), class: 'btn btn-block btn-lg btn-default', method: 'delete', data: { confirm: t('glysellin.notices.cart.confirm_line_item_deletion', name: line_item.variant.name) }, title: t('glysellin.labels.cart.remove_from_cart') do
+                \ ×
+
+    %tfoot
+      %tr.products-subtotal-row{ style: ('display:none;' unless cart.subtotal != cart.total_price || Glysellin.show_subtotal_if_identical) }
+        %td{ colspan: '2'}
+          = t('glysellin.labels.order.subtotal')
+        %td
+
+        %td.eot-subtotal
+          = number_to_currency(cart.eot_subtotal)
+
+        %td.subtotal
+          = number_to_currency(cart.subtotal)
+        - if editable
+          %td
+
+      - if cart.adjustments.length > 0
+        - if cart.shipment && cart.shipment.persisted?
+          %tr.adjustment-row{ data: { type: 'shipping-method' } }
+            %td.adjustment-name{ colspan: '4'}
+              = cart.shipment.shipping_method.name
+            %td.adjustment-value
+              = number_to_currency(cart.shipment.price)
+            - if editable
+              %td
+        - cart.discounts.each do |adjustment|
+          - if discount.valid
+            %tr.adjustment-row{ data: { type: 'discount-code' } }
+              %td.adjustment-name{ colspan: '4'}
+                = discount.name
+              %td.adjustment-value
+                = number_to_currency(discount.price)
+              - if editable
+                %td
+
+      - elsif editable
+        %tr.adjustment-row{ style: 'display:none;', data: { type: 'discount-code' } }
+          %td.adjustment-name{ colspan: '4'}
+          %td.adjustment-value
+          %td
+
+      %tr.products-total-row
+        %td{ colspan: '3'}
+          = t('glysellin.labels.order.total')
+        %td.total-eot-price
+          = number_to_currency(cart.total_eot_price)
+        %td.total-price
+          = number_to_currency(cart.total_price)
+        - if editable
+          %td
+
+  - if editable
+    .discount-code
+      = form.input :discount_code do
+        = form.text_field :discount_code
+        = form.button :button, t('glysellin.labels.cart.update_discount'), class: 'update-discount-code-btn', type: 'button', name: 'update_discount'
+
+    / Submit order from cart
+    = form.button :button, t('glysellin.labels.cart.create_order_form'), name: 'submit_order', type: 'submit'
