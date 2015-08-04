@@ -216,6 +216,8 @@ module Glysellin
       order.payments = payments
       order.discounts = discounts
 
+      yield if block_given?
+
       line_items(true)
       billing_address(true)
       shipping_address(true)
@@ -234,6 +236,8 @@ module Glysellin
 
       self.shipment = order.shipment
       self.payments = order.payments
+
+      yield if block_given?
 
       order.line_items(true)
       order.billing_address(true)

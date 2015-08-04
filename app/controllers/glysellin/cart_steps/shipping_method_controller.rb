@@ -6,6 +6,7 @@ module Glysellin
         current_cart.shipment.state = :pending
 
         if current_cart.update_attributes!(cart_params)
+          cart = current_cart
           current_cart.calculate_shipment_price
           current_cart.shipping_method_chosen!
           redirect_to cart_path

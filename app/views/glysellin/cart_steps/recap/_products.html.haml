@@ -1,0 +1,44 @@
+.cart-products
+  %h4= t("glysellin.labels.cart.products")
+  %table.table.table-bordered
+    / Headers
+    %thead
+      %tr
+        %th= t('glysellin.labels.order.name')
+        %th= t('glysellin.labels.order.quantity')
+        %th= t('glysellin.labels.order.price')
+    %tbody
+      / Products
+      - current_cart.line_items.each do |line_item|
+        %tr
+          %td= line_item.name
+          %td= line_item.quantity
+          %td= number_to_currency(line_item.total_price)
+    %tfoot
+      / Subtotal
+      %tr
+        %td{:colspan => "2"}
+          = t("glysellin.labels.order.subtotal")
+        %td
+          = number_to_currency(current_cart.subtotal)
+      / Adjustments
+      - current_cart.discounts.each do |discount|
+        %tr
+          %td{:colspan => "2"}
+            = discount.name
+          %td
+            = number_to_currency(discount.price)
+      - if current_cart.shipment && current_cart.shipment.persisted?
+        %tr
+          %td{:colspan => "2"}
+            = current_cart.shipment.shipping_method.name
+          %td
+            = number_to_currency(current_cart.shipment.price)
+      / Total row
+      %tr
+        %td{:colspan => "2"}
+          %strong
+            = t("glysellin.labels.order.total")
+        %td
+          %strong
+            = number_to_currency(current_cart.total_price)

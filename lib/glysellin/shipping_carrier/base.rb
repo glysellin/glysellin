@@ -1,10 +1,9 @@
 module Glysellin
-
   def self.shipping_carriers
     Hash[ShippingCarrier.shipping_carriers_list.map { |sc| [sc[:name], sc[:carrier]] }]
   end
 
-  def shipping_carrier &block
+  def shipping_carrier(&block)
     if block_given?
       ShippingCarrier.config &block
     else
@@ -20,38 +19,23 @@ module Glysellin
     @@shipping_carriers_list = []
 
     class Base
-      class << self
-        def register name, carrier
-          ShippingCarrier.shipping_carriers_list << { :name => name, :carrier => carrier }
-        end
+      attr_reader :order, :shipping_method
 
-        def config
-          yield self
-        end
-      end
-
-      @@config_file = nil
-
-      def initialize
-        raise "Config file is not defined for #{ self.name } shipping method" unless @@config_file
-        @config = YAML.load(File.read @@config_file)['config']
-      end
-
-      def rate order
-        @config.each do |item|
-          if item['countries'].split(',').include?(order.shipping_address.country)
-            return process_rate(order, item['rates'])
-          end
-        end
-        # Return nil if country not accepted
-        nil
+      def initialize(order, shipping_method)
+        @order = order
+        @shipping_method = shipping_method
       end
 
       def trackable?
         false
       end
 
-      def process_rate order, rates
+      def self.register name, carrier
+        ShippingCarrier.shipping_carriers_list << { :name => name, :carrier => carrier }
+      end
+
+      def self.config(&block)
+        block ? block.call(self) : self
       end
     end
   end

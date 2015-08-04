@@ -13,17 +13,21 @@ module Glysellin
         form.object.use_another_address_for_shipping = true
       end
 
-      %w(billing_address shipping_address).each do |addr|
-        next if form.object.send(addr)
-
-        if record && (address = record.send("#{ addr }"))
-          form.object.send(:"#{ addr }=", address.dup)
-        else
-          form.object.send(:"build_#{ addr }")
-        end
+      %w(billing_address shipping_address).each do |type|
+        copy_address_to_form(form, type, record)
       end
 
       render partial: 'glysellin/orders/addresses_fields', locals: { form: form }
+    end
+
+    def copy_address_to_form(form, type, record)
+      return if form.object.send(type)
+
+      if record && (address = record.send("#{ type }"))
+        form.object.send(:"#{ type }=", address.dup)
+      else
+        form.object.send(:"build_#{ type }")
+      end
     end
   end
 end

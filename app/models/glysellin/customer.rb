@@ -6,9 +6,6 @@ module Glysellin
 
     acts_as_taggable_on :groups
 
-    validates :first_name, :last_name, presence: true,
-              unless: :company_name_filled_in?
-
     has_many :orders, class_name: 'Glysellin::Order', foreign_key: :customer_id
 
     belongs_to :customer_type, class_name: 'Glysellin::CustomerType'
@@ -32,10 +29,6 @@ module Glysellin
 
     def password_filled_in?
       user.password.present?
-    end
-
-    def company_name_filled_in?
-      company_name.present?
     end
   end
 end

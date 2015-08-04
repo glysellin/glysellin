@@ -1,0 +1,15 @@
+%h2= t('glysellin.labels.payment_responses.payment_canceled')
+%p= t('glysellin.labels.payment_responses.canceled_payment_text')
+
+%br
+%br
+
+- if order
+  = t('glysellin.labels.payment_responses.try_to_pay_again')
+  %br
+  = render partial: "glysellin/payment_methods/#{ order.payment_method.slug }", locals: { order: order }
+
+%br
+%br
+
+= link_to t('glysellin.labels.misc.back_to_homepage'), root_path, class: 'btn btn-default'
