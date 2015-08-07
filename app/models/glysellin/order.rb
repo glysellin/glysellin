@@ -58,6 +58,12 @@ module Glysellin
       payment && payment.payment_method
     end
 
+    def paid_on
+      if (payment = payments.select(&:paid?).last)
+        payment.received_on
+      end
+    end
+
     def self.export(format = :xls)
       ExportOrder.new(format, all).file_path
     end
