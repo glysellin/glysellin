@@ -7,10 +7,9 @@ module Glysellin
         end
 
         if current_cart.update_attributes(cart_params)
-          current_cart.customer.update_from_cart! current_cart
           current_cart.addresses_filled!
 
-          if Glysellin.sign_in_after_user_selection
+          if Glysellin.sign_in_after_user_selection && current_cart.customer.user
             sign_in current_cart.customer.user
           end
 

@@ -9,7 +9,7 @@ module Glysellin
       has_one :shipping_address, class_name: 'Glysellin::Address',
         as: :shipped_addressable, dependent: :destroy
 
-      accepts_nested_attributes_for :billing_address, reject_if: :all_blank
+      accepts_nested_attributes_for :billing_address
       accepts_nested_attributes_for :shipping_address,
         reject_if: :shipping_address_blank_or_not_needed
     end
