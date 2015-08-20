@@ -15,6 +15,7 @@ module Glysellin
 
           redirect_to cart_path
         else
+          set_cart_errors_flash
           current_cart.state = "addresses"
           render "glysellin/cart/show"
         end

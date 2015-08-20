@@ -11,6 +11,7 @@ module Glysellin
           current_cart.shipping_method_chosen!
           redirect_to cart_path
         else
+          set_cart_errors_flash
           current_cart.state = 'choose_shipping_method'
           render 'glysellin/cart/show'
         end

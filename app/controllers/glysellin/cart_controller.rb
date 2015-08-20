@@ -21,12 +21,6 @@ module Glysellin
 
     # Helper method to set cookie value
     def update_cart_in_session
-      if current_cart.errors.any?
-        flash[:error] = t(
-          "glysellin.errors.cart.state_transitions.#{ current_cart.state }"
-        )
-      end
-
       session["glysellin.cart"] = current_cart.id if current_cart
     end
 
@@ -49,6 +43,12 @@ module Glysellin
     def prepare_associable_data
       @shipping_methods = Glysellin::ShippingMethod.ordered
       @payment_methods = Glysellin::PaymentMethod.ordered
+    end
+
+    def set_cart_errors_flash
+      flash[:error] = t(
+        "glysellin.errors.cart.state_transitions.#{ current_cart.state }"
+      ) if current_cart.errors.any?
     end
   end
 end

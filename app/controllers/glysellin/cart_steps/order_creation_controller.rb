@@ -13,6 +13,8 @@ module Glysellin
         else
           if !params[:cart]
             flash[:error] = t('glysellin.errors.cart.state_transitions.recap')
+          else
+            set_cart_errors_flash
           end
 
           current_cart.state = "recap"
