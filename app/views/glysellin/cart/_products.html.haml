@@ -1,6 +1,6 @@
 - unless defined?(editable) then editable = false end
 
-= simple_form_for cart, as: :cart, url: validate_cart_products_path, method: 'put', html: { class: "products-recap-form#{ ' editable' if editable }", data: { cart: { url: cart_path } } } do |form|
+= simple_form_for cart, as: :cart, url: validate_cart_products_path, method: 'put', html: { class: "products-recap-form#{ ' editable' if editable }", data: { :'cart-url' => cart_path } } do |form|
   %table#order_recap_table.table.table-bordered.table-striped
     %thead
       %tr
