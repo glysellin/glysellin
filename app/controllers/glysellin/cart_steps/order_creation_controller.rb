@@ -11,12 +11,7 @@ module Glysellin
 
           redirect_to order_path
         else
-          if !params[:cart]
-            flash[:error] = t('glysellin.errors.cart.state_transitions.recap')
-          else
-            set_cart_errors_flash
-          end
-
+          set_cart_errors_flash
           current_cart.state = "recap"
           render "glysellin/cart/show"
         end

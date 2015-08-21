@@ -1,0 +1,14 @@
+.cart-recap
+  .title
+    %h3
+      = t('glysellin.labels.cart.your_cart')
+
+  / Products recap table
+  - if current_cart.line_items.length > 0
+    = render partial: "glysellin/cart_steps/recap/products", locals: { cart: cart }
+
+  - if current_cart.state_index > current_cart.available_states.index("addresses")
+    = render partial: "glysellin/cart_steps/recap/addresses", locals: { cart: cart }
+
+  - if current_cart.shipment && current_cart.shipment.shipping_method
+    = render partial: "glysellin/cart_steps/recap/shipment", locals: { cart: cart }

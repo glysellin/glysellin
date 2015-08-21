@@ -16,8 +16,8 @@ class GlysellinCart
       if resp.responseJSON.error is 'choose_variant'
         @showError true
 
-  showError: (b) =>
-    if b
+  showError: (state) =>
+    if state
       @add_to_cart_forms.find('.submit-container').addClass('has-error')
       $('[data-choose-variant-text]').removeClass('hidden')
     else
