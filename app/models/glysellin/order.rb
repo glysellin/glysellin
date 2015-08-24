@@ -66,6 +66,8 @@ module Glysellin
 
     scope :from_customer, lambda { |customer_id| where(customer_id: customer_id) }
 
+    delegate :transaction_id, to: :payment, allow_nil: true
+
     def quantified_items
       items.map { |product| [product, product.quantity] }
     end
