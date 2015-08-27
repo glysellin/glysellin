@@ -4,24 +4,23 @@ class GlysellinCart
 
   constructor: (@container, options) ->
     @options = $.extend({}, defaults, options)
-    @add_to_cart_forms = $('[data-add-to-cart-form]')
     @bindAll()
 
   bindAll: ->
-    @add_to_cart_forms.on 'ajax:success', (e, resp) =>
+    $('body').on 'ajax:success', '[data-add-to-cart-form]', (e, resp) =>
       @update(resp)
       @showError false
 
-    @add_to_cart_forms.on 'ajax:error', (e, resp) =>
+    $('body').on 'ajax:error', '[data-add-to-cart-form]', (e, resp) =>
       if resp.responseJSON.error is 'choose_variant'
         @showError true
 
   showError: (state) =>
     if state
-      @add_to_cart_forms.find('.submit-container').addClass('has-error')
+      $('[data-add-to-cart-form]').find('.submit-container').addClass('has-error')
       $('[data-choose-variant-text]').removeClass('hidden')
     else
-      @add_to_cart_forms.find('.submit-container').removeClass('has-error')
+      $('[data-add-to-cart-form]').find('.submit-container').removeClass('has-error')
       $('[data-choose-variant-text]').addClass('hidden')
 
   update: (markup) ->
