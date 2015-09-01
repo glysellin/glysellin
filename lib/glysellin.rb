@@ -1,39 +1,25 @@
-require "active_model/model"
-require "paperclip"
-require "state_machine"
-require "acts-as-taggable-on"
+require 'active_model/model'
+require 'paperclip'
+require 'state_machine'
+require 'acts-as-taggable-on'
+require 'request_store'
 
 require 'countries'
 require 'country_select'
 
-require "glysellin/engine"
-require "glysellin/gateway"
-require "glysellin/adjustment"
-require "glysellin/discount_type_calculator"
-require "glysellin/vat_rates"
-require "glysellin/products_list"
-require "glysellin/shipping_carrier"
-require "glysellin/available_stock"
-require "glysellin/order_stock_migration"
-require "glysellin/payments"
-require "glysellin/barcode_generator"
+require 'glysellin/engine'
+require 'glysellin/gateway'
+require 'glysellin/adjustment'
+require 'glysellin/discount_type_calculator'
+require 'glysellin/vat_rates'
+require 'glysellin/products_list'
+require 'glysellin/shipping_carrier'
+require 'glysellin/available_stock'
+require 'glysellin/order_stock_migration'
+require 'glysellin/payments'
+require 'glysellin/barcode_generator'
 
 module Glysellin
-  ################################################################
-  #
-  # Config vars, to be overriden from generated initializer file
-  #
-  ################################################################
-
-  # Status const to be used to define order step to payment
-  ORDER_STEP_PAYMENT = 'payment'
-
-  ################################################################
-  #
-  # Config vars, to be overriden from generated initializer file
-  #
-  ################################################################
-
   # Defines which user class will be used to bind Customer model to an
   #   authenticable user
   mattr_accessor :barcode_class_name
@@ -104,11 +90,6 @@ module Glysellin
 
   mattr_accessor :async_cart
   @@async_cart = true
-
-  mattr_accessor :step_routes
-  @@step_routes = {
-    payment_method_chosen: ORDER_STEP_PAYMENT
-  }
 
   # Product images paperclip styles
   mattr_accessor :product_images_styles

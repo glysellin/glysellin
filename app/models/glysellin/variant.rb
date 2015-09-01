@@ -115,7 +115,7 @@ module Glysellin
 
     def stocks_for_all_stores
       @stocks_for_all_stores ||=
-        Glysellin::Store.all.each_with_object({}) do |store, hash|
+        Glysellin::Store.all_cached_stores.each_with_object({}) do |store, hash|
           existing_stock = stocks.find { |stock| stock.store_id == store.id }
           hash[store] = existing_stock || stocks.build(store: store)
         end

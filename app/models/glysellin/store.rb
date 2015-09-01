@@ -24,6 +24,10 @@ class Glysellin::Store < ActiveRecord::Base
       variant.stocks.find { |stock| stock.store_id == self.id }.try(:count) || 0
   end
 
+  def self.all_cached_stores
+    RequestStore.store[:_glysellin_all_cached_stores] ||= all
+  end
+
   private
 
   def available_quantities
