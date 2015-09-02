@@ -242,6 +242,37 @@ fr:
       glysellin/customer:
         email: "Adresse e-mail"
 
+      glysellin/order:
+        ref: "Référence"
+        payment_state: "Statut du Paiement"
+        total_price: "Total TTC"
+        total_price_cache: "Total TTC"
+        total_eot_price: "Total HT"
+        total_eot_price_cache: "Total HT"
+        customer: "Client"
+        created_at: "Date de création"
+        billing_address: "Adresse de facturation"
+        use_another_address_for_shipping: "Utiliser une autre adresse pour la livraison"
+        shipping_address: "Adresse de livraison"
+        line_items: "Produits commandés"
+        shipment: "Livraison"
+        payments: "Paiements"
+        discounts: "Remises"
+
+      glysellin/shipment:
+        sent_on: "Expédiée le"
+        eot_price: "Prix HT"
+        price: "Prix TTC"
+        tracking_code: "Code de suivi"
+        state: "État"
+        shipping_method: "Mode de livraison"
+
+      glysellin/payment:
+        received_on: "Reçu le"
+        amount: "Montant"
+        state: "État"
+        payment_method: "Mode de paiement"
+
       user:
         password: "Mot de passe"
         password_confirmation: "Confirmation du mot de passe"
