@@ -13,16 +13,30 @@ module Glysellin
     belongs_to :user, class_name: 'User', inverse_of: :customer
     accepts_nested_attributes_for :user
 
+    before_validation :ensure_names
+
     def name
-      [full_name, company_name].map(&:presence).compact.join(' - ')
+      name = [full_name, company_name].map(&:presence).compact.join(' - ')
+
+      name.presence || email
     end
 
     def full_name
-      [first_name, last_name].map(&:presence).compact.join(' ')
+      [last_name, first_name].map(&:presence).compact.join(' ')
     end
 
     def password_filled_in?
       user.password.present?
+    end
+
+    private
+
+    def ensure_names
+      [:company_name, :first_name, :last_name].each do |field|
+        unless self.send(field).present?
+          self.send(:"#{ field }=", billing_address.try(field))
+        end
+      end
     end
   end
 end
