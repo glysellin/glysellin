@@ -31,8 +31,6 @@ class Glysellin::OrderCustomerMailer < ActionMailer::Base
     @order = order
     @email = @order.customer.email || @order.customer.user.email
 
-    return unless order.email.presence
-
     mail(
       to: @email,
       subject: I18n.t('glysellin.mailer.customer.send_order_shipped_email', ref: @order.ref)
