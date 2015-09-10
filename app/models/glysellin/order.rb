@@ -58,6 +58,10 @@ module Glysellin
       payment && payment.payment_method
     end
 
+    def paid?
+      payments_manager.complete?
+    end
+
     def paid_on
       if (payment = payments.select(&:paid?).last)
         payment.received_on
