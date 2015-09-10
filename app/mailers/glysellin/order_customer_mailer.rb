@@ -7,7 +7,7 @@ class Glysellin::OrderCustomerMailer < ActionMailer::Base
 
     mail(
       to: @email,
-      subject: Glysellin.mailer_subjects.call[:customer][:send_order_created_email]
+      subject: I18n.t('glysellin.mailer.customer.send_order_created_email', ref: @order.ref)
     )
   end
 
@@ -23,7 +23,7 @@ class Glysellin::OrderCustomerMailer < ActionMailer::Base
 
     mail(
       to: @email,
-      subject: Glysellin.mailer_subjects.call[:customer][:send_order_paid_email]
+      subject: I18n.t('glysellin.mailer.customer.send_order_paid_email', ref: @order.ref)
     )
   end
 
@@ -35,7 +35,7 @@ class Glysellin::OrderCustomerMailer < ActionMailer::Base
 
     mail(
       to: @email,
-      subject: Glysellin.mailer_subjects.call[:customer][:send_order_shipped_email]
+      subject: I18n.t('glysellin.mailer.customer.send_order_shipped_email', ref: @order.ref)
     )
   end
 end

@@ -101,13 +101,6 @@ module Glysellin
   mattr_accessor :allow_anonymous_orders
   @@allow_anonymous_orders = true
 
-  def self.mailer_subjects=(hash = nil)
-    @@mailer_subjects = -> { I18n.t('glysellin.mailer').merge(hash) }
-  end
-
-  mattr_reader :mailer_subjects
-  @@mailer_subjects = -> { I18n.t('glysellin.mailer') }
-
   mattr_accessor :order_paid_email_attachments
   @@order_paid_email_attachments = nil
 
