@@ -62,6 +62,10 @@ module Glysellin
       stock_migration.apply
     end
 
+    def trackable?
+      tracking_code.present?
+    end
+
     private
 
     def rollback_stocks
