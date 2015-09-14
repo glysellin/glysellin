@@ -20,7 +20,7 @@ module Glysellin
     belongs_to :brand, class_name: "Glysellin::Brand", inverse_of: :sellables,
                counter_cache: true
 
-    validates_presence_of :name, :vat_rate, :taxonomy_id
+    validates_presence_of :name, :vat_rate
     validates_numericality_of :vat_rate
 
     has_many :variants, class_name: "Glysellin::Variant", inverse_of: :sellable,
