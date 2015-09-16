@@ -1,6 +1,6 @@
 require 'active_model/model'
 require 'paperclip'
-require 'state_machine'
+require 'state_machines'
 require 'acts-as-taggable-on'
 require 'request_store'
 
