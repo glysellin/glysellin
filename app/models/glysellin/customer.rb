@@ -20,7 +20,7 @@ module Glysellin
     before_validation :setup_user_email
 
     def name
-      [full_name, company_name].map(&:presence).compact.join(' - ')
+      [company_name, full_name].map(&:presence).compact.join(' - ')
     end
 
     def full_name
