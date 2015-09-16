@@ -16,7 +16,7 @@ module Glysellin
     before_validation :ensure_names
 
     def name
-      name = [full_name, company_name].map(&:presence).compact.join(' - ')
+      name = [company_name, full_name].map(&:presence).compact.join(' - ')
 
       name.presence || email
     end
