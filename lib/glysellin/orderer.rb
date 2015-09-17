@@ -17,7 +17,7 @@ module Glysellin
 
       define_method(:shipping_address) do |force_reload = false|
         if use_another_address_for_shipping
-          shipping_address(force_reload)
+          actual_shipping_address(force_reload)
         else
           billing_address(force_reload)
         end
