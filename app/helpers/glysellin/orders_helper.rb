@@ -29,5 +29,10 @@ module Glysellin
         orderer.send(:"build_#{ type }")
       end
     end
+
+    # Deprecated, here for backwards compatibility
+    def copy_address_to_form(form, type, record)
+      copy_address_to(form.object, type, record)
+    end
   end
 end
