@@ -14,19 +14,19 @@ module Glysellin
       end
 
       %w(billing_address shipping_address).each do |type|
-        copy_address_to_form(form, type, record)
+        copy_address_to(form.object, type, record)
       end
 
       render partial: 'glysellin/orders/addresses_fields', locals: { form: form }
     end
 
-    def copy_address_to_form(form, type, record)
-      return if form.object.send(type)
+    def copy_address_to(orderer, type, record)
+      return if orderer.send(type)
 
       if record && (address = record.send("#{ type }"))
-        form.object.send(:"#{ type }=", address.dup)
+        orderer.send(:"#{ type }=", address.dup)
       else
-        form.object.send(:"build_#{ type }")
+        orderer.send(:"build_#{ type }")
       end
     end
   end
