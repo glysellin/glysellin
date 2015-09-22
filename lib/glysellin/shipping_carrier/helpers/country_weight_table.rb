@@ -18,6 +18,36 @@ module Glysellin
               end
             end
           end
+
+          def available_for?(address)
+            if country = address.try(:country)
+              prices_data.any? do |data|
+                data[:countries].include?(country)
+              end
+            end
+          end
+
+          def prices_data
+            csv = CSV.parse(File.read(path_to_data))
+            headers = csv.shift
+
+            data = headers[1..-1].map do |c|
+              {
+                countries: c.split(",").map(&:strip),
+                prices: {}
+              }
+            end
+
+            csv.each do |row|
+              max_weight = row.shift.to_f
+
+              row.each_with_index do |cell, index|
+                data[index][:prices][max_weight] = cell.try(:to_f)
+              end
+            end
+
+            data
+          end
         end
 
         def price_for_weight_and_country
@@ -25,7 +55,7 @@ module Glysellin
           country = @order.use_another_address_for_shipping ?
             @order.shipping_address.country : @order.billing_address.country
 
-          zone = prices_data.find do |zone|
+          zone = self.class.prices_data.find do |zone|
             zone[:countries].include?(country)
           end
 
@@ -36,28 +66,6 @@ module Glysellin
 
             weight_price.last if weight_price
           end
-        end
-
-        def prices_data
-          return @prices if @prices
-
-          csv = CSV.parse File.read self.class.path_to_data
-
-          @prices = csv.shift[1..-1].map do |c|
-            {
-              countries: c.split(",").map(&:strip),
-              prices: {}
-            }
-          end
-
-          csv.each do |row|
-            max_weight = row.shift.to_f
-            row.each_with_index do |cell, index|
-              @prices[index][:prices][max_weight] = cell.presence ? cell.to_f : cell
-            end
-          end
-
-          @prices
         end
       end
     end

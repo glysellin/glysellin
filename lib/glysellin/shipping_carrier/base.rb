@@ -30,6 +30,10 @@ module Glysellin
         false
       end
 
+      def self.available_for?(address)
+        true
+      end
+
       def self.register name, carrier
         ShippingCarrier.shipping_carriers_list << { :name => name, :carrier => carrier }
       end

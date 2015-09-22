@@ -12,7 +12,17 @@ module Glysellin
     scope :ordered, -> { order("name ASC") }
 
     def carrier(order)
-      Glysellin.shipping_carriers[identifier].new(order, self)
+      carrier_class.new(order, self)
+    end
+
+    def carrier_class
+      Glysellin.shipping_carriers[identifier]
+    end
+
+    def self.available_for(address)
+      all.select do |shipping_method|
+        shipping_method.carrier_class.available_for?(address)
+      end
     end
 
     private
