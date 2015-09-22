@@ -77,6 +77,7 @@ module Glysellin
 
     def check_prices
       return unless price.present? || eot_price.present?
+
       # If we have to fill one of the prices when changed
       if eot_changed_alone?
         self.price = (eot_price * vat_ratio).round(2)
@@ -133,11 +134,11 @@ module Glysellin
     end
 
     def vat_rate
-      Glysellin.default_vat_rate
+      sellable.try(:vat_rate) || Glysellin.default_vat_rate
     end
 
     def vat_ratio
-      1 + vat_rate / 100
+      1.0 + (vat_rate / 100.0)
     end
 
     def image_url(style = :thumb)
