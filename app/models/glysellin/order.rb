@@ -58,6 +58,12 @@ module Glysellin
       payment && payment.payment_method
     end
 
+    def pay!
+      payment.amount = payments.remaining
+      payment.pay!
+      save!
+    end
+
     def paid?
       payments_manager.complete?
     end

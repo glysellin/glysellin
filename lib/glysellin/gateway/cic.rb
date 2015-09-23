@@ -20,24 +20,11 @@ module Glysellin
         response = CicPayment.new.response Rack::Utils.parse_nested_query(post_data)
         order = Glysellin::Order.find(response['reference'].to_i)
 
-        if Rails.env.development?
-          order.payments.last.update! amount: order.total_price
-          order.payments.last.pay!
-          order.save!
-        end
-
-        if Rails.env.staging?
-          order.payments.last.update! amount: order.total_price
-          order.payments.last.pay!
-          order.save!
-        end
-
-        if Rails.env.production?
-          if response[:success] || (response["code-retour"].downcase == "annulation")
-            order.payments.last.update! amount: order.total_price
-            order.payments.last.pay!
-            order.save!
-          end
+        if !Rails.env.production? || (
+          response[:success] ||
+          (response["code-retour"].downcase == "annulation")
+        )
+          order.pay!
         end
       end
 

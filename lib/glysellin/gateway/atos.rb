@@ -98,7 +98,7 @@ module Glysellin
 
         log "Processing remote payment : #{ valid }"
 
-        result = valid ? @order.paid! : false
+        result = valid ? @order.pay! : false
 
         @order.save
         result
