@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'countries'
   s.add_dependency 'country_select'
   s.add_dependency 'state_machines'
+  s.add_dependency 'state_machines-activerecord'
   s.add_dependency 'friendly_id', '~> 5.0'
   s.add_dependency 'devise'
   s.add_dependency 'active_model_serializers', '~> 0.8.0'
