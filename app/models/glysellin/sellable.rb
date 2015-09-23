@@ -34,6 +34,7 @@ module Glysellin
     # }
 
     before_validation :check_prices
+    before_validation :ensure_variant
 
     # Published sellables are the ones that have at least one variant
     # published.
@@ -58,6 +59,10 @@ module Glysellin
       elsif price_changed_alone?
         self.eot_price = (price / vat_ratio).round(2)
       end
+    end
+
+    def ensure_variant
+      variants.build(name: 'default') if variants.length == 0
     end
 
     def eot_changed_alone?
