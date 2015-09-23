@@ -10,7 +10,7 @@ module Glysellin
 
     belongs_to :customer_type, class_name: 'Glysellin::CustomerType'
 
-    belongs_to :user, class_name: 'User', inverse_of: :customer
+    belongs_to :user, class_name: Glysellin.user_class_name, inverse_of: :customer
     accepts_nested_attributes_for :user
 
     before_validation :ensure_names
