@@ -61,7 +61,7 @@ module Glysellin
     def pay!
       payment.amount = payments.remaining
       payment.pay!
-      save!
+      complete!
     end
 
     def paid?
