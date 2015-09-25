@@ -119,7 +119,7 @@ Create the ones you need :
 
 ```bash
 rails runner "Glysellin::PaymentMethod.create(name: 'Credit Card', identifier: 'atos')"
-rails runner "Glysellin::PaymentMethod.create(name: 'Credit Card', identifier: 'systempay')"
+rails runner "Glysellin::PaymentMethod.create(name: 'Credit Card', identifier: 'system_pay')"
 ```
 
 #### Existing gateway integrations :
@@ -127,7 +127,7 @@ rails runner "Glysellin::PaymentMethod.create(name: 'Credit Card', identifier: '
 * paypal_integral : Paypal integral simple integration
 * atos : Atos integration for the banks that use it (BNP, Societe Generale, LCL, and more ...)
 * cic : CIC / Credit mutuel system integration
-* systempay : Banque Populaire / Credit du nord system integration
+* system_pay : Banque Populaire / Credit du nord system integration
 * check : An integration that displays a message with the direction to send a check to pay the order.
 
 SystemPay needs [youbook's SystemPay gem](https://github.com/youboox/system_pay/). Please include it to 

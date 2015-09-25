@@ -1,7 +1,7 @@
 module Glysellin
   module Gateway
     class Systempay < Glysellin::Gateway::Base
-      register 'systempay', self
+      register 'system_pay', self
 
       attr_accessor :errors, :order
 
