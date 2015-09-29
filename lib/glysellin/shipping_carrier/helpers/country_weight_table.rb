@@ -20,52 +20,43 @@ module Glysellin
           end
 
           def available_for?(address)
-            if country = address.try(:country)
-              prices_data.any? do |data|
-                data[:countries].include?(country)
-              end
-            end
+            prices_data.key?(address.try(:country))
           end
 
           def prices_data
             csv = CSV.parse(File.read(path_to_data))
             headers = csv.shift
 
-            data = headers[1..-1].map do |c|
-              {
-                countries: c.split(",").map(&:strip),
-                prices: {}
-              }
-            end
+            headers.each_with_index.each_with_object({}) do |(countries, index), hash|
+              next if index == 0
 
-            csv.each do |row|
-              max_weight = row.shift.to_f
+              countries.split(",").each do |country|
+                country_code = country.strip
+                hash[country_code] = {}
 
-              row.each_with_index do |cell, index|
-                data[index][:prices][max_weight] = cell.try(:to_f)
+                csv.each do |row|
+                  max_weight = row.first.to_f
+                  price = row[index].try(:to_f)
+                  hash[country_code][max_weight] = price
+                end
               end
             end
-
-            data
           end
         end
 
         def price_for_weight_and_country
-          weight = @order.total_weight
-          country = @order.use_another_address_for_shipping ?
-            @order.shipping_address.country : @order.billing_address.country
+          weight = order.total_weight
+          country = order.shipping_address.country
+          country_prices = self.class.prices_data[country]
 
-          zone = self.class.prices_data.find do |zone|
-            zone[:countries].include?(country)
+          return unless country_prices
+
+          weight_price = country_prices.each do |max_weight, price|
+            return price if weight < max_weight
           end
 
-          if zone
-            weight_price = zone[:prices].find do |max_weight, price|
-              weight < max_weight
-            end
-
-            weight_price.last if weight_price
-          end
+          # Return nil if no price was found
+          nil
         end
       end
     end
