@@ -51,7 +51,7 @@ module Glysellin
     end
 
     def payment
-      payments.last
+      @payment ||= payments.last
     end
 
     def payment_method
@@ -59,6 +59,7 @@ module Glysellin
     end
 
     def pay!
+      return if paid?
       payment.amount = payments.remaining
       payment.pay!
       complete!
