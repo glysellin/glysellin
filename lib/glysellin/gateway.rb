@@ -9,7 +9,7 @@ require 'glysellin/gateway/check'
 begin
   require 'system_pay/railtie'
   require 'glysellin/gateway/systempay'
-rescue
+rescue LoadError => e
 end
 
 module Glysellin
