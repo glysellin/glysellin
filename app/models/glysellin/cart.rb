@@ -216,6 +216,8 @@ module Glysellin
       order.payments = payments
       order.discounts = discounts
 
+      order.store = store
+
       yield if block_given?
 
       line_items(true)
