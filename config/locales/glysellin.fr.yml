@@ -36,7 +36,7 @@ fr:
     notices:
       cart:
         confirm_line_item_deletion: |
-          Êtes vous sûrs de vouloir supprimer le produit %{name} de votre
+          Êtes vous sûr(e) de vouloir supprimer le produit %{name} de votre
           panier ?
     labels:
       misc:
