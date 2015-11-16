@@ -8,6 +8,10 @@ module Glysellin
       ((subtotal / eot_subtotal) - 1).round(2) * 100
     end
 
+    def vat_ratio
+      1.0 + (vat_rate / 100.0)
+    end
+
     def vat_total
       subtotal - eot_subtotal
     end

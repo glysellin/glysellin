@@ -84,7 +84,7 @@ module Glysellin
     end
 
     def vat_ratio
-      1 + vat_rate / 100
+      1.0 + (vat_rate / 100.0)
     end
 
     private

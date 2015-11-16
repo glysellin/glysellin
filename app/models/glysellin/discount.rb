@@ -8,7 +8,7 @@ module Glysellin
     validates_presence_of :value, :discount_type_id
 
     def eot_price
-      price - (price * discountable.vat_rate)
+      price / discountable.vat_ratio
     end
 
     def price
