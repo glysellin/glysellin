@@ -9,22 +9,28 @@ module Glysellin
       has_one :shipping_address, class_name: 'Glysellin::Address',
         as: :shipped_addressable, dependent: :destroy
 
-      accepts_nested_attributes_for :billing_address, reject_if: :all_blank
+      accepts_nested_attributes_for :billing_address
       accepts_nested_attributes_for :shipping_address,
         reject_if: :shipping_address_blank_or_not_needed
+
+      alias_method :actual_shipping_address, :shipping_address
+
+      define_method(:shipping_address) do |force_reload = false|
+        if use_another_address_for_shipping
+          actual_shipping_address(force_reload)
+        else
+          billing_address(force_reload)
+        end
+      end
     end
 
     def has_shipping_address?
       shipping_address && shipping_address.id.present?
     end
 
-    def shipping_address force_reload = false
-      use_another_address_for_shipping ? super : billing_address
-    end
-
     private
 
-    def shipping_address_blank_or_not_needed attributes
+    def shipping_address_blank_or_not_needed(attributes)
       attributes.values.all?(&:blank?) || !use_another_address_for_shipping
     end
   end
