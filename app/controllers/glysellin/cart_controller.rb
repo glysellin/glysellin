@@ -27,7 +27,7 @@ module Glysellin
     def totals_hash
       if (discount = current_cart.discounts.first)
         discount_name = discount.name
-        discount_value = number_to_currency(discount.value)
+        discount_value = number_to_currency(-discount.value)
       end
 
       {
