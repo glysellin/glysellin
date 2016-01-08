@@ -1,49 +1,56 @@
 require 'money'
-require 'active_merchant'
-require 'active_merchant/billing/integrations/action_view_helper'
+require 'offsite_payments'
+require 'offsite_payments/action_view_helper'
 
-ActionView::Base.send(:include, ActiveMerchant::Billing::Integrations::ActionViewHelper)
+ActionView::Base.send(:include, OffsitePayments::ActionViewHelper)
 
 module Glysellin
   module Gateway
     class PaypalIntegral < Glysellin::Gateway::Base
-      include ActiveMerchant::Billing::Integrations
+      include OffsitePayments::Integrations
       register 'paypal-integral', self
 
       mattr_accessor :account
       @@account = ''
 
       # Production mode by default
+      mattr_accessor :test
       @@test = false
 
       attr_accessor :errors, :order
-      
+
       def initialize order
         @order = order
         @errors = []
       end
 
-      # Switch between test and prod modes for ActiveMerchant Paypal
+      # Switch between test and prod modes for OffsitePayments Paypal
       class << self
         def test=(val)
-          ActiveMerchant::Billing::Base.mode = val ? :test : :production
+          OffsitePayments.mode = val ? :test : :production
           @@test = val
         end
       end
 
-      def render_request_button
-         {:partial => 'glysellin/payment_methods/paypal-integral', :locals => {:order => @order}}
+      def render_request_button(options = {})
+        {
+          :partial => 'glysellin/payment_methods/paypal_integral',
+          :locals => { :order => @order }
+        }
       end
 
       # Launch payment processing
       def process_payment! post_data
         notification = Paypal::Notification.new(post_data)
+        log "Processing payment from #{ post_data }"
         if notification.acknowledge
           begin
             if notification.complete?
-              @order.pay!
+              @order.paid!
             else
-              @errors.push("Failed to verify Paypal's notification, please investigate")
+              error = "Failed to verify Paypal's notification, please investigate"
+              @errors.push(error)
+              false
             end
           rescue => e
             raise

@@ -14,7 +14,7 @@ module ActionDispatch::Routing
             match 'response', :action => 'payment_response', :as => 'payment_response'
             # Routes to handle statically parametered Gateways
             post 'gateway/:gateway', :action => 'gateway_response', :as => 'named_gateway_response'
-            post 'gateway/response/:type', :action => 'payment_response', :as => 'typed_payment_response'
+            match 'gateway/response/:type', :action => 'payment_response', :as => 'typed_payment_response', via: [:post, :get]
           end
           member do
             get 'payment', :action => 'payment', :as => 'payment'
