@@ -60,9 +60,15 @@ module Glysellin
     end
 
     def gateway_response
-      g = PaymentMethod.gateway(params[:goid] ? {:order_id => params[:goid]} : {:raw_post => request.raw_post, :gateway => params[:gateway]})
+      gateway_params = if params[:goid]
+        { :order_id => params[:goid] }
+      else
+        { :raw_post => request.raw_post, :gateway => params[:gateway] }
+      end
 
-      if g.process_payment! request.raw_post
+      g = PaymentMethod.gateway(gateway_params)
+
+      if g.process_payment!(request.raw_post)
         OrderCustomerMailer.send_order_paid_email(g.order).deliver
         OrderAdminMailer.send_order_paid_email(g.order).deliver
       end
