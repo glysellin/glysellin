@@ -6,11 +6,15 @@ module Glysellin
       after_save :refresh_variants_long_name
     end
 
-    def variants(*args)
-      raise "Any class that includes Glysellin::VariantCacheable must define " \
-            "the #variants method which would return an " \
-            "ActiveRecord::Relation containing the variants whose long_name " \
-            "should be refreshed."
+    def method_missing(method_name, *args)
+      if method_name == :variants
+        raise "Any class that includes Glysellin::VariantCacheable must define " \
+              "the #variants method which would return an " \
+              "ActiveRecord::Relation containing the variants whose long_name " \
+              "should be refreshed."
+      end
+
+      super
     end
 
     def refresh_variants_long_name
