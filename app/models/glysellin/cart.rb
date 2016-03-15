@@ -101,6 +101,8 @@ module Glysellin
     validate :line_items_stocks_available
     validate :discount_code_valid, if: Proc.new { |cart| discount_code.present? }
 
+    after_create :ensure_ref!
+
     def self.fetch_or_initialize options
       where(id: options[:id]).first_or_create! do |cart|
         cart.store = options[:store]
@@ -203,7 +205,10 @@ module Glysellin
       order.customer = customer
       order.use_another_address_for_shipping = use_another_address_for_shipping
       order.billing_address = billing_address
-      order.shipping_address = shipping_address
+
+      if use_another_address_for_shipping
+        order.shipping_address = shipping_address
+      end
 
       order.shipment = shipment
       order.payments = payments
@@ -217,8 +222,12 @@ module Glysellin
     def cancel_order!
       self.line_items = order.line_items + line_items
 
+      self.use_another_address_for_shipping = order.use_another_address_for_shipping
       self.billing_address = order.billing_address
-      self.shipping_address = order.shipping_address
+
+      if use_another_address_for_shipping
+        self.shipping_address = order.shipping_address
+      end
 
       self.shipment = order.shipment
       self.payments = order.payments
@@ -230,6 +239,14 @@ module Glysellin
       order.payments(true)
 
       order.destroy
+    end
+
+    private
+
+    def ensure_ref!
+      unless ref
+        update_column(:ref, Glysellin.order_reference_generator.call(self))
+      end
     end
   end
 end
