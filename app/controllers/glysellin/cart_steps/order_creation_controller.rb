@@ -4,7 +4,10 @@ module Glysellin
       def update
         if params[:cart] && current_cart.update_attributes(cart_params)
           current_cart.create_order!
-          OrderCustomerMailer.send_order_created_email(current_cart.order).deliver
+
+          order = current_cart.order
+          OrderCustomerMailer.send_order_created_email(order).deliver
+          OrderAdminMailer.send_check_order_created_email(order).deliver if check?(order)
 
           session['glysellin.order'] = current_cart.order.id
           current_cart.reload.destroy
@@ -27,6 +30,10 @@ module Glysellin
         else
           {}
         end
+      end
+
+      def check?(order)
+        Gateway::Check === PaymentMethod.gateway_for(order)
       end
     end
   end

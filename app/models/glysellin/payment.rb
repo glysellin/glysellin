@@ -49,7 +49,7 @@ module Glysellin
     end
 
     def by_check?
-      payment_method.slug == 'check'
+      payment_method.identifier == 'check'
     end
   end
 end

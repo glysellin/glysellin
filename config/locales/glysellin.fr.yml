@@ -146,9 +146,9 @@ fr:
     mailer:
       admin:
         send_order_paid_email: |
-          "Une nouvelle commande (#%{ref}) a été validée sur le site"
+          Une nouvelle commande (#%{ref}) a été validée sur le site
         send_check_order_created_email: |
-          "Une commande (#%{ref}) par chèque a été passée sur le site"
+          Une commande (#%{ref}) par chèque a été passée sur le site
       customer:
         send_order_created_email: "Votre commande n°%{ref} a bien été validée"
         send_order_paid_email: "Le paiement de votre commande n°%{ref} a été accepté"
