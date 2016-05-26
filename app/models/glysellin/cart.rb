@@ -88,7 +88,8 @@ module Glysellin
              as: :payable, inverse_of: :payable, dependent: :destroy
     accepts_nested_attributes_for :payments, allow_destroy: true
 
-    has_one :shipment, as: :shippable, dependent: :destroy
+    has_one :shipment, as: :shippable, dependent: :destroy,
+                                       inverse_of: :shippable
     accepts_nested_attributes_for :shipment, allow_destroy: true
 
     has_many :discounts, as: :discountable, inverse_of: :discountable,
