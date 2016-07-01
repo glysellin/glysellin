@@ -130,7 +130,7 @@ rails runner "Glysellin::PaymentMethod.create(name: 'Credit Card', identifier: '
 * system_pay : Banque Populaire / Credit du nord system integration
 * check : An integration that displays a message with the direction to send a check to pay the order.
 
-SystemPay needs [youbook's SystemPay gem](https://github.com/youboox/system_pay/). Please include it to 
+SystemPay needs [youbook's SystemPay gem](https://github.com/youboox/system_pay/). Please include it to
 your app Gemfile
 
 ```ruby
@@ -171,9 +171,8 @@ end
 
 ## Using the Cart
 
-The shopping cart contents are stored in the Cart model and the cart id in the
-user's session. This allows for better code sharing between the cart and the
-order, but will leave some artifacts.
+The shopping cart contents are stored in the Cart model and the cart id in a
+permanent cookie.
 
 The abandonned carts can be used as a metric, to contact back the users, or
 be cleaned with a custom rake task. This is up to you and not managed by

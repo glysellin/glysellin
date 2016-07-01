@@ -10,9 +10,19 @@ module Glysellin
       protected
 
       def current_cart
-        @cart ||= Cart.fetch_or_initialize(
-          id: session["glysellin.cart"], store: current_store
-        )
+        @cart ||= fetch_or_initialize_cart
+      end
+
+      def fetch_or_initialize_cart
+        cart_id = cookies["glysellin.cart"]
+
+        Cart.fetch_or_initialize(id: cart_id, store: current_store).tap do |cart|
+          set_cart_in_cookies(cart)
+        end
+      end
+
+      def set_cart_in_cookies(cart)
+        cookies.permanent["glysellin.cart"] = cart.id
       end
 
       def current_store
@@ -22,7 +32,7 @@ module Glysellin
       def reset_cart!
         current_cart.destroy
         @cart = Cart.new
-        session.delete("glysellin.cart")
+        cookies.delete("glysellin.cart")
       end
 
       def fetch_current_store

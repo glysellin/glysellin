@@ -3,7 +3,7 @@ module Glysellin
     include ActionView::Helpers::NumberHelper
 
     before_filter :prepare_associable_data
-    after_filter :update_cart_in_session
+    after_filter :update_cart_in_cookies
 
     def show
     end
@@ -20,8 +20,8 @@ module Glysellin
     end
 
     # Helper method to set cookie value
-    def update_cart_in_session
-      session["glysellin.cart"] = current_cart.id if current_cart
+    def update_cart_in_cookies
+      set_cart_in_cookies(current_cart) if current_cart
     end
 
     def totals_hash

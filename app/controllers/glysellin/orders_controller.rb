@@ -45,14 +45,14 @@ module Glysellin
         @order = nil
         @response_type = params[:type]
 
-        # We remove cart from session if the order is considered as paid
+        # We remove cart from cookies if the order is considered as paid
         # by the return code.
         #
         # We cannot be 100% sure that this is a true "paid" request from the
         # bank, but this does not affect the actual order state, since we just
-        # remove the cart from session
+        # remove the cart from cookies
         #
-        reset_cart! if @response_type == 'paid' || @order.paid?
+        reset_cart! if @response_type == 'paid'
       else
         @order = Order.find_by_ref(params[:id])
       end
