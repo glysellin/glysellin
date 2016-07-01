@@ -7,16 +7,21 @@ module Glysellin
 
     attr_accessor :discount_code
 
-    has_many :line_items, class_name: 'Glysellin::LineItem', as: :container
+    has_many :line_items, class_name: 'Glysellin::LineItem',
+                          as: :container,
+                          inverse_of: :container
     accepts_nested_attributes_for :line_items, allow_destroy: true,
                                   reject_if: :all_blank
 
     has_many :variants, through: :line_items, class_name: 'Glysellin::Variant'
 
-    has_one :shipment, as: :shippable, dependent: :destroy
+    has_one :shipment, as: :shippable,
+                       dependent: :destroy,
+                       inverse_of: :shippable
     accepts_nested_attributes_for :shipment, allow_destroy: true
 
-    has_many :discounts, as: :discountable, inverse_of: :discountable
+    has_many :discounts, as: :discountable,
+                         inverse_of: :discountable
     accepts_nested_attributes_for :discounts, allow_destroy: true,
                                   reject_if: :all_blank
 

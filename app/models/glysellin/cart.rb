@@ -57,23 +57,13 @@ module Glysellin
         validates :payments, presence: true
       end
 
-      after_transition any => :ready, do: :generate_order!
-
-      before_transition do |cart, transition|
-        from, to = transition.from_name, transition.to_name
-
-        if from != to && from == :ready
-          if cart.order.present?
-            cart.cancel_order!
-          end
-        end
-      end
+      after_transition any => :ready, do: :generate_order
     end
 
     belongs_to :store
     belongs_to :order, autosave: true
 
-    has_many :line_items, as: :container
+    has_many :line_items, as: :container, inverse_of: :container
     accepts_nested_attributes_for :line_items, allow_destroy: true,
       reject_if: :all_blank
 
@@ -203,52 +193,30 @@ module Glysellin
       end
     end
 
-    def generate_order!
-      build_order unless order
+    def generate_order
+      # Build or clear order
+      if order then order.clear else build_order end
 
-      order.line_items = line_items
+      # One to many relationship objects and attributes can be safely reassigned
       order.customer = customer
+      order.store = store
       order.use_another_address_for_shipping = use_another_address_for_shipping
 
-      order.billing_address = billing_address
-      order.shipping_address = shipping_address
+      # Many to one and one to one relationship objects must be duplicated before
+      # they're added to the order
+      order.line_items = line_items.map(&:dup)
+      order.discounts = discounts.map(&:dup)
+      order.payments = payments.map(&:dup)
+      # Allow nil values for one to many relationships on duplication and avoid
+      # nil duplication exceptions
+      order.billing_address = billing_address.try(:dup)
+      order.shipping_address = shipping_address.try(:dup)
+      order.shipment = shipment.try(:dup)
 
-      order.shipment = shipment
-      order.payments = payments
-      order.discounts = discounts
+      # Allow calling the method and add items to the order before it is saved
+      yield
 
-      order.store = store
-
-      yield if block_given?
-
-      line_items(true)
-      billing_address(true)
-      shipping_address(true)
-      shipment(true)
-      payments(true)
-      discounts(true)
-
-      order.save!
-    end
-
-    def cancel_order!
-      self.line_items = order.line_items
-
-      self.billing_address = order.billing_address
-      self.shipping_address = order.shipping_address
-
-      self.shipment = order.shipment
-      self.payments = order.payments
-
-      yield if block_given?
-
-      order.line_items(true)
-      order.billing_address(true)
-      order.shipping_address(true)
-      order.shipment(true)
-      order.payments(true)
-
-      order.destroy
+      order.save! && save!
     end
   end
 end

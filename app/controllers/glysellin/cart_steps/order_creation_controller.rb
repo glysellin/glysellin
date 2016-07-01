@@ -9,9 +9,6 @@ module Glysellin
           OrderCustomerMailer.send_order_created_email(order).deliver
           OrderAdminMailer.send_check_order_created_email(order).deliver if check?(order)
 
-          session['glysellin.order'] = current_cart.order.id
-          current_cart.reload.destroy
-
           redirect_to order_path
         else
           set_cart_errors_flash

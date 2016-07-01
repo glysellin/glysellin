@@ -4,10 +4,14 @@ module Glysellin
 
     included do
       has_one :billing_address, class_name: 'Glysellin::Address',
-        as: :billed_addressable, dependent: :destroy
+                                as: :billed_addressable,
+                                dependent: :destroy,
+                                inverse_of: :billed_addressable
 
       has_one :shipping_address, class_name: 'Glysellin::Address',
-        as: :shipped_addressable, dependent: :destroy
+                                 as: :shipped_addressable,
+                                 dependent: :destroy,
+                                 inverse_of: :shipped_addressable
 
       accepts_nested_attributes_for :billing_address
       accepts_nested_attributes_for :shipping_address,

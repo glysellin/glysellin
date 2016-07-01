@@ -1,9 +1,7 @@
 module Glysellin
-  class OrderController < ApplicationController
+  class OrderController < CartController
     def show
-      order_id = session['glysellin.order'].presence
-
-      unless order_id && (@order = Order.where(id: order_id).first)
+      unless (@order = current_cart.order)
         flash[:alert] = t('glysellin.controllers.errors.order_doesnt_exist')
         redirect_to root_path
       end

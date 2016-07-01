@@ -37,6 +37,24 @@ module Glysellin
       end
     end
 
+    def clear
+      self.customer = nil
+      self.store = nil
+      self.use_another_address_for_shipping = nil
+
+      # Destroy nested many to one and one to one resources
+      line_items.clear
+      discounts.clear
+      payments.clear
+
+      billing_address.destroy
+      shipping_address.destroy
+      shipment.destroy
+
+      # Return cleared order
+      self
+    end
+
     def set_prices_cache_columns
       update_column :total_price_cache, total_price.to_s.gsub('.', ',')
       update_column :total_eot_price_cache, total_eot_price.to_s.gsub('.', ',')
