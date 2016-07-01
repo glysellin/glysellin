@@ -213,9 +213,6 @@ module Glysellin
       order.shipping_address = shipping_address.try(:dup)
       order.shipment = shipment.try(:dup)
 
-      # Allow calling the method and add items to the order before it is saved
-      yield
-
       order.save! && save!
     end
   end

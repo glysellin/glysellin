@@ -47,9 +47,9 @@ module Glysellin
       discounts.clear
       payments.clear
 
-      billing_address.destroy
-      shipping_address.destroy
-      shipment.destroy
+      billing_address.try(:destroy)
+      shipping_address.try(:destroy)
+      shipment.try(:destroy)
 
       # Return cleared order
       self
