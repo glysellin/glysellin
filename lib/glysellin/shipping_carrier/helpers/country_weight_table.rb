@@ -8,7 +8,7 @@ module Glysellin
           attr_accessor :path_to_data
 
           def country_weight_table_file path
-            loadable_paths = [File.join(ENV['PWD'], 'lib')] + $LOAD_PATH
+            loadable_paths = [Rails.root.join('lib')] + $LOAD_PATH
             # Try to find table file in load path
             loadable_paths.each do |loadable_path|
               file = File.join(loadable_path, '..', 'db', 'seeds', 'shipping_carrier', 'rates', path)
