@@ -5,18 +5,24 @@ module Glysellin
         extend ActiveSupport::Concern
 
         module ClassMethods
-          attr_accessor :path_to_data
+          attr_accessor :path
 
-          def country_weight_table_file path
+          def country_weight_table_file(path)
+            @path = path
+          end
+
+          def path_to_data
             loadable_paths = [Rails.root.join('lib')] + $LOAD_PATH
+
             # Try to find table file in load path
             loadable_paths.each do |loadable_path|
               file = File.join(loadable_path, '..', 'db', 'seeds', 'shipping_carrier', 'rates', path)
               if File.exists?(file)
-                @path_to_data = file
-                return
+                return file
               end
             end
+
+            nil
           end
 
           def available_for?(address)
