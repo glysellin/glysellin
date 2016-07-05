@@ -8,6 +8,10 @@ module Glysellin
     validates :payable, presence: true
 
     state_machine :state, initial: :pending, use_transactions: false do
+      event :reset do
+        transition all => :pending
+      end
+
       event :pay do
         transition all => :paid
       end
@@ -17,6 +21,18 @@ module Glysellin
       end
 
       before_transition to: :paid, do: :set_payment_date
+    end
+
+    # On cart payments duplication, the state attribute is not saved.
+    #
+    # This may be a bug from the state_machines gem, but I couldn't find a
+    # proper way to fix that.
+    #
+    # So we return a default pending state to avoid further transitions to fail,
+    # which allows, for example, payment gateways notifications to work.
+    #
+    def state
+      read_attribute(:state) || 'pending'
     end
 
     def set_payment_date
@@ -45,7 +61,7 @@ module Glysellin
     end
 
     def states
-      @states ||= (state_paths.to_states + [:pending])
+      @states ||= state_paths.to_states
     end
 
     def by_check?

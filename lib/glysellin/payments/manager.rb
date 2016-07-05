@@ -41,7 +41,11 @@ module Glysellin
       end
 
       def process_payments
-        payments.reload if order.persisted?
+        if order.persisted?
+          payments.each do |payment|
+            payment.reload if payment.persisted?
+          end
+        end
 
         if payments.balanced? && !complete?
           completed
