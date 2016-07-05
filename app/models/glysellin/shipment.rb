@@ -36,6 +36,18 @@ module Glysellin
       end
     end
 
+    # On cart shipment duplication, the state attribute is not saved.
+    #
+    # This may be a bug from the state_machines gem, but I couldn't find a
+    # proper way to fix that.
+    #
+    # So we return a default pending state to avoid further transitions to fail,
+    # which allows, for example, payment gateways notifications to work.
+    #
+    def state
+      read_attribute(:state) || 'pending'
+    end
+
     def vat_rate
       return 0 unless price && eot_price
       ((price / eot_price) - 1) * 100
