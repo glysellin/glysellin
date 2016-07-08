@@ -33,7 +33,7 @@ module Glysellin
     before_validation :check_prices
     before_validation :ensure_name
 
-    validate :generate_barcode, on: :create, unless: Proc.new { |variant| variant.sku.present? }
+    validate :generate_barcode, unless: proc { |variant| variant.sku.present? }
     # validates_numericality_of :eot_price, :price
     validates :name, presence: true
     validates :sku, uniqueness: true
