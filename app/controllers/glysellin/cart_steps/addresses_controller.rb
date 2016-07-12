@@ -9,8 +9,8 @@ module Glysellin
           # avoid rails nested attributes setter to override the current cart's
           # user
           if (customer_params = params[:cart] && params[:cart][:customer_attributes])
-            customer_attributes[:id] = current_user.customer.id
-            customer_attributes.delete(:user_attributes)
+            customer_params[:id] = current_user.customer.id
+            customer_params.delete(:user_attributes)
           end
         end
 
