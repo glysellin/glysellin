@@ -3,13 +3,21 @@ module Glysellin
     class AddressesController < CartController
       def update
         if user_signed_in?
-          current_cart.customer = current_user.customer
+          current_cart.update(customer: current_user.customer)
+
+          # Set customer_attributes id to the current user's customer id to
+          # avoid rails nested attributes setter to override the current cart's
+          # user
+          if (customer_params = params[:cart] && params[:cart][:customer_attributes])
+            customer_attributes[:id] = current_user.customer.id
+            customer_attributes.delete(:user_attributes)
+          end
         end
 
         if current_cart.update_attributes(cart_params)
           current_cart.addresses_filled!
 
-          if Glysellin.sign_in_after_user_selection && current_cart.customer.user
+          if !user_signed_in? && Glysellin.sign_in_after_user_selection && current_cart.customer.user
             sign_in current_cart.customer.user
           end
 
