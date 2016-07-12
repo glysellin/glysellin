@@ -61,7 +61,7 @@ module Glysellin
     end
 
     belongs_to :store
-    belongs_to :order, autosave: true
+    belongs_to :order, inverse_of: :cart
 
     has_many :line_items, as: :container, inverse_of: :container
     accepts_nested_attributes_for :line_items, allow_destroy: true,

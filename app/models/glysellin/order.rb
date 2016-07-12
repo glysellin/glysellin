@@ -1,5 +1,7 @@
 module Glysellin
   class Order < AbstractOrder
+    belongs_to :cart
+
     has_one :invoice, dependent: :destroy
 
     has_many :payments, -> {

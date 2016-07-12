@@ -2,7 +2,7 @@ module Glysellin
   class Shipment < ActiveRecord::Base
     self.table_name = 'glysellin_shipments'
 
-    belongs_to :shippable, polymorphic: true, autosave: true
+    belongs_to :shippable, polymorphic: true
     belongs_to :shipping_method, class_name: 'Glysellin::ShippingMethod'
 
     has_many :parcels, class_name: 'Glysellin::Parcel', as: :sendable,
