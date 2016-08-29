@@ -43,7 +43,7 @@ module Glysellin
       def process_payments
         if order.persisted?
           payments.each do |payment|
-            payment.reload if payment.persisted?
+            payment.reload if payment.persisted? && !payment.changed?
           end
         end
 
