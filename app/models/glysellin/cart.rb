@@ -91,8 +91,16 @@ module Glysellin
     validate :line_items_valid
     validate :discount_code_valid, if: Proc.new { |cart| discount_code.present? }
 
-    def self.fetch_or_initialize(options)
-      where(id: options[:id]).first_or_create! do |cart|
+    scope :paid, -> { joins(order: :payments).where(glysellin_payments: { state: 'paid' }) }
+    scope :unpaid, -> { where.not(id: unscoped.paid.select(:id)) }
+
+    def self.fetch(options = {})
+      # Only fetch unpaid carts
+      unpaid.where(options).first
+    end
+
+    def self.build(options = {})
+      new do |cart|
         cart.state = :init
         cart.store = options[:store]
       end

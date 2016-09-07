@@ -14,15 +14,17 @@ module Glysellin
       end
 
       def fetch_or_initialize_cart
-        cart_id = cookies["glysellin.cart"]
-
-        Cart.fetch_or_initialize(id: cart_id, store: current_store).tap do |cart|
-          set_cart_in_cookies(cart)
+        if (cart_id = cookies.encrypted["glysellin.cart"])
+          if (cart = Cart.fetch(id: cart_id))
+            return cart
+          else
+            # Ensure we remove the unfetchable cart from cookies to clean up
+            # unavailable carts and start with a fresh new cart then.
+            remove_cart_from_cookies
+          end
         end
-      end
 
-      def set_cart_in_cookies(cart)
-        cookies.permanent["glysellin.cart"] = cart.id
+        Cart.build(store: current_store)
       end
 
       def current_store
@@ -32,7 +34,7 @@ module Glysellin
       def reset_cart!
         current_cart.destroy
         @cart = Cart.new
-        cookies.delete("glysellin.cart")
+        remove_cart_from_cookies
       end
 
       def fetch_current_store
@@ -45,6 +47,14 @@ module Glysellin
         else
           Store.first
         end
+      end
+
+      def set_cart_in_cookies(cart)
+        cookies.permanent.encrypted["glysellin.cart"] = cart.id
+      end
+
+      def remove_cart_from_cookies
+        cookies.delete("glysellin.cart")
       end
     end
   end
