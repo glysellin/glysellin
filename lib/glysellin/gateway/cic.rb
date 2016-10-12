@@ -17,7 +17,8 @@ module Glysellin
       end
 
       def process_payment! post_data
-        response = CicPayment.new.response Rack::Utils.parse_nested_query(post_data)
+        transaction_data = Rack::Utils.parse_nested_query(post_data)
+        response = CicPayment.new.response(transaction_data)
         order = Glysellin::Order.find(response['reference'].to_i)
 
         if !Rails.env.production? || (
@@ -26,6 +27,9 @@ module Glysellin
         )
           order.pay!
         end
+
+        order.payment.update_attributes(transaction_data: transaction_data) if order.payment
+        order.save
       end
 
       def response

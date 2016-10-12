@@ -20,7 +20,7 @@ module Glysellin
 
       def render_request_button(options = {})
         @system_pay = SystemPay::Vads.new(
-          :amount => (@order.total_price * 100).to_i.to_s, 
+          :amount => (@order.total_price * 100).to_i.to_s,
           :trans_id => @order.payment.get_new_transaction_id,
           :order_id => @order.ref,
           :capture_delay => 0
@@ -32,14 +32,17 @@ module Glysellin
       end
 
       # Launch payment processing
-      def process_payment! post_data
-        data_param = Rack::Utils.parse_nested_query(post_data)
-        results = SystemPay::Vads.diagnose(data_param.with_indifferent_access)
+      def process_payment!(post_data)
+        transaction_data = Rack::Utils.parse_nested_query(post_data)
+        results = SystemPay::Vads.diagnose(transaction_data.with_indifferent_access)
 
         # Réponse acceptée
         valid = results[:status] == :success
 
         result = valid ? @order.pay! : false
+
+        @order.payment.update_attributes(transaction_data: transaction_data) if @order.payment
+        @order.save
 
         result
       end

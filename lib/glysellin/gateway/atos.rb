@@ -91,8 +91,9 @@ module Glysellin
       end
 
       # Launch payment processing
-      def process_payment! post_data
-        results = self.class.parse_atos_resp(Rack::Utils.parse_nested_query(post_data)['DATA'])
+      def process_payment!(post_data)
+        transaction_data = Rack::Utils.parse_nested_query(post_data)['DATA']
+        results = self.class.parse_atos_resp(transaction_data)
         # Réponse acceptée
         valid = results[1].to_i == 0 && results[11].to_i == 0
 
@@ -100,6 +101,7 @@ module Glysellin
 
         result = valid ? @order.pay! : false
 
+        @order.payment.update_attributes(transaction_data: transaction_data) if @order.payment
         @order.save
         result
       end

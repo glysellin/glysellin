@@ -40,9 +40,12 @@ module Glysellin
       end
 
       # Launch payment processing
-      def process_payment! post_data
+      def process_payment!(post_data)
+        transaction_data = Rack::Utils.parse_nested_query(post_data)
         notification = Paypal::Notification.new(post_data)
+
         log "Processing payment from #{ post_data }"
+
         if notification.acknowledge
           begin
             if notification.complete?
@@ -55,6 +58,7 @@ module Glysellin
           rescue => e
             raise
           ensure
+            @order.payment.update_attributes(transaction_data: transaction_data) if @order.payment
             @order.save
           end
         else
