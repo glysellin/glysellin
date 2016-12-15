@@ -1,7 +1,7 @@
 module Glysellin
   module DiscountTypeCalculator
-    class OrderPercentage < Glysellin::DiscountTypeCalculator::Base
-      register 'order-percentage', self
+    class FreeShipping < Glysellin::DiscountTypeCalculator::Base
+      register 'free-shipping', self
 
       attr_accessor :discountable, :value
 
@@ -11,7 +11,7 @@ module Glysellin
       end
 
       def calculate
-        -(discountable.discountable_amount * value)
+        -(discountable.try(:shipment).try(:price) || 0)
       end
     end
   end

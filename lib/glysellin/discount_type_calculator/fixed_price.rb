@@ -5,7 +5,7 @@ module Glysellin
 
       attr_reader :value
 
-      def initialize _, value
+      def initialize(_, value)
         @value = value
       end
 
