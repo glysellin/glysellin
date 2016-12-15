@@ -251,6 +251,7 @@ fr:
         total_eot_price_cache: "Total HT"
         customer: "Client"
         created_at: "Date de création"
+        updated_at: "Dernière action sur la commande"
         billing_address: "Adresse de facturation"
         use_another_address_for_shipping: "Utiliser une autre adresse pour la livraison"
         shipping_address: "Adresse de livraison"
