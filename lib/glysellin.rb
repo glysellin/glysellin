@@ -29,6 +29,13 @@ module Glysellin
   mattr_accessor :user_class_name
   @@user_class_name = 'User'
 
+  # Pass the name of a class to be initialized with a cart and
+  # implementing a #call method where line items, product prices,
+  # discounts can be modified or deleted.
+  # This will be called when fetching a cart
+  mattr_accessor :cart_expiration_checker
+  @@cart_expiration_checker = nil
+
   mattr_accessor :sign_in_after_user_selection
   @@sign_in_after_user_selection = false
 
