@@ -11,7 +11,7 @@ module Glysellin
       end
 
       def calculate
-        -(discountable.discountable_amount * value)
+        (-(discountable.discountable_amount * value)).round(2)
       end
     end
   end
