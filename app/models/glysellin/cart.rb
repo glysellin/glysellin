@@ -97,7 +97,7 @@ module Glysellin
     def self.fetch(options = {})
       # Only fetch unpaid carts
       cart = unpaid.where(options).first
-      Glysellin.cart_expiration_checker.new(cart).call if Glysellin.cart_expiration_checker
+      Glysellin.cart_expiration_checker.new(cart).call if cart && Glysellin.cart_expiration_checker
       cart
     end
 
