@@ -4,13 +4,22 @@
       .modal-header
         %button.close{ "aria-label" => "Close", "data-dismiss" => "modal", :type => "button" }
           %span{ "aria-hidden" => "true" } ×
-        %h4.modal-title= t('glysellin.labels.cart.added_to_cart')
+        %h4.modal-title
+          - if current_cart.errors.any?
+            = t('glysellin.labels.cart.error_adding_to_cart')
+          - else
+            = t('glysellin.labels.cart.added_to_cart')
       .modal-body
         %p
-          %strong= "#{ @line_item.quantity }×"
-          = @line_item.name
-          = number_to_currency(@line_item.price)
-          %strong{ style: "float:right;" }= number_to_currency(@line_item.total_price)
+          - if current_cart.errors.any?
+            %ul.list-unstyled
+              - current_cart.errors.full_messages.each do |message|
+                %li= message
+          - else
+            %strong= "#{ @line_item.quantity }×"
+            = @line_item.name
+            = number_to_currency(@line_item.price)
+            %strong{ style: "float:right;" }= number_to_currency(@line_item.total_price)
 
       .modal-footer
         %button.btn.btn-default{ "data-dismiss" => "modal", :type => "button" }

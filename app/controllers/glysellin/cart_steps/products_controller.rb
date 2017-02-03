@@ -19,7 +19,7 @@ module Glysellin
           end
         end
 
-        current_cart.line_items_added!
+        current_cart.line_items_added
         render_cart_partial
       end
 
