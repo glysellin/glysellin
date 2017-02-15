@@ -21,6 +21,10 @@ fr:
         shipping_method_unavailable_for_country: |
           Désolé mais nous ne pouvons pas envoyer votre commande vers
           %{country} avec %{method}, merci de choisir un autre mode de livraison
+        payment_request_expired: |
+          Vous avez attendu trop longtemps avant de cliquer sur le bouton de
+          paiement et celui-ci a expiré. Merci de cliquer à nouveau sur le
+          bouton afin de procéder au paiement.
         state_transitions:
           filled: |
             Une erreur est survenue pendant la soumission de votre panier

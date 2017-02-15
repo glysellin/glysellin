@@ -1,5 +1,7 @@
 module Glysellin
   class PaymentMethod < ActiveRecord::Base
+    include ActionView::Helpers::TagHelper
+
     self.table_name = 'glysellin_payment_methods'
 
     scope :ordered, -> { order("name ASC") }

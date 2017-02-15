@@ -34,5 +34,16 @@ module Glysellin
     def copy_address_to_form(form, type, record)
       copy_address_to(form.object, type, record)
     end
+
+    def render_payment_button_for(order)
+      data = {
+        :'payment-request-expires-at' => 15.minutes.from_now.to_i,
+        :'payment-request-expired-url' => url_for(payment_request_expired: true)
+      }
+
+      content_tag(:div, class: 'payment-request-button', data: data) do
+        (render order.payments.last.payment_method.request_button(order)).html_safe
+      end
+    end
   end
 end

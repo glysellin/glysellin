@@ -3,6 +3,7 @@ module Glysellin
     include ActionView::Helpers::NumberHelper
 
     before_filter :prepare_associable_data
+    before_filter :handle_payment_request_expired
     after_filter :update_cart_in_cookies
 
     def show
@@ -49,6 +50,12 @@ module Glysellin
       flash[:error] = t(
         "glysellin.errors.cart.state_transitions.#{ current_cart.state }"
       ) if current_cart.errors.any?
+    end
+
+    def handle_payment_request_expired
+      if params[:payment_request_expired] == 'true'
+        flash.now[:error] = t('glysellin.errors.cart.payment_request_expired')
+      end
     end
   end
 end

@@ -11,5 +11,5 @@
 - if order.payments_balanced?
   = t("glysellin.labels.order.paid_on_by", date: l(order.payments.last.received_on, format: :short), method: order.payments.last.payment_method.name)
 - else
-  = (render order.payments.last.payment_method.request_button(order)).html_safe
+  = render_payment_button_for(order)
 
