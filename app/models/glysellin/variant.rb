@@ -140,7 +140,7 @@ module Glysellin
       barcode = Glysellin.barcode_class_name.constantize.new(self)
 
       if barcode.valid?
-        while(Glysellin::Variant.exists?(sku: barcode.number))
+        while(barcode_exists?(barcode))
           barcode.generate
         end
 
@@ -150,6 +150,13 @@ module Glysellin
           errors.add :sku, message
         end
       end
+    end
+
+    def barcode_exists?(barcode)
+      Glysellin::Variant.exists?(sku: barcode.number) ||
+        # Check also currently built variants that are not saved to database
+        # during this validation
+        sellable && sellable.variants.any? { |v| v.sku == barcode.number }
     end
 
     def eot_changed_alone?
