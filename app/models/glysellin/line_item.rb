@@ -67,7 +67,7 @@ module Glysellin
     end
 
     def total_eot_price
-      (eot_subtotal + discount_price).round 2
+      (eot_subtotal + discount_eot_price).round 2
     end
 
     def total_price
@@ -82,12 +82,12 @@ module Glysellin
       eot_subtotal
     end
 
-    def discount_eot_price
-      @discount_eot_price ||= (discount && discount.price) || 0
+    def discount_price
+      @discount_price ||= (discount && discount.price) || 0
     end
 
-    def discount_price
-      (discount_eot_price * (1 + vat_rate_division)).round 2
+    def discount_eot_price
+      (discount_price / (1 + vat_rate_division)).round 2
     end
 
     def total_weight
