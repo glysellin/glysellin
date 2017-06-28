@@ -29,8 +29,8 @@ module Glysellin
     after_create :ensure_customer_addresses
     after_create :ensure_ref
 
-    belongs_to :customer
-    belongs_to :store
+    belongs_to :customer, class_name: 'Glysellin::Customer'
+    belongs_to :store, class_name: 'Glysellin::Store'
 
     scope :from_customer, ->(customer_id) { where(customer_id: customer_id) }
     scope :active, -> { where.not(state: :canceled) }
