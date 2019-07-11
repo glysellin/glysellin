@@ -174,7 +174,7 @@ end
 The shopping cart contents are stored in the Cart model and the cart id in a
 permanent cookie.
 
-The abandonned carts can be used as a metric, to contact back the users, or
+The abandoned carts can be used as a metric, to contact back the users, or
 be cleaned with a custom rake task. This is up to you and not managed by
 Glysellin.
 
